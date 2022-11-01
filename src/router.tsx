@@ -1,8 +1,9 @@
 import axios, { Axios, AxiosError, AxiosResponse } from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
 import { CLIENT, SERVER } from "./assets/config";
 import { USER, PLACEHOLDER, LISTOF_POST_REQ_TYPES } from "./assets/constants";
-import SocketProvider from "./socket";
 import { IRequestData, IResponseData, TRequest } from "./assets/types";
 
 
@@ -44,3 +45,40 @@ function RouterProvider() {
 }
 
 export default RouterProvider;
+
+export type TMsg = {
+  message: string;
+  username: string;
+  time: Date;
+}[];
+
+const socket = io(SERVER.GET_URI, {
+  transports: [],
+});
+
+function SocketProvider() {
+  // console.log("socketprovider loaded");
+
+  const [username, setUsername] = useState("");
+  const [roomId, setRoomId] = useState("");
+  const [rooms, setRooms] = useState({});
+  const [messages, setMessages] = useState<TMsg>([
+    {
+      username: "You",
+      message: "asd",
+      time: new Date(),
+    },
+  ]);
+
+  const openSocket = () => {
+    socket.io.opts.transports = CLIENT.SOCKET_CONNECTION;
+  };
+
+  const closeSocket = () => {
+    socket.io.opts.transports = [];
+  };
+
+  return {
+    socket,
+  };
+}
