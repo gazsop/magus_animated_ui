@@ -11,27 +11,18 @@ import { CLIENT, SERVER } from "../assets/config";
 import {
   USER,
   PLACEHOLDER,
-  LISTOF_POST_REQ_TYPES,
+  LIST_OF_POST_REQ_TYPES,
   UI_THEME,
   STATES,
 } from "../assets/constants";
 import { IRequestData, IResponseData, TRequest } from "../assets/types";
 import RouterProvider from "../router";
+import ErrorBoundary from "../hooks/errorHandler";
+import { IAdvanture } from "src/components/advantures/PageAdvantures";
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 
-interface IFrontEndError {
-  colno: number;
-  filename: string;
-  lineno: number;
-  message: string;
-}
-
-interface IFrontEndErrorData
-  extends Optional<IFrontEndError, keyof IFrontEndError> {}
-
 interface IAppData {
-  error: IFrontEndError;
   page: string;
   loading: string[];
   debugWindow: boolean;
@@ -52,17 +43,10 @@ type TUpdateUser = Optional<IUser, keyof IUser>;
 type TUpdateAppData = Optional<IAppData, keyof IAppData>;
 
 const initialAppData: IAppData = {
-  // error: {
-  //   colno: PLACEHOLDER.NUMBER,
-  //   filename: PLACEHOLDER.STRING,
-  //   lineno: PLACEHOLDER.NUMBER,
-  //   message: PLACEHOLDER.STRING,
-  // },
-  error: {} as IFrontEndError,
   page: "",
   loading: [],
-  debugWindow: true,
-  interfaceTheme: UI_THEME.LIGHT,
+  debugWindow: false,
+  interfaceTheme: UI_THEME.DARK,
   appStatus: process.env.NODE_ENV === "development" ? true : false
 };
 
@@ -74,8 +58,24 @@ const unauthorizedUser: IUser = {
   rank: USER.RANK.UNAUTH,
 };
 
+const testUser: IUser = {
+  id: "2",
+  uid: "testUser",
+  pwd: "pwd",
+  keepLoggedIn: STATES.BOOLEAN.OFF,
+  rank: USER.RANK.USER,
+};
+
+const testAdmin: IUser = {
+  id: "1",
+  uid: "testAdmin",
+  pwd: "pwd",
+  keepLoggedIn: STATES.BOOLEAN.OFF,
+  rank: USER.RANK.ADMIN,
+};
+
 interface IAppContext {
-  getUserData: () => IUser;
+  getUserData: IUser;
   setUserData: (val: TUpdateUser) => void;
   selectAdvanture: (val: string) => void;
   userGetAllAdvantures: () => {};
@@ -84,7 +84,6 @@ interface IAppContext {
   readonly getLoading: Array<string>;
   toggleDebugWindow: () => void;
   readonly getDebugWindow: boolean;
-  readonly getAppError: IFrontEndError;
   toggleInterfaceTheme: () => {};
   readonly getInterfaceTheme: string;
   readonly getAppStatus: boolean;
@@ -94,24 +93,19 @@ interface IAppContext {
 function AppProvider(props: any) {
   const navigate = useNavigate();
   const { serverPostRequest, serverPostError } = RouterProvider();
-  const [user, setUser] = useState<IUser>(unauthorizedUser);
+  // const [user, setUser] = useState<IUser>(unauthorizedUser);
+  const [user, setUser] = useState<IUser>(testUser);
+  const [advanture, setAdvanture] = useState<IAdvanture>();
+  
   const [app, setApp] = useState<IAppData>(initialAppData);
 
-  useMemo(() => {
-    console.log("useMemo fired");
-
-    window.addEventListener("error", (event) => {
-      if (event.error.hasBeenCaught !== undefined) return false;
-      event.error.hasBeenCaught = true;
-      event.error.handled = false;
-      errorHandler({
-        colno: event.colno,
-        filename: event.filename,
-        lineno: event.lineno,
-        message: event.message,
-      });
-    });
-  }, []);
+  // useMemo(()=>{
+  //   console.log(user);
+    
+  //   if(user.pwd !== unauthorizedUser.pwd){
+  //     setUser({...testUser});
+  //   }
+  // },[user])
 
   /****************
    * APP
@@ -133,11 +127,7 @@ function AppProvider(props: any) {
       };
     }
     // const cloneObject = JSON.parse(JSON.stringify(temp.error))
-    setApp({...temp,  error: {...temp.error}});
-    console.log("temp");
-    console.log(temp);
-    console.log("temp.error");
-    console.log(temp.error);
+    setApp({...temp});
   };
 
   const getAppData = { ...app };
@@ -197,55 +187,33 @@ function AppProvider(props: any) {
     setAppData({ debugWindow: !getAppData.debugWindow });
 
   /****************
-   * APP - ERROR
-   ****************/
-  const errorHandler = (errorEvent: IFrontEndError) => {
-    console.log("errorhandler");
-    console.log(errorEvent);
-
-    // setErrorData(errorEvent)
-    setAppData({
-      error: { ...errorEvent },
-    });
-    // serverPostError({
-    //   type: LISTOF_POST_REQ_TYPES.ERROR,
-    // })
-  };
-
-  const getAppError: IFrontEndError = getAppData.error;
-
-  /****************
    * USER
    ****************/
   const setUserData = (newValue: TUpdateUser) => {
-    let key: keyof typeof user;
-    for (key in user) {
-      if (!Object.prototype.hasOwnProperty.call(user, key)) continue;
-      const temp: { [key: string]: any } = {};
-      if (newValue[key]) {
-        if (key === "id" && newValue.id) continue;
-        temp[key] = newValue[key];
-      }
-      setUser((prevState) => ({
-        ...prevState,
-        ...temp,
-      }));
-      return true;
+    console.log(newValue);
+    let key: keyof TUpdateUser;
+
+    for (key in newValue) {
+      if (
+        !Object.prototype.hasOwnProperty.call(user, key) ||
+        !Object.prototype.hasOwnProperty.call(newValue, key)
+      ) return false;
     }
-    // const response = serverPostRequest({
-    //   type: LISTOF_POST_REQ_TYPES.LOGINUNAME,
-    //   data: {
-    //     name: newValue.id,
-    //   },
-    // });
+    
+    if(newValue.pwd){
+      setUser({...testUser});
+      return;
+    }
+    // const cloneObject = JSON.parse(JSON.stringify(temp.error))
+    setUser(prev=>({...prev, ...newValue}));
   };
-  const getUserData = () => {
-    return { ...user };
-  };
+
+  const getUserData =  { ...user };
+
   const logout = () => {
     setUserData(unauthorizedUser);
     serverPostRequest({
-      type: LISTOF_POST_REQ_TYPES.LOGOUT,
+      type: LIST_OF_POST_REQ_TYPES.LOGOUT,
     });
   };
 
@@ -253,6 +221,7 @@ function AppProvider(props: any) {
    * ADVANTURES
    ****************/
   const selectAdvanture = (id: string) => {
+    setAppData({});
     navigate("character");
   };
 
@@ -284,25 +253,26 @@ function AppProvider(props: any) {
   };
 
   return (
-    <AppContext.Provider
-      value={{
-        getUserData,
-        setUserData,
-        logout,
-        selectAdvanture,
-        userGetAllAdvantures,
-        setLoading,
-        getDebugWindow,
-        toggleDebugWindow,
-        getAppError,
-        toggleInterfaceTheme,
-        getInterfaceTheme,
-        getAppData,
-        getLoading,
-        getAppStatus
-      }}
-      {...props}
-    />
+    <ErrorBoundary errorHandler={requestError}>
+      <AppContext.Provider
+        value={{
+          getUserData,
+          setUserData,
+          logout,
+          selectAdvanture,
+          userGetAllAdvantures,
+          setLoading,
+          getDebugWindow,
+          toggleDebugWindow,
+          toggleInterfaceTheme,
+          getInterfaceTheme,
+          getAppData,
+          getLoading,
+          getAppStatus
+        }}
+        {...props}
+      />
+    </ErrorBoundary>
   );
 }
 

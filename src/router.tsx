@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { CLIENT, SERVER } from "./assets/config";
-import { USER, PLACEHOLDER, LISTOF_POST_REQ_TYPES } from "./assets/constants";
+import { USER, PLACEHOLDER, LIST_OF_POST_REQ_TYPES } from "./assets/constants";
 import { IRequestData, IResponseData, TRequest } from "./assets/types";
 
 

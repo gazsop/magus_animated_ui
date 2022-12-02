@@ -5,7 +5,7 @@ import {
   shared_PLACEHOLDER,
   shared_MONEY,
   shared_ITEM,
-  shared_LISTOF_POST_REQ_TYPES,
+  shared_LIST_OF_POST_REQ_TYPES,
   shared_STATES,
   shared_ERROR
 } from "../../../shared/magus_app_constants";
@@ -33,4 +33,4 @@ export const ROLL = shared_ROLL;
 export const PLACEHOLDER = shared_PLACEHOLDER;
 export const MONEY = shared_MONEY;
 export const ITEM = shared_ITEM;
-export const LISTOF_POST_REQ_TYPES = shared_LISTOF_POST_REQ_TYPES;
+export const LIST_OF_POST_REQ_TYPES = shared_LIST_OF_POST_REQ_TYPES;

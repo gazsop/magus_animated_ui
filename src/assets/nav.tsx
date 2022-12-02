@@ -1,7 +1,7 @@
 import React from "react";
-import { Advantures } from "../components/PageAdvantures";
-import { Character } from "../components/PageCharacter";
-import { Login } from "../components/PageLogin";
+import { Advantures } from "../components/advantures/PageAdvantures";
+import { Character } from "../components/character/PageCharacter";
+import { Login } from "../components/login/PageLogin";
 import { Monsters } from "../components/PageMonsters";
 import { Spells } from "../components/PageSpells";
 import { USER } from "./constants";

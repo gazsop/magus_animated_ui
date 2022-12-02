@@ -1,35 +1,66 @@
 $ikharic_font: "iokharic";
-$height_of_navbar: "56px";
-$inner_height: calc(100vh - 56px);
-$nav_bg_coolor: #aaa;
-$bg_color_light: #fff;
-$bg_color_dark: #333;
+$height_of_navbar: 56px;
+$debug_container_width: 300px;
+$content_max_width: calc(100vw - $debug_container_width);
+$inner_height: 100%;
+
+
+$bg_color_light: rgb(230, 230, 230);
+$text_color_light: rgb(25, 25, 25);
+$input_bg_color_light: $bg_color_light;
+$input_text_color_light: $text_color_light;
+$nav_bg_color_light: #aaa;
+$bg_container_light:rgb(3, 218, 68);
+
+$bg_color_dark: rgb(30, 30, 30);
+$text_color_dark: rgb(221, 221, 221);
+$input_bg_color_dark: $bg_color_dark;
+$input_text_color_dark: $text_color_dark;
+$nav_bg_color_dark: #aaa;
+$bg_container_dark:rgb(0, 50, 189);
 
 // GENERAL HTML ELEMENT
 html,body,#main{
     height: 100vh;
     width: 100vw;
-    overflow: auto;
+    overflow:hidden;
     margin: 0px;
     padding: 0px;
 }
 
 nav{
-    background-color: $nav_bg_coolor !important;
+    background-color: $nav_bg_color_light !important;
+    z-index: 9999;
 }
 
 h1{
     font-size: 2rem !important;
 }
 
+button,input{
+  border-radius: 0px !important;
+  border: 0px solid black !important;
+  font-weight: 600 !important;
+}
+
 .light-theme{
     background-color: $bg_color_light !important;
-    color: black;
+    color: $text_color_light;
+}
+
+.light-theme input{
+  background-color: $input_bg_color_light !important;
+  color: $input_text_color_light !important;
+}
+
+.light-theme button{
+  
+  color: $bg_color_dark !important;
 }
 
 .dark-theme{
     background-color: $bg_color_dark !important;
-    color: white;
+    color: rgb(201, 201, 201);
 }
 
 .screen-cover{
@@ -45,19 +76,23 @@ h1{
     border-right: 1px solid black;
     height: $inner_height;
     overflow-y: scroll;
+    width: $debug_container_width;
 }
 
 .debug-window{
-    width: 100;
+    width: 100%;
     height: 50vh;
     border-bottom: 1px solid black;
 }
 // LOGIN STYLING
-.login-form {
-    max-width: 400px;
-    margin-top: 30vh;
-    background-color: rgba(0, 102, 255,.5);
-    border-radius: 10px;
+.light-theme .login-form {
+    max-width: 350px;
+    background-color: $bg_container_light;
+}
+
+.dark-theme .login-form {
+  max-width: 350px;
+  background-color: $bg_container_dark;
 }
 
 .login-link{
@@ -71,6 +106,50 @@ h1{
 .login-link-text{
     display: inline-block;
 }
+
+.uid-error-tooltip > .tooltip-inner {
+  background-color: rgba($color: #ff0000, $alpha: .9);
+  color: rgb(255, 255, 255);
+  border: 1px solid #062e56;
+}
+
+.uid-error-tooltip > .tooltip-arrow {
+  border-top: 5px solid #062e56;
+}
+
+.tooltip-arrow{
+  border-top: 0px !important;
+}
+/*
+SLIDESHOW
+*/
+
+.main{
+  background-color: #e60073;
+  width: 450px;
+  height: 600px;
+  margin: auto 40px;
+}
+
+.next{
+  background-color: #aaa;
+}
+
+.prev{
+  background-color: #062e56;
+}
+
+.side{
+  width: 300px;
+  height: 400px
+}
+
+@media screen and (max-width: 1200px){
+  .side{
+    display: none;
+  }
+}
+
 /*
 NOT IN USE
 glowing effect for input buttons
@@ -118,7 +197,6 @@ glowing effect for input buttons
         text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
       }
 }
-
 
 /*
 * LOADING

@@ -1,11 +1,12 @@
 import React from "react";
 import { Col, InputGroup, Row } from "react-bootstrap";
+import { Id } from "../../utils/getId";
 
 export function Character(): React.ReactElement {
   const statFiller = (numberOfStatS: number) => {
     const template = (index: string)=> {
       return (
-      <tr key={index}>
+      <tr key={Id.getRand(9)}>
         <th style={{minWidth: "400px"}}>STAT_{index}</th>
         <td>
           <input type="number" defaultValue={index} readOnly={true} />
@@ -58,9 +59,9 @@ export function Character(): React.ReactElement {
             <Col>
               <label htmlFor="">RP</label>
               <table>
-                {
-                  statFiller(7)
-                }
+              <tbody>
+                {statFiller(7)}
+                </tbody>
               </table>
             </Col>
           </Row>
@@ -68,9 +69,9 @@ export function Character(): React.ReactElement {
             <Col>
               <label htmlFor="">Szint</label>
               <table>
-                {
-                  statFiller(3)
-                }
+              <tbody>
+                {statFiller(3)}
+                </tbody>
               </table>
             </Col>
           </Row>
@@ -78,9 +79,9 @@ export function Character(): React.ReactElement {
             <Col>
             <label htmlFor="">HM</label>
               <table>
-                {
-                  statFiller(13)
-                }
+              <tbody>
+                {statFiller(13)}
+                </tbody>
               </table>
             </Col>
           </Row>
@@ -91,9 +92,9 @@ export function Character(): React.ReactElement {
               <label htmlFor="">HM</label>
               <label htmlFor="">Stat</label>
               <table>
-                {
-                  statFiller(5)
-                }
+              <tbody>
+                {statFiller(5)}
+                </tbody>
               </table>
             </Col>
           </Row>
