@@ -1,0 +1,287 @@
+$ikharic_font: "iokharic";
+$height_of_navbar: 56px;
+$debug_container_width: 300px;
+$content_max_width: calc(100vw - $debug_container_width);
+$inner_height: 100%;
+
+
+$bg_color_light: rgb(230, 230, 230);
+$text_color_light: rgb(25, 25, 25);
+$input_bg_color_light: $bg_color_light;
+$input_text_color_light: $text_color_light;
+$nav_bg_color_light: #aaa;
+$bg_container_light: rgb(3, 218, 68);
+
+$bg_color_dark: rgb(30, 30, 30);
+$text_color_dark: rgb(221, 221, 221);
+$input_bg_color_dark: $bg_color_dark;
+$input_text_color_dark: $text_color_dark;
+$nav_bg_color_dark: #aaa;
+$bg_container_dark: rgb(0, 50, 189);
+
+// GENERAL HTML ELEMENT
+html,
+body,
+#main {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  margin: 0px;
+  padding: 0px;
+}
+
+nav {
+  background-color: $nav_bg_color_light !important;
+  z-index: 9999;
+}
+
+h1 {
+  font-size: 2rem !important;
+}
+
+button,
+input {
+  border-radius: 0px !important;
+  border: 0px solid black !important;
+  font-weight: 600 !important;
+}
+
+.page {
+  overflow: hidden;
+  position: absolute;
+  top: 0px;
+}
+
+.light-theme {
+  background-color: $bg_color_light !important;
+  color: $text_color_light;
+}
+
+.light-theme input {
+  background-color: $input_bg_color_light !important;
+  color: $input_text_color_light !important;
+}
+
+.light-theme button {
+
+  color: $bg_color_dark !important;
+}
+
+.dark-theme {
+  background-color: $bg_color_dark !important;
+  color: rgb(201, 201, 201);
+}
+
+.screen-cover {
+  height: $inner_height;
+}
+
+@font-face {
+  font-family: 'iokharic';
+  src: local('iokharic'), url(../iokharic_bold.otf) format('woff');
+}
+
+// DEBUG STYLING
+.debug-container {
+  border-right: 1px solid black;
+  height: $inner_height;
+  overflow-y: scroll;
+  width: $debug_container_width;
+}
+
+.debug-window {
+  width: 100%;
+  height: 50vh;
+  border-bottom: 1px solid black;
+}
+
+// LOGIN STYLING
+.light-theme .login-form {
+  max-width: 350px;
+  background-color: $bg_container_light;
+}
+
+.dark-theme .login-form {
+  max-width: 350px;
+  background-color: $bg_container_dark;
+}
+
+.login-link {
+  display: inline-block !important;
+}
+
+.login-link::before {
+  content: "\00a0";
+}
+
+.login-link-text {
+  display: inline-block;
+}
+
+.uid-error-tooltip>.tooltip-inner {
+  background-color: rgba($color: #ff0000, $alpha: .9);
+  color: rgb(255, 255, 255);
+  border: 1px solid #062e56;
+}
+
+.uid-error-tooltip>.tooltip-arrow {
+  border-top: 5px solid #062e56;
+}
+
+.tooltip-arrow {
+  border-top: 0px !important;
+}
+
+/*
+SLIDESHOW
+*/
+
+.main {
+  background-color: #e60073;
+  width: 450px;
+  height: 600px;
+  margin: auto 40px;
+}
+
+.next {
+  background-color: #aaa;
+}
+
+.prev {
+  background-color: #062e56;
+}
+
+.side {
+  width: 300px;
+  height: 400px
+}
+
+@media screen and (max-width: 1200px) {
+  .side {
+    display: none;
+  }
+}
+
+/*
+NOT IN USE
+glowing effect for input buttons
+*/
+.resizable-content {
+  min-height: 30px;
+  min-width: 30px;
+  resize: both;
+  overflow: auto;
+  max-height: fit-content;
+  max-width: fit-content;
+}
+
+.input-field-btn {
+  user-select: none;
+  font-family: $ikharic_font;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color: #000000, $alpha: .0);
+  margin: auto;
+  font-size: 8em;
+}
+
+.input-field-btn:hover {
+  -webkit-animation: glow 1s ease-in-out infinite alternate;
+  -moz-animation: glow 1s ease-in-out infinite alternate;
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
+
+@-webkit-keyframes glow {
+  from {
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+  }
+
+  to {
+    text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+  }
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+  }
+
+  to {
+    text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+  }
+}
+
+/*
+* LOADING
+*/
+
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #000;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
+/**/

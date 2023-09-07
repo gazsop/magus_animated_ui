@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import { useApp } from "../../context/app.context";
+import { useApp } from "../../core/App";
 
 export function WarningWindow() {
   const {getAppError} = useApp();

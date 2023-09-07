@@ -1,0 +1,267 @@
+:root {
+  --side-mid-scale-factor: 0.7;
+  --card-width: 400px;
+  --card-height: 82vh;
+  --card-top: 4vh;
+  --card-margin-x: 25vw;
+  --side-card-top: calc(4vh - var(--card-height) / 2 + var(--card-height) * var(--side-mid-scale-factor) / 1.7);
+  --side-card-width: var(--card-width) * var(--side-mid-scale-factor);
+  --mid-card-top-scaling-factor: 2;
+  --mid-card-top: calc(var(--card-top) * var(--mid-card-top-scaling-factor));
+  --mid-card-left: calc(50vw - var(--card-width) / 2);
+
+  --left-card-left: calc(50vw - 0.75 * var(--card-width) - var(--card-margin-x));
+  --right-card-left: calc(50vw + 0.75 * var(--card-width) + var(--card-margin-x) - var(--card-width));
+
+  --fleft-card-left: calc((var(--card-width) - var(--side-card-width)) / -2 - var(--side-card-width));
+  --fright-card-left: calc(100vw - (var(--card-width) - var(--side-card-width)) / 2);
+
+  --z-index-back: auto;
+  --z-index-mid: 5;
+  --z-index-front: 10;
+  --card-animation-time: 4s;
+  --card-animation-repeat: 1;
+}
+
+.disabled {
+  opacity: 0;
+}
+
+.slideshow-card {
+  width: var(--card-width);
+  height: var(--card-height);
+  background-color: red;
+  position: absolute;
+  border-radius: 30px;
+  font-size: 1rem;
+  color: white;
+  overflow: visible;
+}
+
+.card-header,.card-second-header,.card-third-header,.card-text-body{
+  width: 100%;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  text-align: center;
+}
+
+.card-header,.card-second-header,.card-third-header,.card-text-body > *{
+}
+
+.select-btn{
+  position: absolute;
+  bottom: 20px;
+  width: 250px;
+  height: 60px;
+  font-size: 1.5rem;
+}
+.mid {
+  left: var(--mid-card-left);
+  top: var(--mid-card-top);
+  z-index: var(--z-index-front);
+}
+
+.side-card {
+  top: var(--side-card-top);
+  scale: var(--side-mid-scale-factor);
+}
+
+.left {
+  left: var(--left-card-left);
+}
+
+.right {
+  left: var(--right-card-left);
+}
+
+.left,.right{
+  z-index: var(--z-index-mid);
+}
+
+.far-left {
+  left: var(--fleft-card-left);
+}
+
+.far-right {
+  left: var(--fright-card-left);
+}
+
+.far-left,
+.far-right {
+  z-index: var(--z-index-back);
+  opacity: 0;
+}
+
+.farLeftToLeft-animation {
+  animation: 
+    var(--card-animation-time) var(--card-animation-repeat) normal forwards cubic-bezier(.45,.05,.55,.95) farLeftToLeftTransition, 
+    var(--card-animation-time) var(--card-animation-repeat) linear normal forwards farLeftToLeftOpacity;
+}
+
+.leftToFarLeft-animation {
+  animation: 
+    var(--card-animation-time) var(--card-animation-repeat) reverse forwards cubic-bezier(.45,.05,.55,.95) farLeftToLeftTransition, 
+    var(--card-animation-time) var(--card-animation-repeat) linear reverse forwards farLeftToLeftOpacity;
+}
+
+@keyframes farLeftToLeftTransition {
+  0% {
+    left: var(--fleft-card-left);
+    scale: var(--side-mid-scale-factor);
+  }
+
+  100% {
+    left: var(--left-card-left);
+    scale: var(--side-mid-scale-factor);
+  }
+}
+
+@keyframes farLeftToLeftOpacity {
+  0% {
+    opacity: 0;
+  }
+
+  80% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.leftToMid-animation {
+  animation: 
+    var(--card-animation-time) var(--card-animation-repeat) normal forwards linear leftToMidTransition, 
+    var(--card-animation-time) var(--card-animation-repeat) ease-in-out normal forwards leftToMidScaling;
+}
+
+.midToLeft-animation {
+  animation: 
+    var(--card-animation-time) var(--card-animation-repeat) reverse forwards linear leftToMidTransition, 
+    var(--card-animation-time) var(--card-animation-repeat) ease-in-out reverse forwards leftToMidScaling;
+}
+
+@keyframes leftToMidTransition {
+  0% {
+    top: var(--side-card-top);
+    left: var(--left-card-left);
+  }
+
+  100% {
+    left: var(--mid-card-left);
+    top: var(--mid-card-top);
+  }
+}
+
+@keyframes leftToMidScaling {
+  0% {
+    scale: var(--side-mid-scale-factor);
+  }
+
+  100% {
+    scale: 1;
+  }
+}
+
+.midToRight-animation {
+  animation: 
+    var(--card-animation-time) var(--card-animation-repeat) normal forwards linear midToRightTransition, 
+    var(--card-animation-time) var(--card-animation-repeat) ease-in-out normal forwards midToRightScaling;
+}
+
+.rightToMid-animation {
+  animation: 
+    var(--card-animation-time) var(--card-animation-repeat) reverse forwards linear midToRightTransition, 
+    var(--card-animation-time) var(--card-animation-repeat) ease-in-out reverse forwards midToRightScaling;
+}
+
+
+@keyframes midToRightTransition {
+  0% {
+    top: var(--mid-card-top);
+    left: var(--mid-card-left);
+  }
+
+  100% {
+    left: var(--right-card-left);
+    top: var(--side-card-top);
+  }
+}
+
+@keyframes midToRightScaling {
+  0% {
+    scale: 1;
+  }
+
+  100% {
+    scale: var(--side-mid-scale-factor);
+  }
+}
+
+.rightToFarRight-animation {
+  animation: 
+    var(--card-animation-time) var(--card-animation-repeat) normal forwards linear rightToFarRightTransition, 
+    var(--card-animation-time) var(--card-animation-repeat) linear normal forwards rightToFarRightOpacity;
+}
+
+@keyframes rightToFarRightTransition {
+  0% {
+    left: var(--right-card-left);
+    scale: var(--side-mid-scale-factor);
+  }
+
+  100% {
+    left: var(--fright-card-left);
+    scale: var(--side-mid-scale-factor);
+  }
+}
+
+@keyframes rightToFarRightOpacity {
+  0% {
+    opacity: 1;
+  }
+
+  40% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.farRightToRight-animation {
+  animation: 
+    var(--card-animation-time) var(--card-animation-repeat) normal forwards linear farRightToRightTransition, 
+    var(--card-animation-time) var(--card-animation-repeat) linear normal forwards farRightToRightOpacity;
+}
+
+@keyframes farRightToRightTransition {
+  0% {
+    left: var(--fright-card-left);
+  }
+
+  100% {
+    left: var(--right-card-left);
+  }
+}
+
+@keyframes farRightToRightOpacity {
+  0% {
+    opacity: 0;
+  }
+
+  80% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  :root{
+    --card-margin-x: 40vw;
+  }
+}

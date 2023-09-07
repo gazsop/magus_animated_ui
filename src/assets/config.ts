@@ -11,3 +11,12 @@ export const CLIENT = {
   SUPRESS_ERROR: true,
   SOCKET_CONNECTION: ["polling", "websocket"]
 };
+
+export const GAME = {
+  PAGESTATE: {
+    adventure: "adv",
+    CHAR: "char",
+    SPELLS: "spell",
+    SECONDARYSTATS: "secStats"
+  }
+}

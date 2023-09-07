@@ -1,0 +1,72 @@
+:root{
+    --page_animation_duration: .5s;
+}
+
+.page-animation-left-appear-active{
+    transform: translateX(-100%) scale(.6);
+}
+
+.page-animation-left-enter {
+  transform: translateX(-100%) scale(.6);
+}
+
+.page-animation-left-enter-active {
+  transform: translateX(0);
+  transition: transform var(--page_animation_duration) cubic-bezier(.5,0,.5,1);
+}
+
+.page-animation-left-exit {
+  transform: translateX(0);
+}
+
+.page-animation-left-exit-active {
+  transform: translateX(100%) scale(.6);
+  transition: transform var(--page_animation_duration) cubic-bezier(.5,0,.5,1);
+}
+
+.page-animation-right-enter {
+  transform: translateX(100%) scale(.6);
+}
+
+.page-animation-right-enter-active {
+  transform: translateX(0) scale(1);
+  transition: transform var(--page_animation_duration) cubic-bezier(.5,0,.5,1);
+}
+
+.page-animation-right-exit {
+  transform: translateX(0) scale(1);
+}
+
+.page-animation-right-exit-active {
+  transform: translateX(-100%) scale(.6);
+  transition: transform var(--page_animation_duration) cubic-bezier(.5,0,.5,1);
+}
+
+
+.page-animation-right-appear{
+
+}
+.page-animation-right-appear-active{
+
+}
+.page-animation-right-appear-done{
+
+}
+.page-animation-right-enter{
+
+}
+.page-animation-right-enter-active{
+
+}
+.page-animation-right-enter-done{
+
+}
+.page-animation-right-exit{
+
+}
+.page-animation-right-exit-active{
+
+}
+.page-animation-right-exit-done{
+
+}

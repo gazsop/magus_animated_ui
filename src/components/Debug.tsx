@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { Col, Row } from "react-bootstrap";
 import { Button } from "react-bootstrap";
-import { useApp } from "../context/app.context";
+import { useApp } from "../core/App";
 
 export function Debug() {
   const { toggleInterfaceTheme, getAppData, setLoading } =

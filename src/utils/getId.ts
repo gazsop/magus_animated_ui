@@ -7,9 +7,7 @@ export class Id {
 
     public static getRandMultiple(length = 18, count = 2){
         const returnArray = []
-        for (let i = 0; i < count; i++) {
-            returnArray.push(this.getString(length));
-        }
+        for (let i = 0; i < count; i++) returnArray.push(this.getString(length));
         return returnArray;
     }
 

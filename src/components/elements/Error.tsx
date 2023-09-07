@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import { useApp } from "../../context/app.context";
+import { useApp } from "../../core/App";
 
 export function FrontEndError() {
   const { getAppError } = useApp();

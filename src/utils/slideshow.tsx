@@ -1,206 +1,200 @@
-import {
-  createRef,
-  LegacyRef,
-  MutableRefObject,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useRef, useState } from "react";
 import { linkedList } from "./linkedList";
-import "../assets/slideshow.css";
-import React from "react";
+import "../assets/css/slideshow.css";
 import { Id } from "./getId";
 
-type TSlideshowProps = {
-  data: linkedList<ICard>;
-  layout?: "advanture";
-};
-
-export interface ICard {
-  header: string;
-  secondHeader?: JSX.Element;
-  thirdHeader?: JSX.Element;
-  textBody: JSX.Element;
+export interface ICardSlideshow {
+	jsx: JSX.Element;
+	data: any;
+	selected: boolean;
 }
 
+type TSlideshowProps = {
+	layout?: "adventure";
+	selectCard: () => void;
+	data: linkedList<ICardSlideshow>;
+};
+
+type TCardPositions = (typeof cardPositions)[keyof typeof cardPositions];
+
 interface ICardData {
-  name: typeof cardPositions[keyof typeof cardPositions];
-  val: ICard;
-  classes: string;
-  animationClasses: { toLeft: string; toRight: string };
+	name: TCardPositions;
+	val: JSX.Element;
+	classes: string;
+	animationClasses: { toLeft: string; toRight: string };
 }
 
 const cardPositions = {
-  farLeft: "farLeft",
-  left: "left",
-  mid: "mid",
-  right: "right",
-  farRight: "farRight",
+	farLeft: "farLeft",
+	left: "left",
+	mid: "mid",
+	right: "right",
+	farRight: "farRight",
 };
-const numberOfCards = 5;
-const cardsData: (linkedList: linkedList<ICard>) => ICardData[] = (data) => {
-  return [
-    {
-      name: cardPositions.farLeft,
-      val: data.getHead().prev!.prev!.val,
-      classes: "side-card far-left",
-      animationClasses: {
-        toLeft: "no-animation",
-        toRight: "farLeftToLeft-animation",
-      },
-    },
-    {
-      name: cardPositions.left,
-      val: data.getHead().prev!.val,
-      classes: "side-card left",
-      animationClasses: {
-        toLeft: "leftToFarLeft-animation",
-        toRight: "leftToMid-animation",
-      },
-    },
-    {
-      name: cardPositions.mid,
-      val: data.getHead().val,
-      classes: "mid",
-      animationClasses: {
-        toLeft: "midToLeft-animation",
-        toRight: "midToRight-animation",
-      },
-    },
-    {
-      name: cardPositions.right,
-      val: data.getHead().next!.val,
-      classes: "side-card right",
-      animationClasses: {
-        toLeft: "rightToMid-animation",
-        toRight: "rightToFarRight-animation",
-      },
-    },
-    {
-      name: cardPositions.farRight,
-      val: data.getHead().next!.next!.val,
-      classes: "side-card far-right",
-      animationClasses: {
-        toLeft: "farRightToRight-animation",
-        toRight: "no-animation",
-      },
-    },
-  ];
+
+const cardsData: (linkedList: linkedList<ICardSlideshow>) => ICardData[] = (
+	data
+) => {
+	return [
+		{
+			name: cardPositions.farLeft,
+			val: data.getHead.prev!.prev!.val.jsx,
+			classes: "side-card far-left",
+			animationClasses: {
+				toLeft: "no-animation",
+				toRight: "farLeftToLeft-animation",
+			},
+		},
+		{
+			name: cardPositions.left,
+			val: data.getHead.prev!.val.jsx,
+			classes: "side-card left",
+			animationClasses: {
+				toLeft: "leftToFarLeft-animation",
+				toRight: "leftToMid-animation",
+			},
+		},
+		{
+			name: cardPositions.mid,
+			val: data.getHead.val.jsx,
+			classes: "mid",
+			animationClasses: {
+				toLeft: "midToLeft-animation",
+				toRight: "midToRight-animation",
+			},
+		},
+		{
+			name: cardPositions.right,
+			val: data.getHead.next!.val.jsx,
+			classes: "side-card right",
+			animationClasses: {
+				toLeft: "rightToMid-animation",
+				toRight: "rightToFarRight-animation",
+			},
+		},
+		{
+			name: cardPositions.farRight,
+			val: data.getHead.next!.next!.val.jsx,
+			classes: "side-card far-right",
+			animationClasses: {
+				toLeft: "farRightToRight-animation",
+				toRight: "no-animation",
+			},
+		},
+	];
 };
 
 export function Slideshow(props: TSlideshowProps) {
-  if (props.data.getType() !== "circular") throw Error("list is not circular");
+	console.log("slideshow");
+	if (props.data.getType !== "circular") throw Error("list is not circular");
 
-  const [animation, setAnimation] = useState(false);
-  const [cards, setCards] = useState<ICardData[]>(cardsData(props.data));
-  const cardKeyRef = useRef(Array(5).fill("").map(item=>Id.getRand(9)))
+	const [animation, setAnimation] = useState<"prev" | "next" | null>(null);
+	const cards = useRef<ICardData[]>(cardsData(props.data));
+	const cardKeyRef = useRef([...Array(5)].map((item) => crypto.randomUUID()));
 
-  console.log(cardKeyRef.current);
-  const afterAnimationCallback = ()=>{
-    setAnimation(false);
-    setCards(cardsData(props.data))
-  };
+	const afterAnimationCallback = (e: React.AnimationEvent) => {
+		if (!animation) return;
+		if (e.animationName !== "leftToMidTransition") return;
+		e.stopPropagation();
+		cardKeyRef.current =
+			animation === "prev"
+				? [
+						cardKeyRef.current[4],
+						...cardKeyRef.current.filter((_, index) => index !== 4),
+				  ]
+				: [
+						...cardKeyRef.current.filter((_, index) => index !== 0),
+						cardKeyRef.current[0],
+				  ];
+		props.data.selectNode({ index: animation });
+		setAnimation(null);
+		cards.current = cardsData(props.data);
+	};
 
-  const animateIncrease = () =>
-    cards.map(
-      (card) =>
-        (card.classes = `${card.classes} ${card.animationClasses.toLeft}`)
-    );
+	const animateIncrease = () =>
+		cards.current.map(
+			(card) =>
+				(card.classes = `${card.classes} ${card.animationClasses.toLeft}`)
+		);
 
-  const animateDecrease = () =>
-    cards.map(
-      (card) =>
-        (card.classes = `${card.classes} ${card.animationClasses.toRight}`)
-    );
+	const animateDecrease = () =>
+		cards.current.map(
+			(card) =>
+				(card.classes = `${card.classes} ${card.animationClasses.toRight}`)
+		);
 
-  const changeIndex = (value: "prev" | "next") => {
-    if(animation) return;
-    setAnimation(true);
-    props.data.selectNode({ index: value });
-    value === "next" ? animateIncrease() : animateDecrease();
-  };
+	const changeIndex = (value: "prev" | "next") => {
+		console.log(value);
+		if (animation) return;
+		setAnimation(value);
+		console.log(cardKeyRef.current);
+		value === "next" ? animateIncrease() : animateDecrease();
+	};
 
-  return (
-    <>
-      <input
-        type="button"
-        value="PRESS ME"
-        onClick={() => changeIndex("next")}
-        style={{
-          position: "absolute",
-          bottom: "0px",
-          left: "30px",
-        }}
-        key="leftBtn"
-      ></input>
-      <input
-        type="button"
-        value="PRESS ME TOO"
-        onClick={() => changeIndex("prev")}
-        style={{
-          position: "absolute",
-          bottom: "0px",
-          left: "130px",
-        }}
-        key="rightBtn"
-      ></input>
-      {cards.map((card, i) => (
-        <Card
-          data={card}
-          onAnimationEndCallback={
-            card.name === cardPositions.mid ? afterAnimationCallback : () => {}
-          }
-          key={cardKeyRef.current[i]}
-        ></Card>
-      ))}
+	const getCardFunctions = (
+		cardName: TCardPositions,
+		e?: React.AnimationEvent
+	) => {
+		// console.log(cardName);
+		if (cardName === cardPositions.left)
+			return {
+				onClick: () => changeIndex("prev"),
+			};
+		if (cardName === cardPositions.mid)
+			return {
+				onClick: () => props.selectCard(),
+				onAnimationEnd: e !== undefined ? afterAnimationCallback(e) : undefined,
+			};
+		if (cardName === cardPositions.right)
+			return {
+				onClick: () => changeIndex("next"),
+			};
+		return {
+			onClick: () => {},
+		};
+	};
 
-      <input
-        type="button"
-        value="Kiválasztom"
-        onClick={() => changeIndex("prev")}
-        className="select-btn"
-        key="selectBtn"
-      ></input>
-    </>
-  );
+	return (
+		<>
+			{cards.current.map((card, index) => (
+				<div
+					key={cardKeyRef.current[index]}
+					className={`slideshow-card 
+        ${card.classes}
+        d-flex
+        flex-column
+        align-items-center
+        justify-content-center`}
+					onAnimationEnd={(e) =>
+						getCardFunctions(card.name, e).onAnimationEnd ?? (() => {})
+					}
+					onClick={getCardFunctions(card.name).onClick}
+				>
+					{cardKeyRef.current[index]}
+					{card.val}
+				</div>
+			))}
+			<input
+				type="button"
+				value="Prev"
+				onClick={() => changeIndex("prev")}
+				className="select-btn"
+				key="prevBtn"
+			></input>
+			<input
+				type="button"
+				value="Select"
+				onClick={() => props.selectCard()}
+				className="select-btn"
+				key="selectBtn"
+			></input>
+			<input
+				type="button"
+				value="Next"
+				onClick={() => changeIndex("next")}
+				className="select-btn"
+				key="nextBtn"
+			></input>
+		</>
+	);
 }
-
-const Card = (props: {
-  data: {
-    val: ICard;
-    classes: string;
-  };
-  onclick?: Function;
-  onAnimationEndCallback: Function;
-}) => (
-  <div
-    className={`slideshow-card 
-      ${props.data.classes}
-      d-flex
-      flex-column
-      align-items-center`}
-    onClick={(e) => {
-      e.preventDefault();
-    }}
-    onAnimationEnd={() => {
-      console.log("animationend");
-      props.onAnimationEndCallback();
-    }}
-  >
-    <div className="card-header pt-5 d-flex justify-content-center align-items-center">
-      {props.data.val.header}
-    </div>
-    {props.data.val.secondHeader && (
-      <div className="card-second-header pt-1 d-flex">
-        {props.data.val.secondHeader}
-      </div>
-    )}
-    {props.data.val.thirdHeader && (
-      <div className="card-third-header pt-1 d-flex">
-        {props.data.val.thirdHeader}
-      </div>
-    )}
-
-    <div className="card-text-body">{props.data.val.textBody}</div>
-  </div>
-);

@@ -1,0 +1,33 @@
+:root{
+    --bag-width: auto;
+    --bag-max-width: 600px;
+    --bag-max-height: var(--bag-max-width);
+    --bookWidth: 80vw;
+    --bookHeight: var(--bookWidth) * .625;
+    --bookDepth: 10px;
+    --bookBottomTop: var(--bookHeight);
+}
+
+.bag{
+    border: 1px solid black;
+    padding: 3px;
+}
+
+.bag-slot{
+    height: 40px;
+    aspect-ratio: 1;
+    background-color: rgb(148, 70, 37);
+    border: 1px solid rgb(0, 0, 0);
+    padding: 2px;
+}
+
+.note-container{
+    width: 400px;
+    height: 600px;
+    overflow: none;
+}
+
+.notes-list{
+    height: 500px;
+    overflow: scroll;
+}

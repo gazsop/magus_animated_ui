@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Overlay, Tooltip } from "react-bootstrap";
-import {IRegexErrorArray} from '../login/PageLogin'
+import {IRegexErrorArray} from '../pageLogin/PageLogin_FORMAL'
 
 function ErrorOverlay(props: any){
     const [errorText, setErrorText] = useState(null);

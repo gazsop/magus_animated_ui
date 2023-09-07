@@ -4,6 +4,8 @@ interface ILinkedListNode<T> {
   next: linkedListNode<T> | null;
   prev: linkedListNode<T> | null;
   val: T;
+  index: number;
+  id: string;
 }
 
 export class linkedList<T> {
@@ -12,6 +14,8 @@ export class linkedList<T> {
   protected type: TTypeOfLinkedList = "plain";
 
   constructor(initArray: T[], type: TTypeOfLinkedList = "plain") {
+    // console.log(type);
+    // console.log(initArray);
     this.type = type;
     initArray
       .filter((item) => item || item === 0)
@@ -26,12 +30,12 @@ export class linkedList<T> {
     return this.nodeArray.length;
   }
 
-  public getType(){
+  get getType(){
     return this.type;
   }
 
-  public getIndex(){
-    return (this.nodeArray.findIndex( node => node === this.getHead()));
+  get getIndex(){
+    return (this.nodeArray.findIndex( node => node === this.getHead));
   }
 
   public deleteNode(deleteValue: {
@@ -71,13 +75,11 @@ export class linkedList<T> {
     return this;
   }
 
-  public searchNode(searchParam: { val: T; index: number }) {
+  public searchNode(searchParam: { val?: T; index?: number }) {
     if (searchParam.val)
-      return [...this.nodeArray.filter((node) => node.val === searchParam.val)];
+      return this.nodeArray.find((node) => node.val === searchParam.val);
     if (searchParam.index)
-      return [
-        ...this.nodeArray.filter((_, index) => index === searchParam.index),
-      ];
+      return this.nodeArray.find((_, index) => index === searchParam.index);
   }
 
   public selectNode(newVal: {
@@ -85,6 +87,8 @@ export class linkedList<T> {
     index?: number | "next" | "prev";
     node?: linkedListNode<T> | null;
   }) {
+    // console.log("newVal", newVal);
+    // console.log(this.getHead.val);
     if (
       (newVal.index && newVal.val) ||
       (newVal.val && typeof newVal.val !== typeof this.nodeArray[0].val)
@@ -105,10 +109,11 @@ export class linkedList<T> {
     } else if (newVal.node)
       this.head =
         this.nodeArray.find((node) => node === newVal.node) ?? this.head;
+        // console.log(this.getHead.val);
     return this;
   }
 
-  public getHead() {
+  get getHead() {
     return this.head;
   }
 
@@ -146,15 +151,26 @@ export class linkedList<T> {
         break;
     }
   }
+
+  public map<K>(callback: (node: linkedListNode<T>) => K): K[] {
+    return this.nodeArray.map((node) => callback(node));
+  }
+
+  public find(callback: (node: linkedListNode<T>) => boolean) {
+    return this.nodeArray.find((node) => callback(node));
+  }
 }
 
 class linkedListNode<T> implements ILinkedListNode<T> {
   protected _val: T;
   protected _next: linkedListNode<T> | null = null;
   protected _prev: linkedListNode<T> | null = null;
+  protected _index: number;
+  protected _id = crypto.randomUUID();
 
   constructor(val: T, index: number) {
     this._val = val;
+    this._index = index;
   }
 
   public get next() {
@@ -166,7 +182,13 @@ class linkedListNode<T> implements ILinkedListNode<T> {
   public get val() {
     return this._val;
   }
-
+  public get index(): number {
+    return this._index;
+  }
+  public get id(): string {
+    return this._id;
+  }
+  
   public set next(newVal) {
     this._next = newVal;
   }
@@ -175,5 +197,10 @@ class linkedListNode<T> implements ILinkedListNode<T> {
   }
   public set val(newVal) {
     this._val = newVal;
+  }
+  public set index(value: number) {
+    this._index = value;
+  }
+  public set id(value: string) {
   }
 }

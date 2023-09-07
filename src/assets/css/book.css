@@ -1,0 +1,88 @@
+:root{
+  --book-width: 500px;
+  --book-height: calc(var(--book-width) * 1);
+  --book-depth: 10px;
+}
+
+.book{
+  perspective: 100vw;
+  perspective-origin: 75%;
+  transform: translateX(-25%);
+}
+
+.book.selected{
+  perspective: 1000vw;
+  perspective-origin: center;
+  transform: translateX(0);
+}
+
+.pages{
+  width: calc(1 * var(--book-width));
+  max-width: var(--book-width);
+  height: var(--book-height);
+  transform-style: preserve-3d;
+  transform-origin: center;
+  backface-visibility: hidden;
+  transform: rotateX(15deg);
+}
+
+.book .book-page{
+  float: none;
+  clear: none;
+  position: absolute;
+  transform-origin: 0 0;
+  transition: transform 1.4s;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  user-select: none;
+  background-color: #909090 !important;
+  top: 0;
+  width: calc(var(--book-width) / 2);
+  height: var(--book-height);
+  background: left top no-repeat;
+  background-size: cover;
+  overflow: hidden;
+}
+
+.book .book-page:nth-child(odd) {
+  pointer-events: all;
+  transform: rotateY(0deg);
+  right: 0;
+  border-radius: 0 4px 4px 0;
+  background-image: linear-gradient(to right, rgba(0,0,0,.15) 0%, rgba(0,0,0,0) 10%);
+}
+
+.book .book-page:nth-child(even) {
+  pointer-events: none;
+  transform: rotateY(180deg);
+  transform-origin: 100% 0;
+  left: 0;
+  border-radius: 4px 0 0 4px;
+  border-color: black;
+  background-image: linear-gradient(to left, rgba(0,0,0,.12) 0%, rgba(0,0,0,0) 10%);
+}
+
+.book .book-page.flipped:nth-child(odd) {
+  pointer-events: none;
+  transform: rotateY(-180deg);
+}
+
+.book .book-page.flipped:nth-child(even) {
+  pointer-events: all;
+  transform: rotateY(0deg);
+}
+
+*,
+* :before,
+*:after {
+  box-sizing: border-box;
+  backface-visibility: visible;
+}
+body{
+  overflow:hidden;
+}
+
+.book-page:nth-child(odd){
+  background-position: right top;
+}

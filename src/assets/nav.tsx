@@ -1,75 +1,33 @@
 import React from "react";
-import { Advantures } from "../components/advantures/PageAdvantures";
-import { Character } from "../components/character/PageCharacter";
-import { Login } from "../components/login/PageLogin";
-import { Monsters } from "../components/PageMonsters";
-import { Spells } from "../components/PageSpells";
+import { Login } from "../components/pageLogin/PageLogin_FORMAL";
+import { Admin } from "../components/pageAdmin/Admin";
 import { USER } from "./constants";
+import { Game } from "../components/Game";
+import { TNav } from "../types/nav";
 
-export type TPage = {
-  TEXT: string;
-  HREF: string;
-  RANG_REQ: string;
-  INDEX: boolean;
-  COMPONENT: React.ReactElement;
-};
-
-export type TNavDefault = {
-  HREF: string;
-  COMPONENT: React.ReactElement;
-};
-export type TNav = {
-  PAGES: TPage[];
-  DEFAULT: (val: string) => TNavDefault;
-};
-
-export const NAV: TNav = {
-  PAGES: [
-    {
-      TEXT: "Belépés",
-      HREF: "login",
-      RANG_REQ: USER.RANK.UNAUTH,
-      INDEX: true,
-      COMPONENT: <Login />,
-    },
-    {
-      TEXT: "Karakter",
-      HREF: "character",
-      RANG_REQ: USER.RANK.USER,
-      INDEX: false,
-      COMPONENT: <Character />,
-    },
-    {
-      TEXT: "Kalandok",
-      HREF: "advantures",
-      RANG_REQ: USER.RANK.USER,
-      INDEX: false,
-      COMPONENT: <Advantures />,
-    },
-    {
-      TEXT: "Varázslatok",
-      HREF: "spells",
-      RANG_REQ: USER.RANK.USER,
-      INDEX: false,
-      COMPONENT: <Spells />,
-    },
-    {
-      TEXT: "Lények",
-      HREF: "monster",
-      RANG_REQ: USER.RANK.ADMIN,
-      INDEX: false,
-      COMPONENT: <Monsters />,
-    },
-  ],
-  DEFAULT: (userRank) => {
-    if (userRank === USER.RANK.USER)
-      return {
-        HREF: "advantures",
-        COMPONENT: <Advantures />,
-      };
-    return {
-      HREF: "login",
-      COMPONENT: <Login />,
-    };
-  },
-};
+// export const NAV: TNav = {
+//   PAGES: [
+//     {
+//       TEXT: "Belépés",
+//       HREF: "login",
+//       RANG_REQ: USER.RANK.UNAUTH,
+//       INDEX: true,
+//       COMPONENT: <Login />,
+//     },
+//     {
+//       TEXT: "Game",
+//       HREF: "game",
+//       RANG_REQ: USER.RANK.USER,
+//       INDEX: false,
+//       COMPONENT: <Game />,
+//     },
+//     {
+//       TEXT: "admin",
+//       HREF: "admin",
+//       RANG_REQ: USER.RANK.ADMIN,
+//       INDEX: false,
+//       COMPONENT: <Admin />,
+//     },
+//   ],
+//   DEFAULT: userRank => NAV.PAGES.find(item=>item.RANG_REQ === userRank) ?? NAV.PAGES[0]
+// };
