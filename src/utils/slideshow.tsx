@@ -32,9 +32,7 @@ const cardPositions = {
 	farRight: "farRight",
 };
 
-const cardsData: (linkedList: linkedList<ICardSlideshow>) => ICardData[] = (
-	data
-) => {
+const cardsData: (linkedList: linkedList<ICardSlideshow>) => ICardData[] = data => {
 	return [
 		{
 			name: cardPositions.farLeft,
