@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Id } from "../../utils/getId";
 import "../../assets/css/game.css";
-import { Slideshow } from "../../utils/slideshow";
+import { Slideshow } from "../../utils/Slideshow";
 import { linkedList } from "../../utils/linkedList";
 import { IAdventure } from "../../types/common";
 import advantures_bg from "../../assets/imgs/bg/adventures_2.png";
@@ -52,27 +52,10 @@ export function Adventures(): JSX.Element {
 		],
 		"circular"
 	);
-	// const allAdvantures = ()=> new linkedList([...testAdventure.map((adventure, index) =>(
-	//   {
-	//     jsx: <div>{index}</div>,
-	//     data: adventure,
-	//     selected: false
-	//   }
-	// ))], "circular");
+
 
 	return (
 		<div
-			className={[
-				// "d-flex",
-				// "login-form",
-				// "flex-wrap",
-				// "py-4",
-				// "px-3",
-				// "mx-auto",
-				// "justify-content-center",
-				// "align-items-center",
-				// "align-self-center",
-			].join(" ")}
 			style={{
 				background: `url(${advantures_bg}) no-repeat center center fixed`,
 				backgroundSize: "cover",

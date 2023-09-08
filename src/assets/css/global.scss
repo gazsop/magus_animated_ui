@@ -19,6 +19,11 @@ $input_text_color_dark: $text_color_dark;
 $nav_bg_color_dark: #aaa;
 $bg_container_dark: rgb(0, 50, 189);
 
+* {
+  box-sizing: border-box;
+  user-select: none;
+}
+
 // GENERAL HTML ELEMENT
 html,
 body,

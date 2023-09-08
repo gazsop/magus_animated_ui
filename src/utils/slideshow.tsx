@@ -160,11 +160,11 @@ export function Slideshow(props: TSlideshowProps) {
 				<div
 					key={cardKeyRef.current[index]}
 					className={`slideshow-card 
-        ${card.classes}
-        d-flex
-        flex-column
-        align-items-center
-        justify-content-center`}
+          ${card.classes}
+          d-flex
+          flex-column
+          align-items-center
+          justify-content-center`}
 					onAnimationEnd={(e) =>
 						getCardFunctions(card.name, e).onAnimationEnd ?? (() => {})
 					}

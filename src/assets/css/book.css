@@ -1,32 +1,39 @@
-:root{
+:root {
   --book-width: 500px;
   --book-height: calc(var(--book-width) * 1);
   --book-depth: 10px;
+  --book-ratio: 500/730;
 }
 
-.book{
+.book {
   perspective: 100vw;
   perspective-origin: 75%;
   transform: translateX(-25%);
+  transition: transform 1.4s;
 }
 
-.book.selected{
+.book.selected {
   perspective: 1000vw;
   perspective-origin: center;
   transform: translateX(0);
 }
 
-.pages{
+.book.selected-last {
+  transform: translateX(25%);
+}
+
+.pages {
   width: calc(1 * var(--book-width));
   max-width: var(--book-width);
-  height: var(--book-height);
+  /* height: var(--book-height); */
+  aspect-ratio: calc(var(--book-ratio) * 2);
   transform-style: preserve-3d;
   transform-origin: center;
   backface-visibility: hidden;
   transform: rotateX(15deg);
 }
 
-.book .book-page{
+.book .book-page {
   float: none;
   clear: none;
   position: absolute;
@@ -39,7 +46,7 @@
   background-color: #909090 !important;
   top: 0;
   width: calc(var(--book-width) / 2);
-  height: var(--book-height);
+  height: 100%;
   background: left top no-repeat;
   background-size: cover;
   overflow: hidden;
@@ -50,7 +57,7 @@
   transform: rotateY(0deg);
   right: 0;
   border-radius: 0 4px 4px 0;
-  background-image: linear-gradient(to right, rgba(0,0,0,.15) 0%, rgba(0,0,0,0) 10%);
+  background-image: linear-gradient(to right, rgba(0, 0, 0, .15) 0%, rgba(0, 0, 0, 0) 10%);
 }
 
 .book .book-page:nth-child(even) {
@@ -60,7 +67,7 @@
   left: 0;
   border-radius: 4px 0 0 4px;
   border-color: black;
-  background-image: linear-gradient(to left, rgba(0,0,0,.12) 0%, rgba(0,0,0,0) 10%);
+  background-image: linear-gradient(to left, rgba(0, 0, 0, .12) 0%, rgba(0, 0, 0, 0) 10%);
 }
 
 .book .book-page.flipped:nth-child(odd) {
@@ -79,10 +86,7 @@
   box-sizing: border-box;
   backface-visibility: visible;
 }
-body{
-  overflow:hidden;
-}
 
-.book-page:nth-child(odd){
+.book-page:nth-child(odd) {
   background-position: right top;
 }

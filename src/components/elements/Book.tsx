@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import "../../assets/css/book.css";
-import book_cover from "../../assets/imgs/book_cover_temp.png";
+import book_cover from "../../assets/imgs/book_cover.png";
+import book_backside from "../../assets/imgs/book_backside.png";
 import { IAdventure } from "../../types/common";
+import { Image } from "react-bootstrap";
 
 const nrOfPages = 9;
 
@@ -28,13 +30,10 @@ const pagesJsx = (
 				style={{
 					width: "100%",
 					height: "100%",
-					// backgroundImage: `url(${book_cover})`,
-					// backgroundSize: "cover",
-					// backgroundPosition: "center",
-					// backgroundRepeat: "no-repeat",
 				}}
 				key={ref[0]}
 			>
+        <Image src={book_cover} fluid />
 				{arg?.character.name}
 			</div>,
 			<div key={ref[1]}>Page 1</div>,
@@ -47,7 +46,9 @@ const pagesJsx = (
 			<div key={ref[8]}>Page 8</div>,
 			<div key={ref[9]}>Page 9</div>,
 			<div key={ref[10]}>Page 10</div>,
-			<div key={ref[11]}>Page 11</div>,
+			<div key={ref[11]}>
+        <Image src={book_backside} fluid />
+      </div>,
 		],
 		jsxLength: function () {
 			return this.jsx.length;
@@ -70,6 +71,9 @@ const Book = (props: IBookProps) => {
 	const bookComponentsRef = useRef<string[]>(
 		[...Array(2)].map((_) => crypto.randomUUID())
 	);
+
+
+
 	const generatePage = (jsx: JSX.Element[]): JSX.Element[] => [
 		...jsx.map((page, index) => (
 			<div
@@ -82,22 +86,15 @@ const Book = (props: IBookProps) => {
 				}}
 				key={`page-${pageRef.current[index]}`}
 				onClick={
-					index === 0
-						? () => {
-              if(!selected){
-                setSelected(true);
-                return;
-              }
-            }
-						: index % 2 === 0
+             index % 2 === 0
 						? (e) => {
-								e.stopPropagation();
-								// console.log(e);
+              if(!selected) return;
+                e.stopPropagation();
 								setBookPages("incr");
 						  }
 						: (e) => {
-								// console.log(e);
-								e.stopPropagation();
+              if(!selected) return;
+                e.stopPropagation();
 								setBookPages("decr");
 						  }
 				}
@@ -127,19 +124,29 @@ const Book = (props: IBookProps) => {
 	};
 
 	return (
+    <>
 		<div
-			className={`book ${selected ? "selected" : ""}`}
+			className={`book ${(selected && currentPage !== 0) && currentPage !== pages.length ? "selected" : ""}`}
 			key={bookComponentsRef.current[0]}
 		>
 			<div
 				className="pages"
 				key={bookComponentsRef.current[1]}
-				onClick={() => setSelected(true)}
 			>
 				{pages.map((page) => page)}
 				{`currentPage: ${props.data.id}`}
 			</div>
 		</div>
+    <button
+      onClick={e => {
+        if(!selected){
+          setSelected(true);
+          setCurrentPage(2);
+          console.log("selected onclick");
+        }
+      }}
+    >SELECT</button>
+    </>
 	);
 };
 
