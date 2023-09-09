@@ -32,7 +32,9 @@ const cardPositions = {
 	farRight: "farRight",
 };
 
-const cardsData: (linkedList: linkedList<ICardSlideshow>) => ICardData[] = data => {
+const cardsData: (linkedList: linkedList<ICardSlideshow>) => ICardData[] = (
+	data
+) => {
 	return [
 		{
 			name: cardPositions.farLeft,
@@ -93,7 +95,6 @@ export function Slideshow(props: TSlideshowProps) {
 	const afterAnimationCallback = (e: React.AnimationEvent) => {
 		if (!animation) return;
 		if (e.animationName !== "leftToMidTransition") return;
-		e.stopPropagation();
 		cardKeyRef.current =
 			animation === "prev"
 				? [
@@ -106,6 +107,7 @@ export function Slideshow(props: TSlideshowProps) {
 				  ];
 		props.data.selectNode({ index: animation });
 		setAnimation(null);
+		console.log(animation);
 		cards.current = cardsData(props.data);
 	};
 
@@ -122,7 +124,7 @@ export function Slideshow(props: TSlideshowProps) {
 		);
 
 	const changeIndex = (value: "prev" | "next") => {
-		console.log(value);
+		console.log(animation);
 		if (animation) return;
 		setAnimation(value);
 		console.log(cardKeyRef.current);
@@ -133,7 +135,6 @@ export function Slideshow(props: TSlideshowProps) {
 		cardName: TCardPositions,
 		e?: React.AnimationEvent
 	) => {
-		// console.log(cardName);
 		if (cardName === cardPositions.left)
 			return {
 				onClick: () => changeIndex("prev"),
@@ -157,12 +158,12 @@ export function Slideshow(props: TSlideshowProps) {
 			{cards.current.map((card, index) => (
 				<div
 					key={cardKeyRef.current[index]}
-					className={`slideshow-card 
-          ${card.classes}
-          d-flex
-          flex-column
-          align-items-center
-          justify-content-center`}
+					className={`${card.classes}
+						slideshow-card 
+						d-flex
+						flex-column
+						align-items-center
+						justify-content-center`}
 					onAnimationEnd={(e) =>
 						getCardFunctions(card.name, e).onAnimationEnd ?? (() => {})
 					}
@@ -185,6 +186,10 @@ export function Slideshow(props: TSlideshowProps) {
 				onClick={() => props.selectCard()}
 				className="select-btn"
 				key="selectBtn"
+				style={{ 
+					left: "50%",
+					transform: "translateX(-50%)",
+				 }}
 			></input>
 			<input
 				type="button"
@@ -192,7 +197,29 @@ export function Slideshow(props: TSlideshowProps) {
 				onClick={() => changeIndex("next")}
 				className="select-btn"
 				key="nextBtn"
+				style={{
+					right: "0",
+				}}
 			></input>
+			<ul
+				style={{
+					position: "absolute",
+					bottom: "80px",
+					right: "0",
+					background: "white",
+					listStyle: "none",
+				}}
+			>
+				<li>
+					{animation}
+				</li>
+				<li>
+					{cardKeyRef.current[0]}
+				</li>
+				<li>
+					{props.data.getHead.val.data.id}
+				</li>
+			</ul>
 		</>
 	);
 }

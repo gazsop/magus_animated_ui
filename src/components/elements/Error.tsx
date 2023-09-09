@@ -3,15 +3,15 @@ import { Button, Modal } from "react-bootstrap";
 import { useApp } from "../../core/App";
 
 export function FrontEndError() {
-  const { getAppError } = useApp();
+  const { getAppData } = useApp();
   const [showError, setShowError] = useState<boolean>(false);
   console.log("showError")
   console.log(showError)
   console.log("getAppError")
-  console.log(getAppError)
+  console.log(getAppData.error)
   useLayoutEffect(() => {
     setShowError(showError);
-  }, [getAppError]);
+  }, [getAppData]);
   return (
     <Modal
       show={showError}

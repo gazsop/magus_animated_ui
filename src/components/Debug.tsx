@@ -9,7 +9,7 @@ export function Debug() {
 
   const triggerError = () => {
     console.log("error triggered by button");
-    throw new Error("asd");
+    throw new Error("start");
   };
 
   return (
@@ -41,7 +41,7 @@ export function Debug() {
               className="mb-1 p-1"
               variant="primary"
               onClick={() => {
-                setLoading("asd")
+                setLoading("end")
               }}
             >
               setLoading
@@ -51,7 +51,7 @@ export function Debug() {
             <Button
               className="mb-1 p-1"
               variant="primary"
-              onClick={() => setLoading("basd")}
+              onClick={() => setLoading("start")}
             >
               setLoading2
             </Button>

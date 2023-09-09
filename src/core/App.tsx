@@ -30,6 +30,7 @@ const initialAppData: IAppData = {
   debugWindow: false,
   interfaceTheme: UI_THEME.DARK,
   appStatus: process.env.NODE_ENV === "development" ? true : false,
+  error: null
 };
 
 function AppProvider(props: {

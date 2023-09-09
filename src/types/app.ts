@@ -11,6 +11,7 @@ export interface IAppData {
 	debugWindow: boolean;
 	interfaceTheme: TInterfaceTheme;
 	appStatus: boolean;
+	error: string | null;
 }
 
 export type TUpdateAppData = Optional<IAppData, keyof IAppData>;

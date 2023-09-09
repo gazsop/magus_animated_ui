@@ -1,25 +1,30 @@
 :root {
-  --book-width: 500px;
+  --book-width: 700px;
   --book-height: calc(var(--book-width) * 1);
   --book-depth: 10px;
   --book-ratio: 500/730;
 }
 
 .book {
+  width: calc(var(--book-width) / 2);
+  aspect-ratio: calc(var(--book-ratio));
+  position:relative;
   perspective: 100vw;
   perspective-origin: 75%;
-  transform: translateX(-25%);
-  transition: transform 1.4s;
+  transform-style: preserve-3d;
+  margin: auto;
+  transition: transform 1.4s, perspective 1s, perspective-origin 1.4s;
 }
 
 .book.selected {
   perspective: 1000vw;
   perspective-origin: center;
-  transform: translateX(0);
 }
 
 .book.selected-last {
-  transform: translateX(25%);
+  perspective-origin: 25%;
+  perspective: 100vw;
+  /* transform: translateX(25%); */
 }
 
 .pages {
@@ -27,10 +32,30 @@
   max-width: var(--book-width);
   /* height: var(--book-height); */
   aspect-ratio: calc(var(--book-ratio) * 2);
+  /* aspect-ratio: var(--book-ratio); */
   transform-style: preserve-3d;
   transform-origin: center;
   backface-visibility: hidden;
-  transform: rotateX(15deg);
+  pointer-events: none;
+}
+
+.pages-closed {
+  transform: rotateX(15deg) translateX(-50%);
+  transition: transform 1.4s;
+}
+
+.pages:not(.pages-closed) {
+  transform: rotateX(15deg) translateX(-25%);
+  transition: transform 1.4s;
+}
+
+.book.selected-last .pages.pages-closed {
+  transform: rotateX(15deg) translateX(0);
+  transition: transform 1.4s;
+}
+
+.book.selected .pages {
+
 }
 
 .book .book-page {
@@ -50,6 +75,13 @@
   background: left top no-repeat;
   background-size: cover;
   overflow: hidden;
+  pointer-events: all;
+}
+
+.book .book-page:first-child, .book .book-page {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  outline: 1px solid transparent;
 }
 
 .book .book-page:nth-child(odd) {

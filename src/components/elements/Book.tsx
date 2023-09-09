@@ -33,22 +33,18 @@ const pagesJsx = (
 				}}
 				key={ref[0]}
 			>
-        <Image src={book_cover} fluid />
+        		<Image src={book_cover} fluid />
 				{arg?.character.name}
 			</div>,
 			<div key={ref[1]}>Page 1</div>,
 			<div key={ref[2]}>Page 2</div>,
-			<div key={ref[3]}>Page 3</div>,
-			<div key={ref[4]}>Page 4</div>,
-			<div key={ref[5]}>Page 5</div>,
-			<div key={ref[6]}>Page 6</div>,
-			<div key={ref[7]}>Page 7</div>,
-			<div key={ref[8]}>Page 8</div>,
-			<div key={ref[9]}>Page 9</div>,
-			<div key={ref[10]}>Page 10</div>,
-			<div key={ref[11]}>
-        <Image src={book_backside} fluid />
-      </div>,
+			<div key={ref[3]}
+				style={{
+					backgroundColor: "red",
+				}}
+			>
+        	{/* <Image src={book_backside} fluid /> */}
+      		</div>,
 		],
 		jsxLength: function () {
 			return this.jsx.length;
@@ -126,11 +122,11 @@ const Book = (props: IBookProps) => {
 	return (
     <>
 		<div
-			className={`book ${(selected && currentPage !== 0) && currentPage !== pages.length ? "selected" : ""}`}
+			className={`book ${ currentPage === pages.length ? "selected-last" : (selected && currentPage !== 0) ? "selected" : ""}`}
 			key={bookComponentsRef.current[0]}
 		>
 			<div
-				className="pages"
+				className={`pages ${currentPage === 0 || currentPage === pages.length ? "pages-closed" : ""}`}
 				key={bookComponentsRef.current[1]}
 			>
 				{pages.map((page) => page)}
