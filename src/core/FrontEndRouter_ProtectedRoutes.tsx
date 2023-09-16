@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { NAV } from "../assets/nav";
 import { USER } from "../assets/constants";
+import { routesArray } from "./FrontEndRouter";
 
 // const REDIRECT_PATH_UNATH = NAV.PAGES.find((value: TPage)=>(value.RANG_REQ == USER.RANK.UNAUTH));
 
@@ -12,5 +12,8 @@ export const ProtectedRoute = ({
 	children: React.ReactElement;
 }) => {
 	if (isAllowed) return children ? children : <Outlet />;
-	return <Navigate to={NAV.DEFAULT(USER.RANK.USER).HREF} replace />;
+	// return <Navigate to="/login" replace />;
+	return <Navigate to={
+		routesArray.find((value)=>(value.userRangReq == USER.RANK.USER))?.path ?? "/login"
+	} replace />;
 };

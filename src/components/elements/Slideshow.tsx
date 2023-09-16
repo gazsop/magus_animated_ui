@@ -1,7 +1,10 @@
-import { useRef, useState } from "react";
-import { linkedList } from "./linkedList";
-import "../assets/css/slideshow.css";
-import { Id } from "./getId";
+import { useMemo, useRef, useState } from "react";
+import { linkedList } from "../../utils/linkedList";
+import "../../assets/css/slideshow.css"
+import { Id } from "../../utils/getId";
+import ArrowLeftSelectionIcon from "../../assets/icons/ArrowLeftSelectionIcon";
+import ArrowRightSelectionIcon from "../../assets/icons/ArrowRightSelectionIcon";
+import React from "react";
 
 export interface ICardSlideshow {
 	jsx: JSX.Element;
@@ -85,49 +88,38 @@ const cardsData: (linkedList: linkedList<ICardSlideshow>) => ICardData[] = (
 };
 
 export function Slideshow(props: TSlideshowProps) {
-	console.log("slideshow");
-	if (props.data.getType !== "circular") throw Error("list is not circular");
+
+	
+	const linkedListData = props.data;
+	console.log("Slideshow render");
+	console.log(linkedListData);
+	if (linkedListData.getType !== "circular") throw Error("list is not circular");
 
 	const [animation, setAnimation] = useState<"prev" | "next" | null>(null);
-	const cards = useRef<ICardData[]>(cardsData(props.data));
-	const cardKeyRef = useRef([...Array(5)].map((item) => crypto.randomUUID()));
+	const cards = useRef<ICardData[]>(cardsData(linkedListData));
 
 	const afterAnimationCallback = (e: React.AnimationEvent) => {
 		if (!animation) return;
-		if (e.animationName !== "leftToMidTransition") return;
-		cardKeyRef.current =
-			animation === "prev"
-				? [
-						cardKeyRef.current[4],
-						...cardKeyRef.current.filter((_, index) => index !== 4),
-				  ]
-				: [
-						...cardKeyRef.current.filter((_, index) => index !== 0),
-						cardKeyRef.current[0],
-				  ];
-		props.data.selectNode({ index: animation });
+		linkedListData.selectNode({ index: animation });
 		setAnimation(null);
-		console.log(animation);
-		cards.current = cardsData(props.data);
+		cards.current = cardsData(linkedListData);
 	};
 
 	const animateIncrease = () =>
 		cards.current.map(
-			(card) =>
+			card =>
 				(card.classes = `${card.classes} ${card.animationClasses.toLeft}`)
 		);
 
 	const animateDecrease = () =>
 		cards.current.map(
-			(card) =>
+			card =>
 				(card.classes = `${card.classes} ${card.animationClasses.toRight}`)
 		);
 
 	const changeIndex = (value: "prev" | "next") => {
-		console.log(animation);
 		if (animation) return;
 		setAnimation(value);
-		console.log(cardKeyRef.current);
 		value === "next" ? animateIncrease() : animateDecrease();
 	};
 
@@ -137,7 +129,7 @@ export function Slideshow(props: TSlideshowProps) {
 	) => {
 		if (cardName === cardPositions.left)
 			return {
-				onClick: () => changeIndex("prev"),
+				// onClick: () => changeIndex("prev"),
 			};
 		if (cardName === cardPositions.mid)
 			return {
@@ -146,18 +138,94 @@ export function Slideshow(props: TSlideshowProps) {
 			};
 		if (cardName === cardPositions.right)
 			return {
-				onClick: () => changeIndex("next"),
+				// onClick: () => changeIndex("next"),
 			};
 		return {
-			onClick: () => {},
+			onClick: () => {
+				console.log("default");
+			},
 		};
 	};
+const NavigationArrowsMemo = useMemo(() => {
+	if (props.layout !== "adventure") return <></>;
+	console.log("use memo");
+	return (
+		<>
+			<div
+				className="navigation-arrow navigation-arrow-left"
+			>
+				<ArrowLeftSelectionIcon	/>
+				<div
+					className="navigation-arrow-placeholder navigation-arrow-placeholder-left"
+					onClick={e => {
+						e.stopPropagation()
+						if(animation) return;
+						changeIndex("prev")
+					}}
+				></div>
+			</div>
+			<div
+				className="navigation-arrow navigation-arrow-right"
+			>
+				<ArrowRightSelectionIcon />
+				<div
+					className="navigation-arrow-placeholder navigation-arrow-placeholder-right"
+					onClick={e => {
+						e.stopPropagation();
+						if(animation) return;
+						changeIndex("next")
+					}}
+				></div>
+			</div>
+			</>
+	)
+}, []);
+
+	// const NavigationArrows = React.memo((memoProps?: {}) => {
+	// 	if (props.layout !== "adventure") return <></>;
+	// 	console.log("react memo");
+	// 	return (
+	// 		<>
+	// 			<div
+	// 				className="navigation-arrow navigation-arrow-left"
+	// 			>
+	// 				<ArrowLeftSelectionIcon	/>
+	// 				<div
+	// 					className="navigation-arrow-placeholder navigation-arrow-placeholder-left"
+	// 					onClick={e => {
+	// 						e.stopPropagation()
+	// 						if(animation) return;
+	// 						changeIndex("prev")
+	// 					}}
+	// 				></div>
+	// 			</div>
+	// 			<div
+	// 				className="navigation-arrow navigation-arrow-right"
+	// 			>
+	// 				<ArrowRightSelectionIcon />
+	// 				<div
+	// 					className="navigation-arrow-placeholder navigation-arrow-placeholder-right"
+	// 					onClick={e => {
+	// 						e.stopPropagation();
+	// 						if(animation) return;
+	// 						changeIndex("next")
+	// 					}}
+	// 				></div>
+	// 			</div>
+	// 			</>
+	// 	)
+	// }, (prevProps, nextProps) => {
+	// 	console.log("react memo compare");
+	// 	return false;
+	// });
+
+	const NavigationArrows = () => NavigationArrowsMemo;
+
 
 	return (
 		<>
 			{cards.current.map((card, index) => (
 				<div
-					key={cardKeyRef.current[index]}
 					className={`${card.classes}
 						slideshow-card 
 						d-flex
@@ -167,39 +235,27 @@ export function Slideshow(props: TSlideshowProps) {
 					onAnimationEnd={(e) =>
 						getCardFunctions(card.name, e).onAnimationEnd ?? (() => {})
 					}
-					onClick={getCardFunctions(card.name).onClick}
+					onClick={getCardFunctions(card.name).onClick ?? (() => {})}
 				>
-					{cardKeyRef.current[index]}
 					{card.val}
 				</div>
 			))}
-			<input
-				type="button"
-				value="Prev"
-				onClick={() => changeIndex("prev")}
-				className="select-btn"
-				key="prevBtn"
-			></input>
+			{
+				props.layout === "adventure"  && <NavigationArrows />
+			}
 			<input
 				type="button"
 				value="Select"
-				onClick={() => props.selectCard()}
+				onClick={() => {
+					// props.selectCard();
+					document.documentElement.requestFullscreen();
+				}}
 				className="select-btn"
 				key="selectBtn"
 				style={{ 
 					left: "50%",
 					transform: "translateX(-50%)",
 				 }}
-			></input>
-			<input
-				type="button"
-				value="Next"
-				onClick={() => changeIndex("next")}
-				className="select-btn"
-				key="nextBtn"
-				style={{
-					right: "0",
-				}}
 			></input>
 			<ul
 				style={{
@@ -214,10 +270,10 @@ export function Slideshow(props: TSlideshowProps) {
 					{animation}
 				</li>
 				<li>
-					{cardKeyRef.current[0]}
+					{linkedListData.getHead.val.data.id}
 				</li>
 				<li>
-					{props.data.getHead.val.data.id}
+					{linkedListData.getIndex}
 				</li>
 			</ul>
 		</>

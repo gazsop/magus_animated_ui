@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Id } from "../../utils/getId";
 import "../../assets/css/game.css";
-import { Slideshow } from "../../utils/Slideshow";
+import { Slideshow } from "../elements/Slideshow";
 import { linkedList } from "../../utils/linkedList";
 import { IAdventure } from "../../types/common";
 import advantures_bg from "../../assets/imgs/bg/adventures_2.png";
@@ -69,6 +69,7 @@ export function Adventures(): JSX.Element {
 						console.log("select");
 					}}
 					data={allAdvantures}
+					layout="adventure"
 				/>
 			)}
 		</div>

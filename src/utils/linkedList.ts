@@ -33,7 +33,7 @@ export class linkedList<T> {
 	}
 
 	get getIndex() {
-		return this.nodeArray.findIndex((node) => node === this.getHead);
+		return this.nodeArray.findIndex(node => node === this.getHead);
 	}
 
 	public deleteNode(deleteValue: {

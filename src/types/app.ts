@@ -12,6 +12,7 @@ export interface IAppData {
 	interfaceTheme: TInterfaceTheme;
 	appStatus: boolean;
 	error: string | null;
+	view: "desktop" | "mobile"
 }
 
 export type TUpdateAppData = Optional<IAppData, keyof IAppData>;

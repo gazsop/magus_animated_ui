@@ -1,6 +1,7 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import { CLIENT, SERVER } from "../assets/config";
@@ -30,7 +31,8 @@ const initialAppData: IAppData = {
   debugWindow: false,
   interfaceTheme: UI_THEME.DARK,
   appStatus: process.env.NODE_ENV === "development" ? true : false,
-  error: null
+  error: null,
+  view: "desktop"
 };
 
 function AppProvider(props: {
@@ -41,8 +43,26 @@ function AppProvider(props: {
   const [userState, setUserState] = useState<User>(new User());
 
   const setAppData = (newValue: TUpdateAppData) => {
-
+    setApp((prev) => ({ ...prev, ...newValue }));
   };
+
+  useEffect(() => {
+		console.log("app useeffect windowWidth");
+		function handleResize() {
+			if(window.innerWidth < 1000 && app.view !== "mobile") setAppData({view: "mobile"})
+      else if(window.innerWidth >= 1000 && app.view !== "desktop") setAppData({view: "desktop"})
+    console.log("app useeffect windowWidth", app.view, window.innerWidth);
+    }
+		window.addEventListener("resize", handleResize);
+
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
+
+  /****************
+   * APP - DATA
+   * **************/
+
+  console.log("app", app);
 
   const getAppData = { ...app };
 

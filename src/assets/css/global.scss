@@ -1,4 +1,4 @@
-$ikharic_font: "iokharic";
+$ikharic_font:"iokharic";
 $height_of_navbar: 56px;
 $debug_container_width: 300px;
 $content_max_width: calc(100vw - $debug_container_width);
@@ -18,6 +18,11 @@ $input_bg_color_dark: $bg_color_dark;
 $input_text_color_dark: $text_color_dark;
 $nav_bg_color_dark: #aaa;
 $bg_container_dark: rgb(0, 50, 189);
+
+$text_shadow_color_pwd_1: rgba(0, 0, 0, 0.5);
+$text_shadow_color_pwd_2: rgba(0, 0, 0, 0.5);
+$text_shadow_color_uid_1: rgba(0, 0, 0, 0.5);
+$text_shadow_color_uid_2: rgba(0, 0, 0, 0.5);
 
 * {
   box-sizing: border-box;
@@ -82,8 +87,8 @@ input {
 }
 
 @font-face {
-  font-family: 'iokharic';
-  src: local('iokharic'), url(../iokharic_bold.otf) format('woff');
+  font-family:'iokharic';
+  src:local('iokharic'),url(../iokharic_bold.otf) format('woff');
 }
 
 // DEBUG STYLING
@@ -148,23 +153,62 @@ SLIDESHOW
   margin: auto 40px;
 }
 
-.next {
-  background-color: #aaa;
+.navigation-arrow {
+  position: absolute;
+  top: 0;
+  width: 0px;
+  height: 100vh;
+  box-shadow: 0 0 90px 90px rgba(150, 150, 150, 0.9);
+  z-index: 100;
 }
 
-.prev {
-  background-color: #062e56;
+.navigation-arrow-left {
+  left: 0;
 }
 
-.side {
-  width: 300px;
-  height: 400px
+.navigation-arrow-right {
+  right: 0;
 }
 
-@media screen and (max-width: 1200px) {
-  .side {
-    display: none;
-  }
+.navigation-arrow > svg {
+  height: 150px;
+  width: auto;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(28, 28, 28, 0.4);
+  transition: color 0.2s ease-in-out;
+}
+
+.navigation-arrow-left > svg {
+  left: -40px;
+}
+
+.navigation-arrow-right > svg {
+  right: -40px;
+}
+
+
+.navigation-arrow-placeholder {
+  position: absolute;
+  top: 0;
+  width: 90px;
+  height: 100vh;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.navigation-arrow-placeholder-left {
+  left: 0;
+}
+
+.navigation-arrow-placeholder-right {
+  right: 0;
+}
+
+.navigation-arrow:hover svg {
+  color: rgba(172, 172, 172, 0.8);
+  filter: drop-shadow(0 0 10px rgba(197, 197, 197, 0.8));
 }
 
 /*
@@ -180,43 +224,67 @@ glowing effect for input buttons
   max-width: fit-content;
 }
 
-.input-field-btn {
+.input-field {
+  position: absolute;
+  top: 50%;
+  background-color: transparent;
+  font-size: 6rem;
   user-select: none;
-  font-family: $ikharic_font;
+  font-family:$ikharic_font;
   text-align: center;
-  width: 100%;
-  height: 100%;
-  background-color: rgba($color: #000000, $alpha: .0);
-  margin: auto;
-  font-size: 8em;
+  cursor: pointer;
 }
 
-.input-field-btn:hover {
-  -webkit-animation: glow 1s ease-in-out infinite alternate;
-  -moz-animation: glow 1s ease-in-out infinite alternate;
-  animation: glow 1s ease-in-out infinite alternate;
+.input-field-submit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
+.input-field-btn.uid {
+  color: rgba(255, 255, 255, 0.9);
+  animation: glow-uid 1s ease-in-out infinite alternate;
+}
 
-@-webkit-keyframes glow {
+.input-field-btn.uid.selected {
+  color: rgba(255, 0, 0,.6);
+}
+
+.input-field-btn.pwd {
+  color: rgba(255, 255, 255, 0.9);
+  animation: glow-pwd 1s ease-in-out infinite alternate;
+}
+
+.input-field-btn.pwd.selected {
+  color: rgba(51, 0, 255,.6);
+}
+
+.input-field-submit {
+  color: rgba(255, 255, 255, 0.9);
+  animation: glow-uid 1s ease-in-out infinite alternate;
+}
+
+@keyframes glow-pwd {
   from {
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #3200e6, 0 0 40px #3200e6, 0 0 50px #3200e6, 0 0 60px #3200e6, 0 0 70px #3200e6;
   }
 
   to {
-    text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+    text-shadow: 0 0 20px #fff, 0 0 30px #5832ff, 0 0 40px #5832ff, 0 0 50px #5832ff, 0 0 60px #5832ff, 0 0 70px #5832ff, 0 0 80px #5832ff;
   }
 }
 
-@keyframes glow {
+@keyframes glow-uid {
   from {
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ffaa00, 0 0 40px #ffaa00, 0 0 50px #ffaa00, 0 0 60px #ffaa00, 0 0 70px #ffaa00;
   }
 
   to {
-    text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+    text-shadow: 0 0 20px #fff, 0 0 30px #fc4416, 0 0 40px #fc4416, 0 0 50px #fc4416, 0 0 60px #fc4416, 0 0 70px #fc4416, 0 0 80px #fc4416;
   }
 }
+
 
 /*
 * LOADING
