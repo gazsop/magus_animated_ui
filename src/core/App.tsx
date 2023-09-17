@@ -5,6 +5,11 @@ import {
   useState,
 } from "react";
 import { CLIENT, SERVER } from "../assets/config";
+import advantures_bg from "../assets/imgs/bg/adventures.png";
+import login from "../assets/imgs/bg/login.png";
+import book_backside from "../assets/imgs/book_backside.png";
+import book_cover from "../assets/imgs/book_cover.png";
+import logo from "../assets/imgs/logo.png";
 import {
   USER,
   PLACEHOLDER,
@@ -27,7 +32,7 @@ import { IAppContext, IAppData, TUpdateAppData } from "../types/app";
 
 const initialAppData: IAppData = {
   page: "",
-  loading: 0,
+  loading: 1,
   debugWindow: false,
   interfaceTheme: UI_THEME.DARK,
   appStatus: process.env.NODE_ENV === "development" ? true : false,
@@ -56,6 +61,27 @@ function AppProvider(props: {
 		window.addEventListener("resize", handleResize);
 
 		return () => window.removeEventListener("resize", handleResize);
+	}, []);
+
+  //preload images
+
+  useEffect(() => {
+		const preloadImages = async () => {
+			const images = [advantures_bg, login, book_backside, book_cover, logo];
+			const promises = images.map((src) => {
+				return new Promise((resolve, reject) => {
+					const img = new Image();
+					img.src = src;
+					img.onload = resolve;
+					img.onerror = reject;
+				});
+			});
+			return await Promise.all(promises);
+		};
+    console.log("preloadImages");
+		preloadImages().then(() => {
+      setAppData({ loading: getAppData.loading - 1 });
+    });
 	}, []);
 
   /****************

@@ -30,7 +30,7 @@
 .slideshow-card {
   width: var(--card-width);
   height: var(--card-height);
-  background-color: red;
+  /* background-color: red; */
   position: absolute;
   border-radius: 30px;
   font-size: 1rem;

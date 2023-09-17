@@ -23,6 +23,7 @@ import "../assets/css/router.css";
 import advantures_bg from "../assets/imgs/bg/adventures.png";
 import login from "../assets/imgs/bg/login.png";
 import { ProtectedRoute } from "./FrontEndRouter_ProtectedRoutes";
+import { useApp } from "./App";
 
 type TRouteNames = "login" | "adventures" | "adventure";
 
@@ -40,20 +41,20 @@ const animationDirectionClasses = {
 };
 
 export const routesArray: TRoute[] = [
-  {
-    path: "/login",
-    name: "login",
-    element: <Login />,
-    userRangReq: USER.RANK.UNAUTH,
-    nodeRef: createRef<HTMLDivElement>(),
-  },
-  {
-    path: "/game/adventures",
-    name: "adventures",
-    element: <Adventures />,
-    userRangReq: USER.RANK.UNAUTH,
-    nodeRef: createRef<HTMLDivElement>(),
-  },
+	{
+		path: "/login",
+		name: "login",
+		element: <Login />,
+		userRangReq: USER.RANK.UNAUTH,
+		nodeRef: createRef<HTMLDivElement>(),
+	},
+	{
+		path: "/game/adventures",
+		name: "adventures",
+		element: <Adventures />,
+		userRangReq: USER.RANK.UNAUTH,
+		nodeRef: createRef<HTMLDivElement>(),
+	},
 ];
 
 const animationTime = {
@@ -67,8 +68,8 @@ type TanimationDirectionClasses =
 
 interface IRouterStates {
 	animationDirection: TanimationDirectionClasses | null;
-	target: linkedList<TRoute>["getHead"];
 	current: linkedList<TRoute>["getHead"];
+	target: linkedList<TRoute>["getHead"];
 	nextTarget: linkedList<TRoute>["getHead"];
 	loading: boolean;
 }
@@ -87,7 +88,7 @@ const testRouter: () => IRouterGenerator = () => {
 				path: "/",
 				element: <AppBody />,
 				errorElement: <Navigate to="/login" replace />,
-				children: routes.map<RouteObject>((route) => ({
+				children: routes.getAllNodes().map<RouteObject>(route => ({
 					index: route.val.path === "/login",
 					path: route.val.path,
 					element: route.val.element,
@@ -106,58 +107,18 @@ function AppBody(): JSX.Element {
 	const routesRef = useRef<IRouterGenerator["routes"]>(
 		testInitRouter.routes
 	).current;
+
+	const { getAppData } = useApp();
+
 	const [routerState, setRouterState] = useState<IRouterStates>({
 		animationDirection: null,
 		target: routesRef.getHead,
 		nextTarget: routesRef.getHead,
 		current: routesRef.getHead,
-		loading: false,
+		loading: getAppData.loading > 0,
 	});
-	const [loaded, setLoaded] = useState(false);
 
 	console.log("routerState", routerState);
-
-  //redirect if there is no url param
-  useEffect(() => {
-    if(location.pathname === "/") navigate(routesRef.getHead.val.path);
-  }, []);
-
-	// preload images
-	useEffect(() => {
-		const preloadImages = async () => {
-			const images = [advantures_bg, login];
-			const promises = images.map((src) => {
-				return new Promise((resolve, reject) => {
-					const img = new Image();
-					img.src = src;
-					img.onload = resolve;
-					img.onerror = reject;
-				});
-			});
-			await Promise.all(promises);
-			setLoaded(true);
-		};
-    console.log("preloadImages");
-		preloadImages();
-	}, []);
-
-	useEffect(() => {
-		console.log(
-			"navigate nexttarget",
-			routerState.target !== routerState.current
-		);
-    console.log(routerState);
-		if (routerState.target !== routerState.current)
-			navigate(routerState.nextTarget.val.path);
-		else
-			setRouter({
-				current:
-					routesRef.find(
-						(route) => route.val.path === routerState.current.val.path
-					) ?? routesRef.getHead,
-				loading: false,
-			});
-	}, [routerState.nextTarget, routerState.target]);
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -166,8 +127,35 @@ function AppBody(): JSX.Element {
 		routesRef.find((route) => route.val.path === location.pathname)?.val
 			.nodeRef ?? null;
 	const setRouter = (data: Optional<IRouterStates, keyof IRouterStates>) => {
-		setRouterState((prev) => ({ ...prev, ...data }));
+		setRouterState(prev => ({ ...prev, ...data }));
 	};
+
+	useEffect(() => {
+		if (location.pathname === "/") navigate(routesRef.getHead.val.path);
+	}, []);
+
+	useEffect(() => {
+		console.log(
+			"navigate nexttarget",
+			routerState.target !== routerState.current
+		);
+		console.log(routerState);
+		if (routerState.target !== routerState.current)
+			navigate(routerState.nextTarget.val.path);
+		else
+			setRouter({
+				current:
+					routesRef.find(
+						(route) => route.val.path === routerState.current.val.path
+					) ?? routesRef.getHead,
+			});
+	}, [routerState.nextTarget, routerState.target]);
+
+	useEffect(() => {
+		if(getAppData.loading === 0 && routerState.loading) setTimeout(()=>setRouter({loading: false}),600)
+		else if(getAppData.loading > 0 && !routerState.loading) setRouter({loading: true})
+		
+	}, [getAppData.loading]);
 
 	const navigator = (targetVal?: string) => {
 		console.log("targetval", targetVal);
@@ -192,7 +180,6 @@ function AppBody(): JSX.Element {
 				nextTarget: newNextTarget,
 				current: currentRoute,
 				target: newTarget,
-				loading: true,
 			});
 			console.log(
 				"direction, nextTarget, current, target",
@@ -215,21 +202,16 @@ function AppBody(): JSX.Element {
 	};
 
 	const navOnclickHandler = (targetVal: string) => {
-		// if(routerState.loading) return;
-		console.log(
-			routesRef.find((route) => route.val.path === targetVal) ??
-				routesRef.getHead
-		);
 		navigator(targetVal);
 	};
 
-	if (!loaded) return <div>loading</div>;
+	if (routerState.loading) return <div>loading</div>;
 
 	return (
 		<>
 			<Navbar bg="light">
 				<Nav className="mx-auto">
-					{routesRef.map((route) => (
+					{routesRef.getAllNodes().map(route => (
 						<div
 							className="nav-link user-select-none"
 							key={route.val.path}
@@ -248,13 +230,11 @@ function AppBody(): JSX.Element {
 					classNames={routerState.animationDirection ?? ""}
 					unmountOnExit={false}
 				>
-          <ProtectedRoute
-            isAllowed={true}
-          >
-            <div ref={nodeRef} className={`page`}>
-              {currentOutlet}
-            </div>
-          </ProtectedRoute>
+					<ProtectedRoute isAllowed={true}>
+						<div ref={nodeRef} className={`page`}>
+							{currentOutlet}
+						</div>
+					</ProtectedRoute>
 				</CSSTransition>
 			</TransitionGroup>
 		</>

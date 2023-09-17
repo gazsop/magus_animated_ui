@@ -40,6 +40,28 @@ body,
   padding: 0px;
 }
 
+#main::after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: calc(50vw - 1px);
+  width: 1px;
+  height: 100vh;
+  background-color: rgba(255, 0, 0, 0.5);
+  z-index: 999;
+}
+
+#main::before {
+  content: "";
+  position: absolute;
+  top: calc(50vh - 1px);
+  left: 0px;
+  width: 100vw;
+  height: 1px;
+  background-color: rgba(255, 0, 0, 0.5);
+  z-index: 999;
+}
+
 nav {
   background-color: $nav_bg_color_light !important;
   z-index: 9999;

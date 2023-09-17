@@ -4,23 +4,13 @@ import "../../assets/css/game.css";
 import { Slideshow } from "../elements/Slideshow";
 import { linkedList } from "../../utils/linkedList";
 import { IAdventure } from "../../types/common";
-import advantures_bg from "../../assets/imgs/bg/adventures_2.png";
+import advantures_bg from "../../assets/imgs/bg/adventures.png";
 import { testAdventure } from "../../data/_testAdvanture";
 import Book from "../elements/Book";
 
 export function Adventures(): JSX.Element {
 	console.log("testAdventure", testAdventure);
 	const [advanturesPageState, setAdvanturesPageState] = useState<number>(0);
-	const booksCurrentPage = useRef<number[]>(testAdventure.map((_) => 0));
-	const setBooksCurrentPage = (index: number, page: number) => {
-		console.log("setBooksCurrentPage: ", index, page);
-		booksCurrentPage.current[index] = page;
-		console.log(
-			"setBooksCurrentPage booksCurrentPage.current[index]): ",
-			booksCurrentPage.current[index]
-		);
-		return true;
-	};
 
 	const books = useRef<{ jsx: JSX.Element; currentPage: number }[]>(
 		testAdventure.map((adventure, index) => {
@@ -30,11 +20,6 @@ export function Adventures(): JSX.Element {
 						data={adventure}
 						key={adventure.id}
 						onclickState={advanturesPageState}
-						currentPage={{
-							ref: booksCurrentPage.current,
-							index: index,
-							setRef: setBooksCurrentPage,
-						}}
 					/>
 				),
 				currentPage: 0,

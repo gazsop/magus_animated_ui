@@ -1,6 +1,6 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { linkedList } from "../../utils/linkedList";
-import "../../assets/css/slideshow.css"
+import "../../assets/css/slideshow.css";
 import { Id } from "../../utils/getId";
 import ArrowLeftSelectionIcon from "../../assets/icons/ArrowLeftSelectionIcon";
 import ArrowRightSelectionIcon from "../../assets/icons/ArrowRightSelectionIcon";
@@ -9,7 +9,6 @@ import React from "react";
 export interface ICardSlideshow {
 	jsx: JSX.Element;
 	data: any;
-	selected: boolean;
 }
 
 type TSlideshowProps = {
@@ -35,9 +34,7 @@ const cardPositions = {
 	farRight: "farRight",
 };
 
-const cardsData: (linkedList: linkedList<ICardSlideshow>) => ICardData[] = (
-	data
-) => {
+const cardsData: (linkedList: linkedList<ICardSlideshow>) => ICardData[] = data => {
 	return [
 		{
 			name: cardPositions.farLeft,
@@ -88,18 +85,30 @@ const cardsData: (linkedList: linkedList<ICardSlideshow>) => ICardData[] = (
 };
 
 export function Slideshow(props: TSlideshowProps) {
-
-	
 	const linkedListData = props.data;
 	console.log("Slideshow render");
 	console.log(linkedListData);
-	if (linkedListData.getType !== "circular") throw Error("list is not circular");
+	if (linkedListData.getType !== "circular")
+		throw Error("list is not circular");
 
 	const [animation, setAnimation] = useState<"prev" | "next" | null>(null);
 	const cards = useRef<ICardData[]>(cardsData(linkedListData));
 
-	const afterAnimationCallback = (e: React.AnimationEvent) => {
+	//useEffect to apply afterAnimationCallback to the mid card
+	useEffect(() => {
 		if (!animation) return;
+		const midCard = document.getElementById("slideshow-card-3");
+		if (!midCard) return;
+		midCard.addEventListener("animationend", afterAnimationCallback);
+		return () =>
+			midCard.removeEventListener("animationend", afterAnimationCallback);
+	}, [animation]);
+
+	let animationAuxVar = 0;
+
+	const afterAnimationCallback = () => {
+		if(animationAuxVar > 0 || !animation) return;
+		animationAuxVar++;
 		linkedListData.selectNode({ index: animation });
 		setAnimation(null);
 		cards.current = cardsData(linkedListData);
@@ -107,13 +116,13 @@ export function Slideshow(props: TSlideshowProps) {
 
 	const animateIncrease = () =>
 		cards.current.map(
-			card =>
+			(card) =>
 				(card.classes = `${card.classes} ${card.animationClasses.toLeft}`)
 		);
 
 	const animateDecrease = () =>
 		cards.current.map(
-			card =>
+			(card) =>
 				(card.classes = `${card.classes} ${card.animationClasses.toRight}`)
 		);
 
@@ -123,104 +132,35 @@ export function Slideshow(props: TSlideshowProps) {
 		value === "next" ? animateIncrease() : animateDecrease();
 	};
 
-	const getCardFunctions = (
-		cardName: TCardPositions,
-		e?: React.AnimationEvent
-	) => {
-		if (cardName === cardPositions.left)
-			return {
-				// onClick: () => changeIndex("prev"),
-			};
-		if (cardName === cardPositions.mid)
-			return {
-				onClick: () => props.selectCard(),
-				onAnimationEnd: e !== undefined ? afterAnimationCallback(e) : undefined,
-			};
-		if (cardName === cardPositions.right)
-			return {
-				// onClick: () => changeIndex("next"),
-			};
-		return {
-			onClick: () => {
-				console.log("default");
-			},
-		};
-	};
-const NavigationArrowsMemo = useMemo(() => {
-	if (props.layout !== "adventure") return <></>;
-	console.log("use memo");
-	return (
-		<>
-			<div
-				className="navigation-arrow navigation-arrow-left"
-			>
-				<ArrowLeftSelectionIcon	/>
-				<div
-					className="navigation-arrow-placeholder navigation-arrow-placeholder-left"
-					onClick={e => {
-						e.stopPropagation()
-						if(animation) return;
-						changeIndex("prev")
-					}}
-				></div>
-			</div>
-			<div
-				className="navigation-arrow navigation-arrow-right"
-			>
-				<ArrowRightSelectionIcon />
-				<div
-					className="navigation-arrow-placeholder navigation-arrow-placeholder-right"
-					onClick={e => {
-						e.stopPropagation();
-						if(animation) return;
-						changeIndex("next")
-					}}
-				></div>
-			</div>
+	const NavigationArrows = () => {
+		if (props.layout !== "adventure") return <></>;
+		return (
+			<>
+				<div className="navigation-arrow navigation-arrow-left">
+					<ArrowLeftSelectionIcon />
+					<div
+						className="navigation-arrow-placeholder navigation-arrow-placeholder-left"
+						onClick={(e) => {
+							e.stopPropagation();
+							if (!!animation) return;
+							changeIndex("prev");
+						}}
+					></div>
+				</div>
+				<div className="navigation-arrow navigation-arrow-right">
+					<ArrowRightSelectionIcon />
+					<div
+						className="navigation-arrow-placeholder navigation-arrow-placeholder-right"
+						onClick={(e) => {
+							e.stopPropagation();
+							if (!!animation) return;
+							changeIndex("next");
+						}}
+					></div>
+				</div>
 			</>
-	)
-}, []);
-
-	// const NavigationArrows = React.memo((memoProps?: {}) => {
-	// 	if (props.layout !== "adventure") return <></>;
-	// 	console.log("react memo");
-	// 	return (
-	// 		<>
-	// 			<div
-	// 				className="navigation-arrow navigation-arrow-left"
-	// 			>
-	// 				<ArrowLeftSelectionIcon	/>
-	// 				<div
-	// 					className="navigation-arrow-placeholder navigation-arrow-placeholder-left"
-	// 					onClick={e => {
-	// 						e.stopPropagation()
-	// 						if(animation) return;
-	// 						changeIndex("prev")
-	// 					}}
-	// 				></div>
-	// 			</div>
-	// 			<div
-	// 				className="navigation-arrow navigation-arrow-right"
-	// 			>
-	// 				<ArrowRightSelectionIcon />
-	// 				<div
-	// 					className="navigation-arrow-placeholder navigation-arrow-placeholder-right"
-	// 					onClick={e => {
-	// 						e.stopPropagation();
-	// 						if(animation) return;
-	// 						changeIndex("next")
-	// 					}}
-	// 				></div>
-	// 			</div>
-	// 			</>
-	// 	)
-	// }, (prevProps, nextProps) => {
-	// 	console.log("react memo compare");
-	// 	return false;
-	// });
-
-	const NavigationArrows = () => NavigationArrowsMemo;
-
+		);
+	}
 
 	return (
 		<>
@@ -232,17 +172,13 @@ const NavigationArrowsMemo = useMemo(() => {
 						flex-column
 						align-items-center
 						justify-content-center`}
-					onAnimationEnd={(e) =>
-						getCardFunctions(card.name, e).onAnimationEnd ?? (() => {})
-					}
-					onClick={getCardFunctions(card.name).onClick ?? (() => {})}
+					key={`slideshow-card-${index}`}
+					id={`slideshow-card-${index}`}
 				>
 					{card.val}
 				</div>
 			))}
-			{
-				props.layout === "adventure"  && <NavigationArrows />
-			}
+			{props.layout === "adventure" && <NavigationArrows />}
 			<input
 				type="button"
 				value="Select"
@@ -252,29 +188,23 @@ const NavigationArrowsMemo = useMemo(() => {
 				}}
 				className="select-btn"
 				key="selectBtn"
-				style={{ 
+				style={{
 					left: "50%",
 					transform: "translateX(-50%)",
-				 }}
+				}}
 			></input>
 			<ul
 				style={{
 					position: "absolute",
 					bottom: "80px",
-					right: "0",
+					right: "100px",
 					background: "white",
 					listStyle: "none",
 				}}
 			>
-				<li>
-					{animation}
-				</li>
-				<li>
-					{linkedListData.getHead.val.data.id}
-				</li>
-				<li>
-					{linkedListData.getIndex}
-				</li>
+				<li>{animation}</li>
+				<li>linkedlist head id: {linkedListData.getHead.val.data.id}</li>
+				<li>linkedlist head index: {linkedListData.getIndex}</li>
 			</ul>
 		</>
 	);
