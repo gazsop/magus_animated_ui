@@ -13,8 +13,8 @@ export interface ICardSlideshow {
 
 type TSlideshowProps = {
 	layout?: "adventure";
-	selectCard: () => void;
 	data: linkedList<ICardSlideshow>;
+	cardSelected?: boolean;
 };
 
 type TCardPositions = (typeof cardPositions)[keyof typeof cardPositions];
@@ -34,7 +34,9 @@ const cardPositions = {
 	farRight: "farRight",
 };
 
-const cardsData: (linkedList: linkedList<ICardSlideshow>) => ICardData[] = data => {
+const cardsData: (linkedList: linkedList<ICardSlideshow>) => ICardData[] = (
+	data
+) => {
 	return [
 		{
 			name: cardPositions.farLeft,
@@ -85,15 +87,16 @@ const cardsData: (linkedList: linkedList<ICardSlideshow>) => ICardData[] = data 
 };
 
 export function Slideshow(props: TSlideshowProps) {
-	const linkedListData = props.data;
 	console.log("Slideshow render");
-	console.log(linkedListData);
+
+	console.log(props.cardSelected);
+	const linkedListData = props.data;
 	if (linkedListData.getType !== "circular")
 		throw Error("list is not circular");
 
 	const [animation, setAnimation] = useState<"prev" | "next" | null>(null);
-	const cards = useRef<ICardData[]>(cardsData(linkedListData));
 
+	const cards = useRef<ICardData[]>(cardsData(linkedListData));
 	//useEffect to apply afterAnimationCallback to the mid card
 	useEffect(() => {
 		if (!animation) return;
@@ -107,7 +110,7 @@ export function Slideshow(props: TSlideshowProps) {
 	let animationAuxVar = 0;
 
 	const afterAnimationCallback = () => {
-		if(animationAuxVar > 0 || !animation) return;
+		if (animationAuxVar > 0 || !animation) return;
 		animationAuxVar++;
 		linkedListData.selectNode({ index: animation });
 		setAnimation(null);
@@ -116,13 +119,13 @@ export function Slideshow(props: TSlideshowProps) {
 
 	const animateIncrease = () =>
 		cards.current.map(
-			(card) =>
+			card =>
 				(card.classes = `${card.classes} ${card.animationClasses.toLeft}`)
 		);
 
 	const animateDecrease = () =>
 		cards.current.map(
-			(card) =>
+			card =>
 				(card.classes = `${card.classes} ${card.animationClasses.toRight}`)
 		);
 
@@ -132,15 +135,24 @@ export function Slideshow(props: TSlideshowProps) {
 		value === "next" ? animateIncrease() : animateDecrease();
 	};
 
-	const NavigationArrows = () => {
+	const NavigationArrows = ( navArrowProps:{
+		hidden : boolean
+	}
+	) => {
 		if (props.layout !== "adventure") return <></>;
 		return (
-			<>
-				<div className="navigation-arrow navigation-arrow-left">
+			<div
+				className={navArrowProps.hidden ?	"hidden" : "" }
+			>
+				<div
+					className={`navigation-arrow navigation-arrow-left${
+						animation ? " animating" : ""
+					}`}
+				>
 					<ArrowLeftSelectionIcon />
 					<div
 						className="navigation-arrow-placeholder navigation-arrow-placeholder-left"
-						onClick={(e) => {
+						onClick={e => {
 							e.stopPropagation();
 							if (!!animation) return;
 							changeIndex("prev");
@@ -151,16 +163,16 @@ export function Slideshow(props: TSlideshowProps) {
 					<ArrowRightSelectionIcon />
 					<div
 						className="navigation-arrow-placeholder navigation-arrow-placeholder-right"
-						onClick={(e) => {
+						onClick={e => {
 							e.stopPropagation();
 							if (!!animation) return;
 							changeIndex("next");
 						}}
 					></div>
 				</div>
-			</>
+			</div>
 		);
-	}
+	};
 
 	return (
 		<>
@@ -178,34 +190,9 @@ export function Slideshow(props: TSlideshowProps) {
 					{card.val}
 				</div>
 			))}
-			{props.layout === "adventure" && <NavigationArrows />}
-			<input
-				type="button"
-				value="Select"
-				onClick={() => {
-					// props.selectCard();
-					document.documentElement.requestFullscreen();
-				}}
-				className="select-btn"
-				key="selectBtn"
-				style={{
-					left: "50%",
-					transform: "translateX(-50%)",
-				}}
-			></input>
-			<ul
-				style={{
-					position: "absolute",
-					bottom: "80px",
-					right: "100px",
-					background: "white",
-					listStyle: "none",
-				}}
-			>
-				<li>{animation}</li>
-				<li>linkedlist head id: {linkedListData.getHead.val.data.id}</li>
-				<li>linkedlist head index: {linkedListData.getIndex}</li>
-			</ul>
+			<NavigationArrows
+				hidden={!props.cardSelected}
+			/>
 		</>
 	);
 }

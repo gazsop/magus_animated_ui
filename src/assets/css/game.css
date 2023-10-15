@@ -2,10 +2,6 @@
     --bag-width: auto;
     --bag-max-width: 600px;
     --bag-max-height: var(--bag-max-width);
-    --bookWidth: 80vw;
-    --bookHeight: var(--bookWidth) * .625;
-    --bookDepth: 10px;
-    --bookBottomTop: var(--bookHeight);
 }
 
 .bag{

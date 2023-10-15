@@ -8,22 +8,26 @@ import {
 	RouteObject,
 	Navigate,
 	useNavigate,
+	useOutletContext,
 } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { USER } from "../assets/constants";
+import { UI_THEME } from "../assets/constants";
 import { Login } from "../components/pageLogin/PageLogin";
 import { Admin } from "../components/pageAdmin/Admin";
 import { linkedList } from "../utils/linkedList";
 import { Adventures } from "../components/pageAdvantures/PageAdventures";
-import { Optional } from "../types/common";
+import { Optional, User } from "../types/common";
 import "../assets/css/router.css";
 
-import advantures_bg from "../assets/imgs/bg/adventures.png";
+import adventures_bg from "../assets/imgs/bg/adventures.png";
 import login from "../assets/imgs/bg/login.png";
 import { ProtectedRoute } from "./FrontEndRouter_ProtectedRoutes";
-import { useApp } from "./App";
+import book_backside from "../assets/imgs/book_backside.png";
+import book_cover from "../assets/imgs/book_cover.png";
+import { IAppData, TUpdateAppData } from "../types/app";
+import logo from "../assets/imgs/logo.png";
 
 type TRouteNames = "login" | "adventures" | "adventure";
 
@@ -45,14 +49,14 @@ export const routesArray: TRoute[] = [
 		path: "/login",
 		name: "login",
 		element: <Login />,
-		userRangReq: USER.RANK.UNAUTH,
+		userRangReq: User.USER_RANK.UNAUTH,
 		nodeRef: createRef<HTMLDivElement>(),
 	},
 	{
 		path: "/game/adventures",
 		name: "adventures",
 		element: <Adventures />,
-		userRangReq: USER.RANK.UNAUTH,
+		userRangReq: User.USER_RANK.UNAUTH,
 		nodeRef: createRef<HTMLDivElement>(),
 	},
 ];
@@ -71,7 +75,7 @@ interface IRouterStates {
 	current: linkedList<TRoute>["getHead"];
 	target: linkedList<TRoute>["getHead"];
 	nextTarget: linkedList<TRoute>["getHead"];
-	loading: boolean;
+	isLoggedIn: boolean;
 }
 
 interface IRouterGenerator {
@@ -79,6 +83,15 @@ interface IRouterGenerator {
 	routes: linkedList<TRoute>;
 	routesArray: TRoute[];
 }
+
+const initialAppData: IAppData = {
+	loading: 1,
+	debugWindow: false,
+	interfaceTheme: UI_THEME.DARK,
+	appDeploymentStatus: process.env.NODE_ENV === "development" ? true : false,
+	error: null,
+	view: "desktop",
+};
 
 const testRouter: () => IRouterGenerator = () => {
 	const routes = new linkedList<TRoute>(routesArray, "plain");
@@ -88,7 +101,7 @@ const testRouter: () => IRouterGenerator = () => {
 				path: "/",
 				element: <AppBody />,
 				errorElement: <Navigate to="/login" replace />,
-				children: routes.getAllNodes().map<RouteObject>(route => ({
+				children: routes.getAllNodes().map<RouteObject>((route) => ({
 					index: route.val.path === "/login",
 					path: route.val.path,
 					element: route.val.element,
@@ -108,38 +121,52 @@ function AppBody(): JSX.Element {
 		testInitRouter.routes
 	).current;
 
-	const { getAppData } = useApp();
+	const [appState, setAppState] = useState<IAppData>(initialAppData);
+
+	const setAppData = (newValue: TUpdateAppData) => {
+		setAppState(prev => ({ ...prev, ...newValue }));
+	};
 
 	const [routerState, setRouterState] = useState<IRouterStates>({
 		animationDirection: null,
 		target: routesRef.getHead,
 		nextTarget: routesRef.getHead,
 		current: routesRef.getHead,
-		loading: getAppData.loading > 0,
+		isLoggedIn: false,
 	});
 
 	console.log("routerState", routerState);
 
 	const navigate = useNavigate();
 	const location = useLocation();
-	const currentOutlet = useOutlet();
+	const currentOutlet = useOutlet({
+		navigator: navigator,
+	});
 	const nodeRef =
 		routesRef.find((route) => route.val.path === location.pathname)?.val
 			.nodeRef ?? null;
 	const setRouter = (data: Optional<IRouterStates, keyof IRouterStates>) => {
-		setRouterState(prev => ({ ...prev, ...data }));
+		setRouterState((prev) => ({ ...prev, ...data }));
 	};
 
 	useEffect(() => {
-		if (location.pathname === "/") navigate(routesRef.getHead.val.path);
+		if (location.pathname === "/") {
+			navigate(routesRef.getHead.val.path);
+			return;
+		}
+
+		if (routesRef.getHead.val.path !== location.pathname) {
+			routesRef.selectNode({
+				node: routesRef.find((route) => route.val.path === location.pathname),
+			});
+		}
+
+		if (routerState.current.val.path !== location.pathname) {
+			navigator(location.pathname);
+		}
 	}, []);
 
 	useEffect(() => {
-		console.log(
-			"navigate nexttarget",
-			routerState.target !== routerState.current
-		);
-		console.log(routerState);
 		if (routerState.target !== routerState.current)
 			navigate(routerState.nextTarget.val.path);
 		else
@@ -152,13 +179,24 @@ function AppBody(): JSX.Element {
 	}, [routerState.nextTarget, routerState.target]);
 
 	useEffect(() => {
-		if(getAppData.loading === 0 && routerState.loading) setTimeout(()=>setRouter({loading: false}),600)
-		else if(getAppData.loading > 0 && !routerState.loading) setRouter({loading: true})
-		
-	}, [getAppData.loading]);
+		const preloadImages = async () => {
+			const images = [adventures_bg, login, book_backside, book_cover, logo];
+			const promises = images.map((src) => {
+				return new Promise((resolve, reject) => {
+					const img = new Image();
+					img.src = src;
+					img.onload = resolve;
+					img.onerror = reject;
+				});
+			});
+			return await Promise.all(promises);
+		};
+		preloadImages().then(() => {
+			setAppData({ loading: appState.loading - 1 });
+		});
+	}, []);
 
-	const navigator = (targetVal?: string) => {
-		console.log("targetval", targetVal);
+	function navigator(targetVal?: string) {
 		const currentRoute =
 			routesRef.find((route) => route.val.path === location.pathname) ??
 			routesRef.getHead;
@@ -174,21 +212,12 @@ function AppBody(): JSX.Element {
 				(newAnimationDirection === animationDirectionClasses.left
 					? currentRoute.prev
 					: currentRoute.next) ?? currentRoute;
-			console.log("nextTarget", newNextTarget);
 			setRouter({
 				animationDirection: newAnimationDirection,
 				nextTarget: newNextTarget,
 				current: currentRoute,
 				target: newTarget,
 			});
-			console.log(
-				"direction, nextTarget, current, target",
-				newAnimationDirection,
-				newNextTarget.val.path,
-				currentRoute.val.path,
-				routesRef.find((route) => route.val.path === targetVal) ??
-					routesRef.getHead
-			);
 		} else {
 			const nextTarget =
 				routerState.animationDirection === animationDirectionClasses.left
@@ -199,29 +228,29 @@ function AppBody(): JSX.Element {
 				current: currentRoute,
 			});
 		}
-	};
+	}
 
-	const navOnclickHandler = (targetVal: string) => {
+	const navOnclickHandler = (targetVal: string) => {	
 		navigator(targetVal);
 	};
 
-	if (routerState.loading) return <div>loading</div>;
-
 	return (
-		<>
-			<Navbar bg="light">
+		<div
+			className={appState.loading ? "loading" : ""}
+		>
+			{/* <Navbar bg="light">
 				<Nav className="mx-auto">
-					{routesRef.getAllNodes().map(route => (
+					{routesRef.getAllNodes().map((route) => (
 						<div
 							className="nav-link user-select-none"
-							key={route.val.path}
+							key={route.val.path}	
 							onClick={() => navOnclickHandler(route.val.path)}
 						>
 							{route.val.name}
 						</div>
 					))}
 				</Nav>
-			</Navbar>
+			</Navbar> */}
 			<TransitionGroup>
 				<CSSTransition
 					onExited={() => navigator()}
@@ -237,9 +266,15 @@ function AppBody(): JSX.Element {
 					</ProtectedRoute>
 				</CSSTransition>
 			</TransitionGroup>
-		</>
+		</div>
 	);
 }
+
+export const useFrontEndRouter = () => {
+	return useOutletContext<{
+		navigator: (targetVal?: string) => void;
+	}>();
+};
 
 export const FrontEndRouter = () => (
 	<RouterProvider fallbackElement={<Login />} router={testInitRouter.router} />

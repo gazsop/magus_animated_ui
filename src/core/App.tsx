@@ -5,39 +5,32 @@ import {
   useState,
 } from "react";
 import { CLIENT, SERVER } from "../assets/config";
-import advantures_bg from "../assets/imgs/bg/adventures.png";
+import adventures_bg from "../assets/imgs/bg/adventures.png";
 import login from "../assets/imgs/bg/login.png";
 import book_backside from "../assets/imgs/book_backside.png";
 import book_cover from "../assets/imgs/book_cover.png";
 import logo from "../assets/imgs/logo.png";
 import {
-  USER,
-  PLACEHOLDER,
-  LIST_OF_POST_REQ_TYPES,
   UI_THEME,
-  STATES,
 } from "../assets/constants";
 import {
-  TRequest,
+  Application,
 } from "../types/common";
 import RouterProvider from "./NetworkRouter";
 // import ErrorBoundary from "./ErrorHandler";
 // import { testAdventure } from "../data/_testadventure";
-import { IUserData, TUpdateUser } from "../types/user";
-import { User } from "./User";
 import ErrorBoundary from "./ErrorHandler";
 import { Id } from "../utils/getId";
 import { IAppContext, IAppData, TUpdateAppData } from "../types/app";
 
 
 const initialAppData: IAppData = {
-  page: "",
   loading: 1,
   debugWindow: false,
   interfaceTheme: UI_THEME.DARK,
-  appStatus: process.env.NODE_ENV === "development" ? true : false,
+  appDeploymentStatus: process.env.NODE_ENV === "development" ? true : false,
   error: null,
-  view: "desktop"
+  view: "desktop",
 };
 
 function AppProvider(props: {
@@ -45,7 +38,6 @@ function AppProvider(props: {
 }): React.ReactElement {
   const { serverPostRequest, serverPostError } = RouterProvider();
   const [app, setApp] = useState<IAppData>(initialAppData);
-  const [userState, setUserState] = useState<User>(new User());
 
   const setAppData = (newValue: TUpdateAppData) => {
     setApp((prev) => ({ ...prev, ...newValue }));
@@ -67,7 +59,7 @@ function AppProvider(props: {
 
   useEffect(() => {
 		const preloadImages = async () => {
-			const images = [advantures_bg, login, book_backside, book_cover, logo];
+			const images = [adventures_bg, login, book_backside, book_cover, logo];
 			const promises = images.map((src) => {
 				return new Promise((resolve, reject) => {
 					const img = new Image();
@@ -78,7 +70,6 @@ function AppProvider(props: {
 			});
 			return await Promise.all(promises);
 		};
-    console.log("preloadImages");
 		preloadImages().then(() => {
       setAppData({ loading: getAppData.loading - 1 });
     });
@@ -92,16 +83,13 @@ function AppProvider(props: {
 
   const getAppData = { ...app };
 
-  const getAppStatus = getAppData.appStatus;
+  const getappDeploymentStatus = getAppData.appDeploymentStatus;
 
-  const getUser = ()=>userState;
-
-  const setUser = (newValue: TUpdateUser) => setUserState(prev=>new User({...prev, ...newValue}));
   /****************
    * APP - ROUTING
    ****************/
 
-  const requestError: TRequest = (inputData) =>
+  const requestError: Application.TRequest = (inputData) =>
     serverPostError(inputData, setLoading("start")).then(()=>setLoading("end"));
 
   /****************
@@ -138,14 +126,13 @@ function AppProvider(props: {
     <ErrorBoundary errorHandler={requestError}>
       <AppContext.Provider
         value={{
-          getUser,
-          setUser,
           setLoading,
           toggleInterfaceTheme,
           getInterfaceTheme,
           getAppData,
+          setAppData,
           getLoading,
-          getAppStatus,
+          getappDeploymentStatus,
         }}
         {...(props as React.PropsWithChildren<{}>)}
       />

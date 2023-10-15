@@ -3,8 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { CLIENT, SERVER } from "../assets/config";
-import { USER, PLACEHOLDER, LIST_OF_POST_REQ_TYPES } from "../assets/constants";
-import { IRequestData, IResponseData, TRequest } from "../types/common";
+import { Application } from "../types/common";
 
 
 function RouterProvider() {
@@ -26,13 +25,13 @@ function RouterProvider() {
 
   const serverWsMsg = () => {};
 
-  const serverPostRequest: TRequest = async (inputData, callback = ()=>{}) =>
+  const serverPostRequest: Application.TRequest = async (inputData, callback = ()=>{}) =>
     await serverRequest
       .post("", inputData)
-      .then((response) => response)
+      .then((response) => callback(response))
       .catch((error) => alert(JSON.stringify(error)));
 
-  const serverPostError: TRequest = async (inputData, callback = Function) =>
+  const serverPostError: Application.TRequest = async (inputData, callback = Function) =>
     await serverRequest
       .post(SERVER.GET_ERROR_URI ?? SERVER.GET_URI, inputData)
       .then((response) => response)

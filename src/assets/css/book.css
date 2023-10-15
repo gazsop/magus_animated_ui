@@ -1,37 +1,44 @@
 :root {
-  --book-width: 700px;
-  --book-height: calc(var(--book-width) * 1);
+  --book-aspect-ratio: calc(980 / 1430);
   --book-depth: 10px;
-  --book-ratio: 500/730;
-  --book-animation-time: 2s;
+  --book-animation-time: 1.2s;
 }
 
 .book {
-  width: calc(var(--book-width) / 2);
-  aspect-ratio: calc(var(--book-ratio));
-  position:relative;
-  perspective: 100vw;
+  height: 98vh;
+  width: calc(var(--book-aspect-ratio) * 100vh);
+  position: relative;
+  perspective: 300vw;
   perspective-origin: 75%;
   transform-style: preserve-3d;
-  margin: auto;
-  transition: transform var(--book-animation-time), perspective var(--book-animation-time), perspective-origin var(--book-animation-time);
+  scale: .6;
+  top: 0;
+  transition: 
+    transform var(--book-animation-time), 
+    perspective var(--book-animation-time), 
+    perspective-origin var(--book-animation-time),
+    scale var(--book-animation-time),
+    top var(--book-animation-time);
+  pointer-events: none;
 }
 
 .book.selected {
   perspective: 1000vw;
   perspective-origin: center;
+  scale: 1;
+  /* top: -60px; */
 }
 
 .book.selected-last {
   perspective-origin: 25%;
   perspective: 100vw;
+  scale: 1;
   /* transform: translateX(25%); */
 }
 
 .pages {
-  width: calc(1 * var(--book-width));
-  max-width: var(--book-width);
-  aspect-ratio: calc(var(--book-ratio) * 2);
+  width: calc(var(--book-aspect-ratio) * 98vh * 2);
+  height: 100%;
   transform-style: preserve-3d;
   transform-origin: center;
   backface-visibility: hidden;
@@ -40,6 +47,12 @@
   position: absolute;
   top: 0;
   left: -100%;
+
+  /* transition: top var(--book-animation-time); */
+}
+
+.book.selected .pages {
+  /* top: 50px; */
 }
 
 .pages-closed {
@@ -57,10 +70,6 @@
   transition: transform var(--book-animation-time);
 }
 
-.book.selected .pages {
-
-}
-
 .book .book-page {
   float: none;
   clear: none;
@@ -73,7 +82,7 @@
   user-select: none;
   background-color: #909090 !important;
   top: 0;
-  width: calc(var(--book-width) / 2);
+  width: calc(var(--book-aspect-ratio) * 98vh);
   height: 100%;
   background: left top no-repeat;
   background-size: cover;

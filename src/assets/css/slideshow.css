@@ -2,7 +2,7 @@
   --side-mid-scale-factor: 0.7;
   --card-width: 400px;
   --card-height: 82vh;
-  --card-top: 4vh;
+  --card-top: 0vh;
   --card-margin-x: 25vw;
   --side-card-top: calc(4vh - var(--card-height) / 2 + var(--card-height) * var(--side-mid-scale-factor) / 1.7);
   --side-card-width: var(--card-width) * var(--side-mid-scale-factor);
@@ -29,8 +29,10 @@
 
 .slideshow-card {
   width: var(--card-width);
-  height: var(--card-height);
+  /* height: var(--card-height); */
   /* background-color: red; */
+  /* width: auto; */
+  height: auto;
   position: absolute;
   border-radius: 30px;
   font-size: 1rem;
@@ -64,6 +66,11 @@
 .side-card {
   top: var(--side-card-top);
   scale: var(--side-mid-scale-factor);
+  pointer-events: none;
+}
+
+.side-card > .book > .pages > .book-page {
+  pointer-events: none;
 }
 
 .left {

@@ -148,11 +148,11 @@ export class linkedList<T> {
 	}
 
 	public map<K>(callback: (node: linkedListNode<T>) => K): K[] {
-		return this.nodeArray.map((node) => callback(node));
+		return this.nodeArray.map(node => callback(node));
 	}
 
 	public find(callback: (node: linkedListNode<T>) => boolean) {
-		return this.nodeArray.find((node) => callback(node));
+		return this.nodeArray.find(node => callback(node));
 	}
 }
 

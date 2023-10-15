@@ -40,27 +40,27 @@ body,
   padding: 0px;
 }
 
-#main::after {
-  content: "";
-  position: absolute;
-  top: 0px;
-  left: calc(50vw - 1px);
-  width: 1px;
-  height: 100vh;
-  background-color: rgba(255, 0, 0, 0.5);
-  z-index: 999;
-}
+// #main::after {
+//   content: "";
+//   position: absolute;
+//   top: 0px;
+//   left: calc(50vw - 1px);
+//   width: 1px;
+//   height: 100vh;
+//   background-color: rgba(255, 0, 0, 0.5);
+//   z-index: 999;
+// }
 
-#main::before {
-  content: "";
-  position: absolute;
-  top: calc(50vh - 1px);
-  left: 0px;
-  width: 100vw;
-  height: 1px;
-  background-color: rgba(255, 0, 0, 0.5);
-  z-index: 999;
-}
+// #main::before {
+//   content: "";
+//   position: absolute;
+//   top: calc(50vh - 1px);
+//   left: 0px;
+//   width: 100vw;
+//   height: 1px;
+//   background-color: rgba(255, 0, 0, 0.5);
+//   z-index: 999;
+// }
 
 nav {
   background-color: $nav_bg_color_light !important;
@@ -82,6 +82,17 @@ input {
   overflow: hidden;
   position: absolute;
   top: 0px;
+}
+
+.loading::after {
+  content: "LOADING...";
+  color: white;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 1);
 }
 
 .light-theme {
@@ -182,6 +193,17 @@ SLIDESHOW
   height: 100vh;
   box-shadow: 0 0 90px 90px rgba(150, 150, 150, 0.9);
   z-index: 100;
+  transform: opacity 0.2s ease-in-out;
+}
+
+.hidden .navigation-arrow {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.navigation-arrow.animating svg{
+  // color: rgba(172, 172, 172, 0.8);
+  // transition: color 0s ease-in-out;
 }
 
 .navigation-arrow-left {
@@ -254,7 +276,6 @@ glowing effect for input buttons
   user-select: none;
   font-family:$ikharic_font;
   text-align: center;
-  cursor: pointer;
 }
 
 .input-field-submit {
@@ -264,27 +285,37 @@ glowing effect for input buttons
   transform: translate(-50%, -50%);
 }
 
-.input-field-btn.uid {
-  color: rgba(255, 255, 255, 0.9);
-  animation: glow-uid 1s ease-in-out infinite alternate;
+.input-field-btn {
+  color: rgba(255, 255, 255, .4);
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
 }
 
-.input-field-btn.uid.selected {
-  color: rgba(255, 0, 0,.6);
+.input-field-btn.uid {
+  animation: glow-uid 1s ease-in-out infinite alternate;
 }
 
 .input-field-btn.pwd {
-  color: rgba(255, 255, 255, 0.9);
   animation: glow-pwd 1s ease-in-out infinite alternate;
 }
 
-.input-field-btn.pwd.selected {
-  color: rgba(51, 0, 255,.6);
+.input-field-btn:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.input-field-btn.selected {
+  color: rgba(255, 255, 255, 1);
 }
 
 .input-field-submit {
-  color: rgba(255, 255, 255, 0.9);
-  animation: glow-uid 1s ease-in-out infinite alternate;
+  color: rgba(255, 255, 255, .2);
+  animation: glow-submit 1s ease-in-out infinite alternate;
+  transition: color 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.input-field-submit.active {
+  color: rgba(255, 255, 255, 1);
 }
 
 @keyframes glow-pwd {
@@ -304,6 +335,16 @@ glowing effect for input buttons
 
   to {
     text-shadow: 0 0 20px #fff, 0 0 30px #fc4416, 0 0 40px #fc4416, 0 0 50px #fc4416, 0 0 60px #fc4416, 0 0 70px #fc4416, 0 0 80px #fc4416;
+  }
+}
+
+@keyframes glow-submit {
+  from {
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff, 0 0 50px #fff, 0 0 60px #fff, 0 0 70px #fff;
+  }
+
+  to {
+    text-shadow: 0 0 20px #fff, 0 0 30px #e5eaff, 0 0 40px #e5eaff, 0 0 50px #e5eaff, 0 0 60px #e5eaff, 0 0 70px #e5eaff, 0 0 80px #e5eaff;
   }
 }
 
