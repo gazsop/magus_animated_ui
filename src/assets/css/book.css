@@ -96,6 +96,10 @@
   outline: 1px solid transparent;
 }
 
+.book-page div {
+  margin: 20px;
+}
+
 .book .book-page:nth-child(odd) {
   pointer-events: all;
   transform: rotateY(0deg);

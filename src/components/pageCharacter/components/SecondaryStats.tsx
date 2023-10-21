@@ -1,128 +1,462 @@
 import React from "react";
 import { Col, InputGroup, Row } from "react-bootstrap";
 import { Id } from "../../../utils/getId";
-import { IChar, ISecStatScaling, ISecondaryStatVal } from '../../../types/common';
+import { Character } from "@/magus_app_types";
 
-const secondaryStatVal: (
-  val: number,
-  scaling?: ISecStatScaling[]
-) => ISecondaryStatVal = (val = 1, scaling = []) => {
-  return {
-    val: val,
-    scaling: null,
-  }
-}
-
-const secondaryStats: {
-  id: number;
-  name: string;
-  val: ISecondaryStatVal;
-}[] = [
-  {
-    id: 1,
-    name: "Álcázás/Álruhaviselés",
-    val: secondaryStatVal(10, [
-      {
-        lvl: 6,
-        newVal: 150,
-      },
-    ]),
-  },
-  // { id: 2, name: "Alkímia", val: secondaryStatVal(10) },
-  // { id: 3, name: "Állatismeret", val: secondaryStatVal(10) },
-  // { id: 4, name: "Belharc", val: secondaryStatVal(10) },
-  // { id: 5, name: "Birkózás", val: secondaryStatVal(10) },
-  // { id: 6, name: "Célzás", val: secondaryStatVal(10) },
-  // { id: 7, name: "Csapda és titkosajtó keresés", val: secondaryStatVal(10) },
-  // { id: 8, name: "Csapdaállítás", val: secondaryStatVal(10) },
-  // { id: 9, name: "Csomózás", val: secondaryStatVal(10) },
-  // { id: 10, name: "Demonológia", val: secondaryStatVal(10) },
-  // { id: 11, name: "Drágakőmágia", val: secondaryStatVal(10) },
-  // { id: 12, name: "Élettan", val: secondaryStatVal(10) },
-  // { id: 13, name: "Emberismeret", val: secondaryStatVal(10) },
-  // { id: 14, name: "Éneklés/Zenélés", val: secondaryStatVal(10) },
-  // { id: 15, name: "Építészet", val: secondaryStatVal(10) },
-  // { id: 16, name: "Erdőjárás", val: secondaryStatVal(10) },
-  // { id: 17, name: "Értékbecslés", val: secondaryStatVal(10) },
-  // { id: 18, name: "Esés", val: secondaryStatVal(10) },
-  // { id: 19, name: "Etikett", val: secondaryStatVal(10) },
-  // { id: 20, name: "Fegyverdobás", val: secondaryStatVal(10) },
-  // { id: 21, name: "Fegyverhasználat", val: secondaryStatVal(10) },
-  // { id: 22, name: "Fegyverismeret", val: secondaryStatVal(10) },
-  // { id: 23, name: "Fegyvertörés", val: secondaryStatVal(10) },
-  // { id: 24, name: "Festészet,Rajzolás", val: secondaryStatVal(10) },
-  // { id: 25, name: "Földharc", val: secondaryStatVal(10) },
-  // { id: 26, name: "Futás", val: secondaryStatVal(10) },
-  // { id: 27, name: "Hadrend", val: secondaryStatVal(10) },
-  // { id: 28, name: "Hadvezetés", val: secondaryStatVal(10) },
-  // { id: 29, name: "Hajózás", val: secondaryStatVal(10) },
-  // { id: 30, name: "Hamisítás", val: secondaryStatVal(10) },
-  // { id: 31, name: "Hamiskártyázás", val: secondaryStatVal(10) },
-  // { id: 32, name: "Hangutánzás", val: secondaryStatVal(10) },
-  // { id: 33, name: "Harc helyhez kötve", val: secondaryStatVal(10) },
-  // { id: 34, name: "Harci láz", val: secondaryStatVal(10) },
-  // { id: 35, name: "Hárítás", val: secondaryStatVal(10) },
-  // { id: 36, name: "Hasbeszélés", val: secondaryStatVal(10) },
-  // { id: 37, name: "Hátbatámadás(Orvtámadás)", val: secondaryStatVal(10) },
-  // { id: 38, name: "Helyismeret", val: secondaryStatVal(10) },
-  // { id: 39, name: "Heraldika", val: secondaryStatVal(10) },
-  // { id: 40, name: "Herbalizmus", val: secondaryStatVal(10) },
-  // { id: 41, name: "Idomítás", val: secondaryStatVal(10) },
-  // { id: 42, name: "Időjóslás", val: secondaryStatVal(10) },
-  // { id: 43, name: "Ikerharc", val: secondaryStatVal(10) },
-  // { id: 44, name: "Írás/Olvasás", val: secondaryStatVal(10) },
-  // { id: 45, name: "Jogismeret", val: secondaryStatVal(10) },
-  // { id: 46, name: "Kétkezes harc", val: secondaryStatVal(10) },
-  // { id: 47, name: "Kétkezes harc - Shien-Su", val: secondaryStatVal(10) },
-  // {
-  //   id: 48,
-  //   name: "Kiegészítő támadás, különleges fegyver",
-  //   val: secondaryStatVal(10),
-  // },
-  // { id: 49, name: "Kínokozás", val: secondaryStatVal(10) },
-  // { id: 50, name: "Kocsihajtás", val: secondaryStatVal(10) },
-  // { id: 51, name: "Kocsmai Verekedés", val: secondaryStatVal(10) },
-  // { id: 52, name: "Kötelekből szabadulás", val: secondaryStatVal(10) },
-  // { id: 53, name: "Kötéltánc", val: secondaryStatVal(10) },
-  // { id: 54, name: "Lábharc", val: secondaryStatVal(10) },
-  // { id: 55, name: "Lefegyvezés", val: secondaryStatVal(10) },
-  // { id: 56, name: "Legendaismeret", val: secondaryStatVal(10) },
-  // { id: 57, name: "Lopózás", val: secondaryStatVal(10) },
-  // { id: 58, name: "Lovaglás", val: secondaryStatVal(10) },
-  // { id: 59, name: "Lovas íjászat", val: secondaryStatVal(10) },
-  // { id: 60, name: "Mágiahasználat", val: secondaryStatVal(10) },
-  // { id: 61, name: "Mágiaismeret", val: secondaryStatVal(10) },
-  // { id: 62, name: "Mászás", val: secondaryStatVal(10) },
-  // { id: 63, name: "Mechanika", val: secondaryStatVal(10) },
-  // { id: 64, name: "Mellébeszélés", val: secondaryStatVal(10) },
-  // { id: 65, name: "Méregkeverés/Semlegesítés", val: secondaryStatVal(10) },
-  // { id: 66, name: "Nehézvért viselet", val: secondaryStatVal(10) },
-  // { id: 67, name: "Nyelvismeret", val: secondaryStatVal(10) },
-  // { id: 68, name: "Nyomolvasás/Eltüntetés", val: secondaryStatVal(10) },
-  // { id: 69, name: "Ökölharc", val: secondaryStatVal(10) },
-  // { id: 70, name: "Ősi nyelv ismerete", val: secondaryStatVal(10) },
-  // { id: 71, name: "Pajzs használat", val: secondaryStatVal(10) },
-  // { id: 72, name: "Pszi", val: secondaryStatVal(10) },
-  // { id: 73, name: "Pusztítás", val: secondaryStatVal(10) },
-  // { id: 74, name: "Rejtőzés", val: secondaryStatVal(10) },
-  // { id: 75, name: "Rúnamágia", val: secondaryStatVal(10) },
-  // { id: 76, name: "Sebgyógyítás", val: secondaryStatVal(10) },
-  // { id: 77, name: "Semlegesítés/Működtetés", val: secondaryStatVal(10) },
-  // { id: 78, name: "Szájról olvasás", val: secondaryStatVal(10) },
-  // { id: 79, name: "Szakma", val: secondaryStatVal(10) },
-  // { id: 80, name: "Szexuális kultúra", val: secondaryStatVal(10) },
-  // { id: 81, name: "Tánc", val: secondaryStatVal(10) },
-  // { id: 82, name: "Térképészet", val: secondaryStatVal(10) },
-  // { id: 83, name: "Történelemismeret", val: secondaryStatVal(10) },
-  // { id: 84, name: "Ugrás/Akrobatika", val: secondaryStatVal(10) },
-  // { id: 85, name: "Úszás", val: secondaryStatVal(10) },
-  // { id: 86, name: "Vadászat/Halászat", val: secondaryStatVal(10) },
-  // { id: 87, name: "Vakharc", val: secondaryStatVal(10) },
-  // { id: 88, name: "Vallásismeret", val: secondaryStatVal(10) },
-  // { id: 89, name: "Zárnyitás", val: secondaryStatVal(10) },
-  // { id: 90, name: "Zsebmetszés", val: secondaryStatVal(10) },
-  // { id: 91, name: "Zsonglőrködés", val: secondaryStatVal(10) },
+export const secondaryStats: Character.ISecondaryStat[] = [
+	{
+		name: "Álcázás/Álruhaviselés",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: 50,
+	},
+	{
+		name: "Alkímia",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Állatismeret",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Belharc",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Birkózás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Célzás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Csapda és titkosajtó keresés",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Csapdaállítás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Csomózás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Demonológia",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Drágakőmágia",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Élettan",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Emberismeret",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Éneklés/Zenélés",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Építészet",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Erdőjárás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Értékbecslés",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Esés",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Etikett",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Fegyverdobás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Fegyverhasználat",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Fegyverismeret",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Fegyvertörés",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Festészet,Rajzolás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Földharc",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Futás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Hadrend",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Hadvezetés",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Hajózás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Hamisítás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Hamiskártyázás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Hangutánzás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Harc helyhez kötve",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Harci láz",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Hárítás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Hasbeszélés",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Hátbatámadás(Orvtámadás)",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Helyismeret",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Heraldika",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Herbalizmus",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Idomítás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Időjóslás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Ikerharc",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Írás/Olvasás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Jogismeret",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Kétkezes harc",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Kétkezes harc - Shien-Su",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Kiegészítő támadás, különleges fegyver",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Kínokozás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Kocsihajtás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Kocsmai Verekedés",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Kötelekből szabadulás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Kötéltánc",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Lábharc",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Lefegyvezés",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Legendaismeret",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Lopózás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Lovaglás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Lovas íjászat",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Mágiahasználat",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Mágiaismeret",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Mászás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Mechanika",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Mellébeszélés",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Méregkeverés/Semlegesítés",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Nehézvért viselet",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Nyelvismeret",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Nyomolvasás/Eltüntetés",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Ökölharc",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Ősi nyelv ismerete",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Pajzs használat",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Pszi",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Pusztítás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Rejtőzés",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Rúnamágia",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Sebgyógyítás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Semlegesítés/Működtetés",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Szájról olvasás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Szakma",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Szexuális kultúra",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Tánc",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Térképészet",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Történelemismeret",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Ugrás/Akrobatika",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Úszás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Vadászat/Halászat",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Vakharc",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Vallásismeret",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Zárnyitás",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Zsebmetszés",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
+	{
+		name: "Zsonglőrködés",
+		level: Character.SECONDARY_STAT_LEVEL.BASIC,
+		skill: Math.floor(Math.random() * 100),
+	},
 ];
-export function SecondaryStats(): React.ReactElement {
-  return <></>;
-}

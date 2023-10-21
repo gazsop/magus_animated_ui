@@ -59,7 +59,7 @@ const LOGIN_PAGE_STATES = {
 };
 
 export function Login() {
-  const { getUser, setUser } = useApp();
+
   const [pageState, setPageState] = useState<
     typeof LOGIN_PAGE_STATES[keyof typeof LOGIN_PAGE_STATES]
   >(LOGIN_PAGE_STATES.uidInput);
@@ -96,7 +96,7 @@ export function Login() {
           loginInputRef.current && (loginInputRef.current.value = "");
           setPageState({ ...LOGIN_PAGE_STATES.pwdInput });
           setLoginError(null);
-          setUser({uid: userInput});
+          // setUser({uid: userInput});
         }
 
         break;
@@ -122,7 +122,7 @@ export function Login() {
           loginInputRef.current && (loginInputRef.current.value = "");
           setPageState({ ...LOGIN_PAGE_STATES.adventure });
           setLoginError(null);
-          setUser({pwd: userInput})
+          // setUser({pwd: userInput})
         }
         break;
       }
@@ -247,7 +247,9 @@ export function Login() {
       <Form.Group className="mt-3 w-100" controlId="login-keep-logged-in">
         <Form.Check
           type="checkbox"
-          checked={getUser().keepLoggedIn}
+          checked={true
+            // getUser().keepLoggedIn
+          }
           ref={keepUserLoggedInRef}
           label="Maradjak bejelentkezve"
           disabled

@@ -176,6 +176,30 @@ input {
 }
 
 /*
+BOOK TABLES
+*/
+
+table.secondary-stats {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0px;
+  border: 1px solid black;
+  font-size: 0.8rem;
+}
+
+table.secondary-stats td {
+  border: 1px solid black;
+  padding: 5px;
+  width: 10%;
+  text-align: center;
+}
+
+table.secondary-stats td:nth-child(3n+1) {
+  width: 30%;
+  text-align: left;
+}
+
+/*
 SLIDESHOW
 */
 

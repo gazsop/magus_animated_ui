@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { CLIENT, SERVER } from "../assets/config";
-import { Application } from "../types/common";
+import { Application } from "@/magus_app_types";
 
 
 function RouterProvider() {

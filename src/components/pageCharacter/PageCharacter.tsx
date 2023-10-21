@@ -1,11 +1,11 @@
 import React from "react";
 import { Col, InputGroup, Row } from "react-bootstrap";
-import { PLACEHOLDER, ERROR } from "../../assets/constants";
 import { Id } from "../../utils/getId";
 import "../../assets/css/game.css";
 import { CustomDate } from "../../utils/formatDate";
 import charInventory from "../../assets/char_inventory.jpg"
 import { Inventory } from "./components/Inventory";
+import { Adventure, Application, PLACEHOLDER } from "@/magus_app_types";
 
 const char = {
   primStats: [
@@ -98,24 +98,6 @@ const char = {
     {
       name: "Réz",
       val: 1,
-    },
-  ],
-  bags: [
-    {
-      refId: "",
-      id: "asd",
-      name: "BigD táska",
-      slot: 56,
-      col: 10,
-      row: 6,
-    },
-    {
-      refId: "",
-      id: "asd",
-      name: "smallD táska",
-      slot: 25,
-      col: 6,
-      row: 5,
     },
   ],
 };
@@ -325,9 +307,6 @@ export function Character(): React.ReactElement {
             <img src={charInventory}/>
           </td>
           <td>
-            {char.bags.map((bag) => (
-              <Inventory data={bag} />
-            ))}
           </td>
           <td><Notes/></td>
         </tr>

@@ -18,7 +18,7 @@ import { Login } from "../components/pageLogin/PageLogin";
 import { Admin } from "../components/pageAdmin/Admin";
 import { linkedList } from "../utils/linkedList";
 import { Adventures } from "../components/pageAdvantures/PageAdventures";
-import { Optional, User } from "../types/common";
+import { Optional, User } from "@/magus_app_types";
 import "../assets/css/router.css";
 
 import adventures_bg from "../assets/imgs/bg/adventures.png";

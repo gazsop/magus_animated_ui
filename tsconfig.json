@@ -15,10 +15,12 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
+    "baseUrl": "./",    /* Specify the base directory to resolve non-relative module names. */
     "paths": {
-      "shared/*": ["../shared/*","../shared"]
-    },     
+      "@/*": [
+        "../shared/*"
+      ],
+    },
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

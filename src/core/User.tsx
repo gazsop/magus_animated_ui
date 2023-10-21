@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { users } from "../data/_testUser";
-import { Adventure, Application, IRegexErrorArray, Optional, User } from "../types/common";
+import { Adventure, Application, IRegexErrorArray, Optional, PLACEHOLDER, User } from "@/magus_app_types";
 
 interface IUser extends User.IUserData {
   setUser: (val: Optional<User.IUserData, keyof User.IUserData>) => void;
@@ -9,9 +9,9 @@ interface IUser extends User.IUserData {
 }
 
 const unauthorizedUser: User.IUserData = {
-  id: Application.PLACEHOLDER.STRING as string,
-  uid: Application.PLACEHOLDER.STRING as string,
-  pwd: Application.PLACEHOLDER.STRING as string,
+  id: PLACEHOLDER.STRING,
+  uid: PLACEHOLDER.STRING,
+  pwd: PLACEHOLDER.STRING,
   keepLoggedIn: false,
   rank: User.USER_RANK.UNAUTH
 };

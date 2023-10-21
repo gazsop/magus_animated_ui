@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { routesArray } from "./FrontEndRouter";
-import { User } from "../types/common";
+import { User } from "@/magus_app_types";
 
 // const REDIRECT_PATH_UNATH = NAV.PAGES.find((value: TPage)=>(value.RANG_REQ == USER.RANK.UNAUTH));
 

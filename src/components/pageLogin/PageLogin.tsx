@@ -1,15 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useApp } from "../../core/App";
-import { Button, Form, Image, Nav } from "react-bootstrap";
 import logo from "../../assets/logo.png";
 import PageLoginInput from "./PageLoginInput";
 import { Navigate, useOutletContext } from "react-router-dom";
-import { LinkContainer } from "react-router-bootstrap";
-import { IRegexErrorArray } from "../../types/common";
-import { User } from "../../core/User";
 import login from "../../assets/imgs/bg/login.png";
 import loginClick from "../../assets/audio/login-click.wav";
 import { useFrontEndRouter } from "../../core/FrontEndRouter";
+import { IRegexErrorArray } from "@/magus_app_types";
 // import { useAppData } from "../../core/FrontEndRouter";
 
 export function Login(props: {
@@ -219,7 +216,7 @@ export function Login(props: {
 				width: "100vw",
 			}}
 		>
-			<Image
+			<img
 				src={login}
 				style={{
 					position: "absolute",

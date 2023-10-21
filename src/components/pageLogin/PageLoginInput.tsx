@@ -18,7 +18,7 @@ function PageLoginInput(props: any) {
       setShowErrorOverlay(true)
     },100)
   },[props.loginError]);
-  return (
+    return (
     <>
       <label className="my-1 control-label w-100 text-center">{props.labelText}</label>
       {showErrorOverlay && errorText}
