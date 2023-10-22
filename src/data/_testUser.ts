@@ -1,4 +1,4 @@
-import { User } from "@/magus_app_types";
+import { User } from "@appTypes/magus_app_types";
 
 
 export const users: User.IUserData[] = [

@@ -5,7 +5,7 @@ import "../../assets/css/game.css";
 import { CustomDate } from "../../utils/formatDate";
 import charInventory from "../../assets/char_inventory.jpg"
 import { Inventory } from "./components/Inventory";
-import { Adventure, Application, PLACEHOLDER } from "@/magus_app_types";
+import { Adventure, Application, PLACEHOLDER } from "@appTypes/magus_app_types";
 
 const char = {
   primStats: [

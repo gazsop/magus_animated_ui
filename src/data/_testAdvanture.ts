@@ -1,7 +1,6 @@
 
-import { Adventure, Character } from '@/magus_app_types';
+import { Adventure, Character } from '@appTypes/magus_app_types';
 import { CustomDate } from "../utils/formatDate";
-import { secondaryStats } from '../components/pageCharacter/components/SecondaryStats';
 
 export const testAdventure: Adventure.IAdventure[] = [
     {
@@ -69,6 +68,10 @@ export const testAdventure: Adventure.IAdventure[] = [
             name: Character.PRIMARY_STATS.WIP,
             val: 18,
           },
+          {
+            name: Character.PRIMARY_STATS.LUC,
+            val: 10
+          }
         ],
         secondaryStats: [
           {
@@ -545,22 +548,22 @@ export const testAdventure: Adventure.IAdventure[] = [
           schools: ["Gandalf school"],
         },
         hm: {
-          AR: {
+          ATK: {
             base: 1,
             fromGear: 1,
             total: 2,
           },
-          DR: {
+          DEF: {
             base: 2,
             fromGear: 2,
             total: 4,
           },
-          IR: {
+          INI: {
             base: 3,
             fromGear: 3,
             total: 6,
           },
-          TR: {
+          AIM: {
             base: 4,
             fromGear: 4,
             total: 8,
@@ -654,22 +657,22 @@ export const testAdventure: Adventure.IAdventure[] = [
           schools: ["Archery School"]
         },
         hm: {
-          AR: {
+          ATK: {
             base: 1,
             fromGear: 1,
             total: 2,
           },
-          DR: {
+          DEF: {
             base: 2,
             fromGear: 2,
             total: 4,
           },
-          IR: {
+          INI: {
             base: 3,
             fromGear: 3,
             total: 6,
           },
-          TR: {
+          AIM: {
             base: 4,
             fromGear: 4,
             total: 8,

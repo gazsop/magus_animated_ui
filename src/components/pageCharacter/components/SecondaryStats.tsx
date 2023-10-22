@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, InputGroup, Row } from "react-bootstrap";
 import { Id } from "../../../utils/getId";
-import { Character } from "@/magus_app_types";
+import { Character } from "@appTypes/magus_app_types";
 
 export const secondaryStats: Character.ISecondaryStat[] = [
 	{

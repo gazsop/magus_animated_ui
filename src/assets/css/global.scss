@@ -199,6 +199,67 @@ table.secondary-stats td:nth-child(3n+1) {
   text-align: left;
 }
 
+/******************************
+EZTCSAKIDESZARTAMJAVÍTSD!
+******************************/
+
+div > .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 10;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+div:hover > .tooltiptext {
+  visibility: visible;
+}
+
+table.hm-stat-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0px;
+  border: 1px solid black;
+  font-size: 0.8rem;
+}
+
+table.hm-stat-table td {
+  border: 1px solid black;
+  padding: 3px;
+  width: 10%;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+table.hm-stat-table td img {
+  height: 40px;
+}
+
+table.main-stat-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0px;
+  border: 1px solid black;
+  font-size: 0.8rem;
+}
+
+table.main-stat-table td {
+  border: 1px solid black;
+  padding: 3px;
+  text-align: center;
+}
+
+table.main-stat-table td img {
+  height: 20px;
+}
+
 /*
 SLIDESHOW
 */

@@ -1,5 +1,5 @@
 import { UI_THEME } from "../assets/constants";
-import { Optional } from "@/magus_app_types";
+import { Optional } from "@appTypes/magus_app_types";
 
 export type TInterfaceTheme = (typeof UI_THEME)[keyof typeof UI_THEME];
 

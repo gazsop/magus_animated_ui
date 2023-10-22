@@ -1,4 +1,4 @@
-import { Character } from "@/magus_app_types";
+import { Character } from "@appTypes/magus_app_types";
 
 export function Inventory(props: { data: Character.Item.TBackpack }) {
 

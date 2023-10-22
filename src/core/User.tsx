@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { users } from "../data/_testUser";
-import { Adventure, Application, IRegexErrorArray, Optional, PLACEHOLDER, User } from "@/magus_app_types";
+import { Adventure, Application, IRegexErrorArray, Optional, PLACEHOLDER, User } from "@appTypes/magus_app_types";
 
 interface IUser extends User.IUserData {
   setUser: (val: Optional<User.IUserData, keyof User.IUserData>) => void;

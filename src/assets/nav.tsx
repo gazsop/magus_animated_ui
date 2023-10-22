@@ -2,7 +2,7 @@ import React from "react";
 import { Login } from "../components/pageLogin/PageLogin_FORMAL";
 import { Admin } from "../components/pageAdmin/Admin";
 import { TNav } from "../types/nav";
-import { User } from '@/magus_app_types';
+import { User } from '@appTypes/magus_app_types';
 
 export const NAV: TNav = {
   PAGES: [

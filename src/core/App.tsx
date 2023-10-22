@@ -15,7 +15,7 @@ import {
 } from "../assets/constants";
 import {
   Application,
-} from "@/magus_app_types";
+} from "@appTypes/magus_app_types";
 import RouterProvider from "./NetworkRouter";
 // import ErrorBoundary from "./ErrorHandler";
 // import { testAdventure } from "../data/_testadventure";

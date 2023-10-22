@@ -6,7 +6,7 @@ import { Navigate, useOutletContext } from "react-router-dom";
 import login from "../../assets/imgs/bg/login.png";
 import loginClick from "../../assets/audio/login-click.wav";
 import { useFrontEndRouter } from "../../core/FrontEndRouter";
-import { IRegexErrorArray } from "@/magus_app_types";
+import { IRegexErrorArray } from "@appTypes/magus_app_types";
 // import { useAppData } from "../../core/FrontEndRouter";
 
 export function Login(props: {

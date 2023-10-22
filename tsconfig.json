@@ -17,8 +17,17 @@
     "jsx": "react-jsx",
     "baseUrl": "./",    /* Specify the base directory to resolve non-relative module names. */
     "paths": {
-      "@/*": [
+      "@appTypes/*": [
         "../shared/*"
+      ],
+      "@css/*": [
+        "./src/assets/css/*",
+      ],
+      "@images/*": [
+        "./src/assets/imgs/*",
+      ],
+      "@components/*": [
+        "./src/components/*",
       ],
     },
   },

@@ -96,8 +96,10 @@
   outline: 1px solid transparent;
 }
 
-.book-page div {
+.book-page > div {
   margin: 20px;
+  height: calc(100% - 40px);
+  width: calc(100% - 40px);
 }
 
 .book .book-page:nth-child(odd) {
