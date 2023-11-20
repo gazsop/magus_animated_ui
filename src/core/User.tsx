@@ -53,7 +53,7 @@ export const UserHook = (
     return errorString ? [...errorString] : errorString;
   };
   const validatePwd = (pwdInput: string) => {
-    console.log(pwdInput);
+    // console.log(pwdInput);
     const pwd = {
       minLength: 4,
       maxLength: 36,

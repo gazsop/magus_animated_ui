@@ -5,16 +5,12 @@ import {
   useState,
 } from "react";
 import { CLIENT, SERVER } from "../assets/config";
-import adventures_bg from "../assets/imgs/bg/adventures.png";
-import login from "../assets/imgs/bg/login.png";
-import book_backside from "../assets/imgs/book_backside.png";
-import book_cover from "../assets/imgs/book_cover.png";
-import logo from "../assets/imgs/logo.png";
 import {
   UI_THEME,
 } from "../assets/constants";
 import {
   Application,
+  Character
 } from "@appTypes/magus_app_types";
 import RouterProvider from "./NetworkRouter";
 // import ErrorBoundary from "./ErrorHandler";
@@ -22,7 +18,6 @@ import RouterProvider from "./NetworkRouter";
 import ErrorBoundary from "./ErrorHandler";
 import { Id } from "../utils/getId";
 import { IAppContext, IAppData, TUpdateAppData } from "../types/app";
-
 
 const initialAppData: IAppData = {
   loading: 1,
@@ -43,43 +38,51 @@ function AppProvider(props: {
     setApp((prev) => ({ ...prev, ...newValue }));
   };
 
-  useEffect(() => {
-		console.log("app useeffect windowWidth");
-		function handleResize() {
-			if(window.innerWidth < 1000 && app.view !== "mobile") setAppData({view: "mobile"})
-      else if(window.innerWidth >= 1000 && app.view !== "desktop") setAppData({view: "desktop"})
-    console.log("app useeffect windowWidth", app.view, window.innerWidth);
-    }
-		window.addEventListener("resize", handleResize);
+  // useEffect(() => {
+	// 	console.log("app useeffect windowWidth");
+	// 	function handleResize() {
+	// 		if(window.innerWidth < 1000 && app.view !== "mobile") setAppData({view: "mobile"})
+  //     else if(window.innerWidth >= 1000 && app.view !== "desktop") setAppData({view: "desktop"})
+  //   console.log("app useeffect windowWidth", app.view, window.innerWidth);
+  //   }
+	// 	window.addEventListener("resize", handleResize);
 
-		return () => window.removeEventListener("resize", handleResize);
-	}, []);
+	// 	return () => window.removeEventListener("resize", handleResize);
+	// }, []);
 
   //preload images
 
-  useEffect(() => {
-		const preloadImages = async () => {
-			const images = [adventures_bg, login, book_backside, book_cover, logo];
-			const promises = images.map((src) => {
-				return new Promise((resolve, reject) => {
-					const img = new Image();
-					img.src = src;
-					img.onload = resolve;
-					img.onerror = reject;
-				});
-			});
-			return await Promise.all(promises);
-		};
-		preloadImages().then(() => {
-      setAppData({ loading: getAppData.loading - 1 });
-    });
-	}, []);
+  // useEffect(() => {
+	// 	const preloadImages = async () => {
+  //     const images: string[] = [];
+  //     Object.keys(Character.IMGS).map(_key => {
+  //       const key = _key as keyof typeof Character.IMGS;
+  //        if(Array.isArray(Character.IMGS[key])) Object.keys(Character.IMGS[key]).map(img => images.push(img))
+  //     })
+  //     Object.keys(Application.IMGS).map(_key => {
+  //       const key = _key as keyof typeof Application.IMGS;
+  //        if(Array.isArray(Application.IMGS[key])) Object.keys(Application.IMGS[key]).map(img => images.push(img))
+  //     })
+	// 		const promises = images.map((src) => {
+	// 			return new Promise((resolve, reject) => {
+	// 				const img = new Image();
+	// 				img.src = src;
+	// 				img.onload = resolve;
+	// 				img.onerror = reject;
+	// 			});
+	// 		});
+	// 		return await Promise.all(promises);
+	// 	};
+	// 	preloadImages().then(() => {
+  //     setAppData({ loading: getAppData.loading - 1 });
+  //   });
+	// }, []);
 
   /****************
    * APP - DATA
    * **************/
 
-  console.log("app", app);
+  // console.log("app", app);
 
   const getAppData = { ...app };
 

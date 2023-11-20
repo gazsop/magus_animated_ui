@@ -15,7 +15,9 @@ export default defineConfig({
       '@appTypes': path.resolve(__dirname, '../shared'),
       '@css': path.resolve(__dirname, './src/assets/css'),
       '@components': path.resolve(__dirname, './src/components'),
-      '@images': path.resolve(__dirname, './src/assets/imgs')
+      '@images': path.resolve(__dirname, './src/assets/imgs'),
+      '@constants': path.resolve(__dirname, './src/assets/constants'),
+      '@config': path.resolve(__dirname, './src/assets/config'),
     },
   },
   build: {

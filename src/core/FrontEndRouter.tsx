@@ -13,22 +13,17 @@ import {
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { UI_THEME } from "../assets/constants";
+import { IMGS, UI_THEME } from "../assets/constants";
 import { Login } from "../components/pageLogin/PageLogin";
 import { Admin } from "../components/pageAdmin/Admin";
 import { linkedList } from "../utils/linkedList";
 import { Adventures } from "../components/pageAdvantures/PageAdventures";
-import { Optional, User } from "@appTypes/magus_app_types";
 import "../assets/css/router.css";
 
-import adventures_bg from "../assets/imgs/bg/adventures.png";
-import login from "../assets/imgs/bg/login.png";
-import { ProtectedRoute } from "./FrontEndRouter_ProtectedRoutes";
-import book_backside from "../assets/imgs/book_backside.png";
-import book_cover from "../assets/imgs/book_cover.png";
-import { IAppData, TUpdateAppData } from "../types/app";
-import logo from "../assets/imgs/logo.png";
+import { Application, Character, User } from "@appTypes/magus_app_types";
 
+import { ProtectedRoute } from "./FrontEndRouter_ProtectedRoutes";
+import { IAppData, TUpdateAppData } from "../types/app";
 type TRouteNames = "login" | "adventures" | "adventure";
 
 export type TRoute = {
@@ -124,7 +119,7 @@ function AppBody(): JSX.Element {
 	const [appState, setAppState] = useState<IAppData>(initialAppData);
 
 	const setAppData = (newValue: TUpdateAppData) => {
-		setAppState(prev => ({ ...prev, ...newValue }));
+		setAppState((prev) => ({ ...prev, ...newValue }));
 	};
 
 	const [routerState, setRouterState] = useState<IRouterStates>({
@@ -145,7 +140,7 @@ function AppBody(): JSX.Element {
 	const nodeRef =
 		routesRef.find((route) => route.val.path === location.pathname)?.val
 			.nodeRef ?? null;
-	const setRouter = (data: Optional<IRouterStates, keyof IRouterStates>) => {
+	const setRouter = (data: Application.Optional<IRouterStates, keyof IRouterStates>) => {
 		setRouterState((prev) => ({ ...prev, ...data }));
 	};
 
@@ -180,7 +175,21 @@ function AppBody(): JSX.Element {
 
 	useEffect(() => {
 		const preloadImages = async () => {
-			const images = [adventures_bg, login, book_backside, book_cover, logo];
+			const images: string[] = [];
+		
+			Object.keys(IMGS.CHARACTER).forEach((_key) => {
+				const key = _key as keyof typeof IMGS.CHARACTER;
+		
+				if (typeof (IMGS.CHARACTER[key]) === "object" && !Array.isArray(IMGS.CHARACTER[key]))
+					Object.values(IMGS.CHARACTER[key]).forEach((img) => images.push(img));
+			});
+
+			Object.keys(IMGS.APPLICATION).map((_key) => {
+				const key = _key as keyof typeof IMGS.APPLICATION;
+				if(typeof IMGS.APPLICATION[key] === "object" && !Array.isArray(IMGS.APPLICATION[key]))
+					Object.values(IMGS.APPLICATION[key]).forEach((img) => images.push(img));
+			});
+			// console.log(images);
 			const promises = images.map((src) => {
 				return new Promise((resolve, reject) => {
 					const img = new Image();
@@ -192,6 +201,7 @@ function AppBody(): JSX.Element {
 			return await Promise.all(promises);
 		};
 		preloadImages().then(() => {
+			console.log("images loaded");
 			setAppData({ loading: appState.loading - 1 });
 		});
 	}, []);
@@ -230,14 +240,12 @@ function AppBody(): JSX.Element {
 		}
 	}
 
-	const navOnclickHandler = (targetVal: string) => {	
+	const navOnclickHandler = (targetVal: string) => {
 		navigator(targetVal);
 	};
 
 	return (
-		<div
-			className={appState.loading ? "loading" : ""}
-		>
+		<div className={appState.loading ? "loading" : ""}>
 			{/* <Navbar bg="light">
 				<Nav className="mx-auto">
 					{routesRef.getAllNodes().map((route) => (

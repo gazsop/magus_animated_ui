@@ -29,8 +29,11 @@
       "@components/*": [
         "./src/components/*",
       ],
+      "@constants": [
+        "./src/assets/constants.ts",
+      ],
     },
   },
-  "include": ["src"],
+  "include": ["src","../shared"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,15 +1,10 @@
+import { Character, Adventure } from "@appTypes/magus_app_types";
+
 import { useState, useEffect, useRef } from "react";
 import "@css/book.css";
-import book_cover from "@images/book_cover.png";
-import book_backside from "@images/book_backside.png";
-import hmAimIcon from "@images/hm_aim.webp";
-import hmDefIcon from "@images/hm_def.webp";
-import hmAtkIcon from "@images/hm_atk.webp";
-import hmIniIcon from "@images/hm_ini.webp";
-import charSheetItemsFiltered from "@images/char_sheet_items_filtered.png";
-import { Adventure, Character, IMGS } from "@appTypes/magus_app_types";
 import { HealthAndResourceOrbs } from "../pageCharacter/components/HealthOrb";
-import book_bg from "@images/bg/book_bg.png";
+import { IMGS } from "@constants";
+
 
 const nrOfPages = 9;
 const hpWidth = 100;
@@ -25,21 +20,24 @@ interface IBookProps {
 
 const pagesJsx = (
 	ref: string[],
-	arg: Adventure.IAdventure
+	arg: Adventure.IAdventure,
+	selected: boolean
 ): {
 	jsx: JSX.Element[];
 	jsxLength: () => number;
 } => {
+	console.log(selected);
 	const Cover = () => (
 		<div
 			style={{
 				width: "100%",
 				height: "100%",
+				margin: "0"
 			}}
 			key={ref[0]}
 		>
 			<img
-				src={book_cover}
+				src={IMGS.APPLICATION.ELEMENTS.BOOK_FRONT_COVER}
 				style={{
 					height: "100%",
 					width: "auto",
@@ -53,59 +51,59 @@ const pagesJsx = (
 					transform: "translate(-50%, -50%)",
 				}}
 			>
-				<table key={`${arg.character.rp.name}-table0`}>
+				<table key={`${arg.characters[0].rp.name}-table0`}>
 					<tbody>
-						<tr key={`${arg.character.rp.name}-name`}>
-							<td key={`${arg.character.rp.name}-name-key`}>Name:</td>
-							<td key={`${arg.character.rp.name}-name-value`}>
-								{arg.character.rp.name}
+						<tr key={`${arg.characters[0].rp.name}-name`}>
+							<td key={`${arg.characters[0].rp.name}-name-key`}>Name:</td>
+							<td key={`${arg.characters[0].rp.name}-name-value`}>
+								{arg.characters[0].rp.name}
 							</td>
 						</tr>
 
-						<tr key={`${arg.character.rp.name}-Class`}>
-							<td key={`${arg.character.rp.name}-Class-key`}>Class:</td>
-							<td key={`${arg.character.rp.name}-Class-value`}>
-								{arg.character.class}
+						<tr key={`${arg.characters[0].rp.name}-Class`}>
+							<td key={`${arg.characters[0].rp.name}-Class-key`}>Class:</td>
+							<td key={`${arg.characters[0].rp.name}-Class-value`}>
+								{arg.characters[0].class}
 							</td>
 						</tr>
 
-						<tr key={`${arg.character.rp.name}-race`}>
-							<td key={`${arg.character.rp.name}-race-key`}>Race:</td>
-							<td key={`${arg.character.rp.name}-race-value`}>
-								{arg.character.race}
+						<tr key={`${arg.characters[0].rp.name}-race`}>
+							<td key={`${arg.characters[0].rp.name}-race-key`}>Race:</td>
+							<td key={`${arg.characters[0].rp.name}-race-value`}>
+								{arg.characters[0].race}
 							</td>
 						</tr>
 
-						<tr key={`${arg.character.rp.name}-creationDate`}>
-							<td key={`${arg.character.rp.name}-creationDate-key`}>
+						<tr key={`${arg.characters[0].rp.name}-creationDate`}>
+							<td key={`${arg.characters[0].rp.name}-creationDate-key`}>
 								Creation date:
 							</td>
-							<td key={`${arg.character.rp.name}-creationDate-value`}>
+							<td key={`${arg.characters[0].rp.name}-creationDate-value`}>
 								{arg.creationDate}
 							</td>
 						</tr>
 
-						<tr key={`${arg.character.rp.name}-lastUpdate`}>
-							<td key={`${arg.character.rp.name}-lastUpdate-key`}>
+						<tr key={`${arg.characters[0].rp.name}-lastUpdate`}>
+							<td key={`${arg.characters[0].rp.name}-lastUpdate-key`}>
 								Last update:
 							</td>
-							<td key={`${arg.character.rp.name}-lastUpdate-value`}>
+							<td key={`${arg.characters[0].rp.name}-lastUpdate-value`}>
 								{arg.lastUpdate}
 							</td>
 						</tr>
 
-						<tr key={`${arg.character.rp.name}-notes`}>
-							<td key={`${arg.character.rp.name}-notes-key`}>Notes:</td>
-							<td key={`${arg.character.rp.name}-notes-value`}>
+						<tr key={`${arg.characters[0].rp.name}-notes`}>
+							<td key={`${arg.characters[0].rp.name}-notes-key`}>Notes:</td>
+							<td key={`${arg.characters[0].rp.name}-notes-value`}>
 								{arg.notes.map((note) => (
-									<div key={`${arg.character.rp.name}-notes-${note.date}`}>
+									<div key={`${arg.characters[0].rp.name}-notes-${note.date}`}>
 										<div
-											key={`${arg.character.rp.name}-notes-${note.date}-date`}
+											key={`${arg.characters[0].rp.name}-notes-${note.date}-date`}
 										>
 											{note.date}
 										</div>
 										<div
-											key={`${arg.character.rp.name}-notes-${note.date}-sendBy`}
+											key={`${arg.characters[0].rp.name}-notes-${note.date}-sendBy`}
 										>
 											{note.sendBy}
 										</div>
@@ -120,57 +118,43 @@ const pagesJsx = (
 	);
 
 	const MainStatField = (props: { style?: React.CSSProperties }) => {
-		console.log(IMGS);
 		return (
 			<div
 				style={{
 					width: "calc(100% + 30px)",
 					height: hpWidth + 10,
-					backgroundColor: "red",
+					backgroundColor: "rgba(0,0,0,0.5)",
 					margin: "-15px -15px 0px -15px",
 					borderRadius: (hpWidth + 10) / 2 + "px",
 				}}
 			>
 				<div style={props.style ? props.style : {}}>
-					<table 
-						className="hm-stat-table"
-						key="hm-stat-table"
-					>
-						<tr
-							key="hm-stat-table-row"
-						>
-							<td
-								key="hm-stat-table-row-aim"
-							>
-								<img src={hmAimIcon} />
+					<table className="hm-stat-table" key="hm-stat-table">
+						<tr key="hm-stat-table-row">
+							<td key="hm-stat-table-row-atk">
+								<img src={IMGS.CHARACTER.HM.ATK} />
 							</td>
-							<td
-								key="hm-stat-table-row-aim-value"
-							>{arg.character.hm.AIM.total}</td>
-							<td
-								key="hm-stat-table-row-atk"
-							>
-								<img src={hmAtkIcon} />
+							<td key="hm-stat-table-row-atk-value">
+								{arg.characters[0].hm.ATK.total}
 							</td>
-							<td
-								key="hm-stat-table-row-atk-value"
-							>{arg.character.hm.ATK.total}</td>
-							<td
-								key="hm-stat-table-row-def"
-							>
-								<img src={hmDefIcon} />
+							<td key="hm-stat-table-row-def">
+								<img src={IMGS.CHARACTER.HM.DEF} />
 							</td>
-							<td
-								key="hm-stat-table-row-def-value"
-							>{arg.character.hm.DEF.total}</td>
-							<td
-								key="hm-stat-table-row-ini"
-							>
-								<img src={hmIniIcon} />
+							<td key="hm-stat-table-row-def-value">
+								{arg.characters[0].hm.DEF.total}
 							</td>
-							<td
-								key="hm-stat-table-row-ini-value"
-							>{arg.character.hm.DEF.total}</td>
+							<td key="hm-stat-table-row-ini">
+								<img src={IMGS.CHARACTER.HM.INI} />
+							</td>
+							<td key="hm-stat-table-row-ini-value">
+								{arg.characters[0].hm.DEF.total}
+							</td>
+							<td key="hm-stat-table-row-aim">
+								<img src={IMGS.CHARACTER.HM.AIM} />
+							</td>
+							<td key="hm-stat-table-row-aim-value">
+								{arg.characters[0].hm.AIM.total}
+							</td>
 						</tr>
 					</table>
 					<table
@@ -180,25 +164,34 @@ const pagesJsx = (
 						}}
 					>
 						<tr>
-							{arg.character.primaryStats.map((stat) => {
+							{arg.characters[0].primaryStats.map((stat, key) => {
 								return (
 									<>
 										<td>
-											<img
-												src={
-													IMGS.PRIM_STAT[
-														stat.name as keyof typeof IMGS.PRIM_STAT
-													]
-												}
-												alt={stat.name}
-											/>
+											<div>
+												<img
+													src={
+														IMGS.CHARACTER.PRIM_STAT[stat.name]
+													}
+													alt={stat.name}
+												/>
+												<span
+													className="tooltiptext"
+													style={{
+														width: "max-content",
+														whiteSpace: "nowrap",
+													}}
+												>
+													{stat.name}
+												</span>
+											</div>
 										</td>
 									</>
 								);
 							})}
 						</tr>
 						<tr>
-							{arg.character.primaryStats.map((stat) => {
+							{arg.characters[0].primaryStats.map((stat) => {
 								return <td>{stat.val}</td>;
 							})}
 						</tr>
@@ -208,141 +201,196 @@ const pagesJsx = (
 		);
 	};
 
-	const FirstPage = () => (
-		<div key={ref[1]}>
-			{/* <table
-				key={`${arg.character.rp.name}-table1`}
+	const CharacterInventory = () => {
+		const slotCoordinates: {
+			[key in Character.Item.ITEM_TYPE_EQUIPPABLE]: {
+				x: number;
+				y: number;
+			}[];
+		} = {
+			[Character.Item.ITEM_TYPE_EQUIPPABLE.HEAD]: [
+				{
+					x: 144,
+					y: 4,
+				},
+			],
+			[Character.Item.ITEM_TYPE_EQUIPPABLE.NECK]: [
+				{
+					x: 144,
+					y: 60,
+				},
+			],
+			[Character.Item.ITEM_TYPE_EQUIPPABLE.SHOULDER]: [
+				{
+					x: 204,
+					y: 54,
+				},
+			],
+			[Character.Item.ITEM_TYPE_EQUIPPABLE.BACK]: [
+				{
+					x: 202,
+					y: 240,
+				},
+			],
+			[Character.Item.ITEM_TYPE_EQUIPPABLE.CHEST]: [
+				{
+					x: 144,
+					y: 115,
+				},
+			],
+			[Character.Item.ITEM_TYPE_EQUIPPABLE.GLOVES]: [
+				{
+					x: 8,
+					y: 47,
+				},
+			],
+			[Character.Item.ITEM_TYPE_EQUIPPABLE.BRACERS]: [
+				{
+					x: 60,
+					y: 47,
+				},
+			],
+			[Character.Item.ITEM_TYPE_EQUIPPABLE.LEGS]: [
+				{
+					x: 144,
+					y: 169,
+				},
+			],
+			[Character.Item.ITEM_TYPE_EQUIPPABLE.BOOTS]: [
+				{
+					x: 151,
+					y: 292,
+				},
+			],
+
+			[Character.Item.ITEM_TYPE_EQUIPPABLE.ACCESSORY]: [
+				{
+					x: 204,
+					y: 4,
+				},
+				{
+					x: 254,
+					y: 4,
+				},
+				{
+					x: 254,
+					y: 54,
+				},
+				{
+					x: 254,
+					y: 104,
+				},
+				{
+					x: 6,
+					y: 237,
+				},
+				{
+					x: 6,
+					y: 292,
+				},
+				{
+					x: 60,
+					y: 292,
+				},
+				{
+					x: 29,
+					y: 367,
+				},
+				{
+					x: 79,
+					y: 367,
+				},
+				{
+					x: 129,
+					y: 367,
+				},
+				{
+					x: 179,
+					y: 367,
+				},
+				{
+					x: 229,
+					y: 367,
+				},
+			],
+
+			[Character.Item.ITEM_TYPE_EQUIPPABLE.WEP1H]: [
+				{
+					x: 201,
+					y: 172,
+				},
+			],
+			[Character.Item.ITEM_TYPE_EQUIPPABLE.WEP2H]: [
+				{
+					x: 24,
+					y: 167,
+				},
+				{
+					x: 24,
+					y: 120,
+				},
+			],
+		};
+		const ItemSlots = () => {
+			const itemSlotWidthFactor = 0.14;
+			const itemSlotWidth = Math.round(itemSlotWidthFactor * 300);
+			return Object.keys(slotCoordinates).map((slotCoordinateKey) =>
+				slotCoordinates[slotCoordinateKey as keyof typeof slotCoordinates].map(
+					(slotCoordinate) => (
+						<div
+							style={{
+								position: "absolute",
+								top: slotCoordinate.y + "px",
+								left: slotCoordinate.x + "px",
+								width: itemSlotWidth + "px",
+								height: itemSlotWidth + "px",
+								backgroundColor: "rgba(255,255,255,0.5)",
+							}}
+						></div>
+					)
+				)
+			);
+		};
+		return (
+			<div
+				style={{
+					width: "300px",
+					position: "relative",
+				}}
 			>
-				<tbody>
-				{Object.keys(arg.character.rp).map(key => {
-					const rpValue = arg.character.rp[key as keyof Character.TRpElements];
-					if (typeof rpValue !== "string" && typeof rpValue !== "number")
-						return null;
-					return (
-						<tr
-							key={`${key}-${rpValue}`}
-						>
+				<img
+					src={IMGS.CHARACTER.ELEMENTS.CHARACTER_INVENTORY}
+					style={{
+						width: "100%",
+						height: "auto",
+					}}
+				/>
+				{ItemSlots()}
+			</div>
+		);
+	};
+	const Inventory = (props: Character.Item.TBackpack) => {
+		return (
+			<table>
+				{[...Array(props.size.y)].map((_, y) => (
+					<tr>
+						{[...Array(props.size.x)].map((_x, x) => (
 							<td
-								key={`${key}-${rpValue}-key`}
-							>{key}</td>
-							<td
-								key={`${key}-${rpValue}-value`}
-							>{rpValue}</td>
-						</tr>
-					);
-				})}
-
-				<tr
-					key={`${arg.character.class}`}
-				>
-					<td
-						key={`${arg.character.class}-key`}
-					>Class:</td>
-					<td
-						key={`${arg.character.class}-value`}
-					>{arg.character.class}</td>
-				</tr>
-
-				<tr
-					key={`${arg.character.race}`}
-				>
-					<td
-						key={`${arg.character.race}-key`}
-					>Race:</td>
-					<td
-						key={`${arg.character.race}-value`}
-					>{arg.character.race}</td>
-				</tr>
-				</tbody>
-				
-			</table>
-
-			<table
-				key={`${arg.character.rp.name}-table2`}
-			>
-				<tbody>
-				<tr
-					key={`${arg.character.rp.name}-lvl`}
-				>
-					<td
-						key={`${arg.character.rp.name}-lvl-key`}
-					>Level:</td>
-					<td
-						key={`${arg.character.rp.name}-lvl-value`}
-					>{arg.character.level.current}</td>
-				</tr>
-				<tr
-					key={`${arg.character.rp.name}-xp`}
-				>
-					<td
-						key={`${arg.character.rp.name}-xp-key`}
-					>Current XP:</td>
-					<td
-						key={`${arg.character.rp.name}-xp-value`}
-					>{arg.character.level.currentXp}</td>
-				</tr>
-				<tr
-					key={`${arg.character.rp.name}-nextxp`}
-				>
-					<td
-						key={`${arg.character.rp.name}-nextxp-key`}
-					>Next XP:</td>
-					<td
-						key={`${arg.character.rp.name}-nextxp-value`}
-					>{arg.character.level.nextXp as number}</td>
-				</tr>
-				</tbody>
-				
-			</table>
-
-			<table
-				key={`${arg.character.rp.name}-table3`}
-			>
-				<tbody>
-				{arg.character.primaryStats.map((stat) => (
-					<tr
-						key={`${arg.character.rp.name}-${stat.name}`}
-					>
-						<td
-							key={`${arg.character.rp.name}-${stat.name}-key`}
-						>{stat.name}</td>
-						<td
-							key={`${arg.character.rp.name}-${stat.name}-value`}
-						>{stat.val}</td>
+								style={{
+									width: props.size.weight * 50 + "px",
+									height: "50px",
+									backgroundImage: `url(${IMGS.CHARACTER.ELEMENTS.BACKPACK_SLOT})`,
+								}}
+							></td>
+						))}
 					</tr>
 				))}
-				</tbody>
-				
 			</table>
+		);
+	};
 
-			<table
-				key={`${arg.character.rp.name}-table4`}
-			>
-				<tbody>
-				{Object.keys(arg.character.hm).map((key) => {
-					if (key === "hmPerLvl") return null;
-					return (
-						<tr
-							key={`${arg.character.rp.name}-${key}`}
-						>
-							<td
-								key={`${arg.character.rp.name}-${key}-key`}
-							>{key}</td>
-							<td
-								key={`${arg.character.rp.name}-${key}-value`}
-							>
-								{
-									arg.character.hm[
-										key as keyof Omit<Character.THmElements, "hmPerLvl">
-									].total
-								}
-							</td>
-						</tr>
-					);
-				})}
-				</tbody>
-				
-			</table> */}
+	const FirstPage = () => (
+		<div key={ref[1]}>
 			<MainStatField
 				style={{
 					marginLeft: hpWidth + 10 + "px",
@@ -362,9 +410,31 @@ const pagesJsx = (
 				}}
 				width={hpWidth}
 			/>
-			<img src={charSheetItemsFiltered} />
+			<CharacterInventory />
+			<Inventory
+				size={{
+					x: 5,
+					y: 4,
+					weight: 1,
+				}}
+				money={[
+					{
+						name: Character.Item.MONEY.GOLD,
+						amount: 100,
+					},
+					{
+						name: Character.Item.MONEY.SILVER,
+						amount: 100,
+					},
+					{
+						name: Character.Item.MONEY.COPPER,
+						amount: 100,
+					},
+				]}
+				items={[]}
+			/>
 			<img
-				src={book_bg}
+				src={IMGS.APPLICATION.ELEMENTS.BOOK_PAGE_BG}
 				style={{
 					position: "absolute",
 					top: "0",
@@ -378,7 +448,7 @@ const pagesJsx = (
 	);
 
 	const SecondPage = () => {
-		const lengthOfCols = Math.floor(arg.character.secondaryStats.length / 2);
+		const lengthOfCols = Math.floor(arg.characters[0].secondaryStats.length / 2);
 		return (
 			<div
 				key={ref[2]}
@@ -391,57 +461,57 @@ const pagesJsx = (
 			>
 				<table className="secondary-stats">
 					<tbody>
-						{arg.character.secondaryStats.map((stat, key) => {
+						{arg.characters[0].secondaryStats.map((stat, key) => {
 							if (key < lengthOfCols)
 								return (
-									<tr key={`${arg.character.rp.name}-${stat.name}-${key}`}>
+									<tr key={`${arg.characters[0].rp.name}-${stat.name}-${key}`}>
 										<td
-											key={`${arg.character.rp.name}-${stat.name}-${key}-name`}
+											key={`${arg.characters[0].rp.name}-${stat.name}-${key}-name`}
 										>
 											{stat.name}
 										</td>
 										<td
-											key={`${arg.character.rp.name}-${stat.name}-${key}-level`}
+											key={`${arg.characters[0].rp.name}-${stat.name}-${key}-level`}
 										>
 											{stat.level}
 										</td>
 										<td
-											key={`${arg.character.rp.name}-${stat.name}-${key}-skill`}
+											key={`${arg.characters[0].rp.name}-${stat.name}-${key}-skill`}
 										>
 											{stat.skill}
 										</td>
-										{arg.character.secondaryStats[key + lengthOfCols] ? (
+										{arg.characters[0].secondaryStats[key + lengthOfCols] ? (
 											<>
 												<td
-													key={`${arg.character.rp.name}-${
-														arg.character.secondaryStats[key + lengthOfCols]
+													key={`${arg.characters[0].rp.name}-${
+														arg.characters[0].secondaryStats[key + lengthOfCols]
 															.name
 													}-${key + lengthOfCols}-name`}
 												>
 													{
-														arg.character.secondaryStats[key + lengthOfCols]
+														arg.characters[0].secondaryStats[key + lengthOfCols]
 															.name
 													}
 												</td>
 												<td
-													key={`${arg.character.rp.name}-${
-														arg.character.secondaryStats[key + lengthOfCols]
+													key={`${arg.characters[0].rp.name}-${
+														arg.characters[0].secondaryStats[key + lengthOfCols]
 															.name
 													}-${key + lengthOfCols}-level`}
 												>
 													{
-														arg.character.secondaryStats[key + lengthOfCols]
+														arg.characters[0].secondaryStats[key + lengthOfCols]
 															.level
 													}
 												</td>
 												<td
-													key={`${arg.character.rp.name}-${
-														arg.character.secondaryStats[key + lengthOfCols]
+													key={`${arg.characters[0].rp.name}-${
+														arg.characters[0].secondaryStats[key + lengthOfCols]
 															.name
 													}-${key + lengthOfCols}-skill`}
 												>
 													{
-														arg.character.secondaryStats[key + lengthOfCols]
+														arg.characters[0].secondaryStats[key + lengthOfCols]
 															.skill
 													}
 												</td>
@@ -452,13 +522,24 @@ const pagesJsx = (
 						})}
 						{
 							<tr>
-								<td colSpan={3}>HM per level: {arg.character.hm.hmPerLvl}</td>
+								<td colSpan={3}>HM per level: {arg.characters[0].hm.hmPerLvl}</td>
 							</tr>
 						}
 					</tbody>
 				</table>
 			</div>
 		);
+	};
+
+	if(!selected) return {
+		jsx: [
+			<Cover />,
+			<div key={ref[1]}></div>,
+			<div key={ref[2]}></div>,
+		],
+		jsxLength: function () {
+			return this.jsx.length;
+		},
 	};
 
 	return {
@@ -488,14 +569,15 @@ const pagesJsx = (
 				style={{
 					width: "100%",
 					height: "100%",
+					margin: "0"
 				}}
 				key={ref[3]}
 			>
 				<img
-					src={book_backside}
+					src={IMGS.APPLICATION.ELEMENTS.BOOK_BACK_COVER}
 					style={{
 						height: "100%",
-						width: "auto",
+						width: "auto"
 					}}
 				/>
 			</div>,
@@ -514,7 +596,7 @@ const Book = (props: IBookProps) => {
 	const [pages, setPages] = useState<JSX.Element[]>([]);
 	const adventure = props.data;
 
-	console.log(props);
+	// console.log(props);
 	useEffect(() => {
 		if (currentPage === formerPage.current) return;
 		if (
@@ -529,8 +611,10 @@ const Book = (props: IBookProps) => {
 	props.currentPage.index = currentPage;
 
 	const pageRef = useRef<string[]>(
-		[...Array(11)].map((_) => crypto.randomUUID())
+		[...Array(11)].map((_) => (Math.random() + 1).toString(36).substring(7))
 	);
+
+	// console.log(pagesJsx(pageRef.current, adventure).jsx.length);
 
 	const generatePage = (jsx: JSX.Element[]): JSX.Element[] => [
 		...jsx.map((page, index) => (
@@ -544,24 +628,75 @@ const Book = (props: IBookProps) => {
 				}}
 				key={`book-page-${pageRef.current[index]}`}
 				onClick={
-					index % 2 === 0
+					index === 0
 						? (e) => {
 								e.stopPropagation();
 								setBookPages("incr");
 						  }
-						: (e) => {
-								e.stopPropagation();
-								setBookPages("decr");
-						  }
+						: 
+						index === jsx.length - 1 ? e => {
+							e.stopPropagation();
+							setBookPages("decr");
+						}
+						: () => {}
 				}
 			>
 				{page}
+				{index === 0 || index === jsx.length - 1 ? (
+					<></>
+				) : index % 2 === 1 ? (
+					<div
+						style={{
+							position: "absolute",
+							bottom: "-20px",
+							left: "-20px",
+							width: "30px",
+							height: "30px",
+							transform: "rotate(90deg)",
+						}}
+						onClick={(e) => {
+							e.stopPropagation();
+							setBookPages("decr");
+						}}
+					>
+						<img
+							src={IMGS.APPLICATION.ELEMENTS.BOOK_PAGE_TURN}
+							style={{
+								width: "100%",
+								height: "auto",
+							}}
+						/>
+					</div>
+				) : (
+					<div
+						style={{
+							position: "absolute",
+							bottom: "-20px",
+							right: "-20px",
+							width: "30px",
+							height: "30px",
+							transform: "rotate(0deg)",
+						}}
+						onClick={(e) => {
+							e.stopPropagation();
+							setBookPages("incr");
+						}}
+					>
+						<img
+							src={IMGS.APPLICATION.ELEMENTS.BOOK_PAGE_TURN}
+							style={{
+								width: "100%",
+								height: "auto",
+							}}
+						/>
+					</div>
+				)}
 			</div>
 		)),
 	];
 
 	useEffect(() => {
-		setPages(generatePage(pagesJsx(pageRef.current, adventure).jsx));
+		setPages(generatePage(pagesJsx(pageRef.current, adventure, currentPage !== 0).jsx));
 	}, [currentPage]);
 
 	const setBookPages = (dir: "incr" | "decr") => {

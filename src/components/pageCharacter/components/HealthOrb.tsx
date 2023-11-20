@@ -2,7 +2,6 @@ import resourceBorder from "@images/resource_border.png";
 import resourceBubbleFury from "@images/resource_bubble_fury.png";
 import resourceBubbleMana from "@images/resource_bubble_mana.png";
 import resourceBubbleHealth from "@images/resource_bubble_Health.png";
-import transparentBubble from "@images/transparent_bubble.png";
 import resourceHealthBg from "@images/resource_health_bg.png";
 import { Character } from "@appTypes/magus_app_types";
 

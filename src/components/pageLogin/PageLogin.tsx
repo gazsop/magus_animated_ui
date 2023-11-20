@@ -1,18 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useApp } from "../../core/App";
-import logo from "../../assets/logo.png";
 import PageLoginInput from "./PageLoginInput";
 import { Navigate, useOutletContext } from "react-router-dom";
-import login from "../../assets/imgs/bg/login.png";
 import loginClick from "../../assets/audio/login-click.wav";
 import { useFrontEndRouter } from "../../core/FrontEndRouter";
-import { IRegexErrorArray } from "@appTypes/magus_app_types";
+import { IMGS } from "../../assets/constants";
 // import { useAppData } from "../../core/FrontEndRouter";
 
 export function Login(props: {
 	loginFn?: (uid: string, pwd: string) => void;
 }) {
-	const [loginError, setLoginError] = useState<IRegexErrorArray[] | null>(null);
+	// const [loginError, setLoginError] = useState<IRegexErrorArray[] | null>(null);
 
 	const InputField = () => {
 		const clickAudio = new Audio(loginClick);
@@ -217,7 +215,7 @@ export function Login(props: {
 			}}
 		>
 			<img
-				src={login}
+				src={IMGS.APPLICATION.BG.LOGIN}
 				style={{
 					position: "absolute",
 					top: 0,

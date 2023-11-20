@@ -1,11 +1,11 @@
 import React, { useState, useRef } from "react";
 import { Id } from "../../utils/getId";
-import "../../assets/css/game.css";
+import "@css/game.css";
 import { Slideshow } from "../elements/Slideshow";
 import { linkedList } from "../../utils/linkedList";
-import adventures_bg from "../../assets/imgs/bg/adventures.png";
 import { testAdventure } from "../../data/_testAdvanture";
 import Book from "../elements/Book";
+import { IMGS } from "../../assets/constants";
 
 export function Adventures(): JSX.Element {
 	
@@ -35,7 +35,7 @@ export function Adventures(): JSX.Element {
 	return (
 		<div
 			style={{
-				background: `url(${adventures_bg}) no-repeat center center fixed`,
+				background: `url(${IMGS.APPLICATION.BG.ADVENTURE}) no-repeat center center fixed`,
 				backgroundSize: "cover",
 				height: "100vh",
 				width: "100vw",

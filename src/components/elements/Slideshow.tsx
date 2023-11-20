@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { linkedList } from "../../utils/linkedList";
-import "../../assets/css/slideshow.css";
+import "@css/slideshow.css";
 import { Id } from "../../utils/getId";
 import ArrowLeftSelectionIcon from "../../assets/icons/ArrowLeftSelectionIcon";
 import ArrowRightSelectionIcon from "../../assets/icons/ArrowRightSelectionIcon";
@@ -89,7 +89,7 @@ const cardsData: (linkedList: linkedList<ICardSlideshow>) => ICardData[] = (
 export function Slideshow(props: TSlideshowProps) {
 	console.log("Slideshow render");
 
-	console.log(props.cardSelected);
+	// console.log(props.cardSelected);
 	const linkedListData = props.data;
 	if (linkedListData.getType !== "circular")
 		throw Error("list is not circular");
@@ -112,9 +112,13 @@ export function Slideshow(props: TSlideshowProps) {
 	const afterAnimationCallback = () => {
 		if (animationAuxVar > 0 || !animation) return;
 		animationAuxVar++;
+		console.log("after animation");
+		console.log(linkedListData.getHead.val.data.id);
 		linkedListData.selectNode({ index: animation });
+		console.log(linkedListData.getHead.val.data.id);
 		setAnimation(null);
 		cards.current = cardsData(linkedListData);
+		console.log("after animation timeout");
 	};
 
 	const animateIncrease = () =>

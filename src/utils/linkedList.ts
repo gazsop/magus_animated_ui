@@ -161,7 +161,7 @@ class linkedListNode<T> implements ILinkedListNode<T> {
 	protected _next: linkedListNode<T> | null = null;
 	protected _prev: linkedListNode<T> | null = null;
 	protected _index: number;
-	protected _id = crypto.randomUUID();
+	protected _id = (Math.random() + 1).toString(36).substring(7);
 
 	constructor(val: T, index: number) {
 		this._val = val;

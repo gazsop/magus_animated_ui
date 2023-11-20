@@ -76,8 +76,8 @@ export function Login() {
     targetState: typeof LOGIN_PAGE_STATES[keyof typeof LOGIN_PAGE_STATES]["name"] = LOGIN_PAGE_STATES
       .pwdInput.name
   ) => {
-    console.log("asd");
-    console.log(targetState);
+    // console.log("asd");
+    // console.log(targetState);
     
     
     e.preventDefault();
@@ -166,7 +166,7 @@ export function Login() {
   */
 
   const validatePwd = (pwdInput: string) => {
-    console.log(pwdInput);
+    // console.log(pwdInput);
     const pwd = {
       minLength: 4,
       maxLength: 36,

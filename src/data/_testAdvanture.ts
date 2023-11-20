@@ -1,5 +1,4 @@
-
-import { Adventure, Character } from '@appTypes/magus_app_types';
+import { Character, Adventure } from "@appTypes/magus_app_types";
 import { CustomDate } from "../utils/formatDate";
 
 export const testAdventure: Adventure.IAdventure[] = [
@@ -22,7 +21,8 @@ export const testAdventure: Adventure.IAdventure[] = [
           text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         },
       ],
-      character: {
+      characters: [{
+        id: "123213",
         ownerId: "1",
         level: {
           current: 17,
@@ -546,6 +546,7 @@ export const testAdventure: Adventure.IAdventure[] = [
           religion: "Gandalf religion",
           bornPlace: "Gandalf town",
           schools: ["Gandalf school"],
+          personality: "Gandalf personality",
         },
         hm: {
           ATK: {
@@ -596,7 +597,7 @@ export const testAdventure: Adventure.IAdventure[] = [
             spec: "Anyád"
           }
         ],
-      },
+      }],
     },
     {
       id: 2,
@@ -617,7 +618,8 @@ export const testAdventure: Adventure.IAdventure[] = [
           text: "Another test note with some random content."
         }
       ],
-      character: {
+      characters: [{
+        id: "123213",
         ownerId: "2",
         level: {
           current: 5,
@@ -654,7 +656,8 @@ export const testAdventure: Adventure.IAdventure[] = [
           description: "Legolas description",
           religion: "Elf religion",
           bornPlace: "Elven Kingdom",
-          schools: ["Archery School"]
+          schools: ["Archery School"],
+          personality: "Legolas personality"
         },
         hm: {
           ATK: {
@@ -706,6 +709,6 @@ export const testAdventure: Adventure.IAdventure[] = [
             spec: "Archery"
           }
         ]
-      }
+      }]
     }
   ];
