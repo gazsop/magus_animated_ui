@@ -37,7 +37,7 @@ export const WindowsLayerProvider = (props: {
   const [isOpen, setIsOpen] = useState<boolean[]>(
     windows && Array.isArray(windows) ? windows.map(() => false) : []
   );
-  asd;
+
   const addWindow = (window: {
     jsx: ({
       close,
