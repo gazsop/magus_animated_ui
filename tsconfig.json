@@ -14,24 +14,20 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "jsx": "react-jsx",
-		"jsxImportSource": "preact",
-    "baseUrl": "./",    /* Specify the base directory to resolve non-relative module names. */
+    "jsxImportSource": "preact",
+    "baseUrl": "./" /* Specify the base directory to resolve non-relative module names. */,
     "paths": {
-      "@appTypes/*": [
-        "../shared/*"
-      ],
-			"react": ["./node_modules/preact/compat/"],
+      "@appTypes/*": ["../shared/*"],
+      "react": ["./node_modules/preact/compat/"],
       "react/jsx-runtime": ["./node_modules/preact/jsx-runtime"],
       "react-dom": ["./node_modules/preact/compat/"],
       "react-dom/*": ["./node_modules/preact/compat/*"],
-      "@css": [
-        "./src/index.css",
-      ]
+      "@css": ["./src/index.css"]
       //"@constants": [
       //  "./src/assets/constants.ts",
       //],
-    },
+    }
   },
-  "include": ["src","../shared"],
+  "include": ["src", "../shared", "declaration.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

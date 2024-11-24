@@ -26,14 +26,14 @@ const WindowsLayerContext = createContext<IWindowsLayer>({
 });
 
 export const WindowsLayerProvider = (props: {
-  children: JSX.Element;
+  children: JSX.Element | JSX.Element[];
   windows?: IWindowsLayerWindowProps[];
+  offsetX?: number;
 }) => {
   const [windows, setWindows] = useState<IWindowsLayerWindowProps[]>(
     props.windows || []
   );
   const [selectedWindow, setSelectedWindow] = useState<string>("");
-
   const [isOpen, setIsOpen] = useState<boolean[]>(
     windows && Array.isArray(windows) ? windows.map(() => false) : []
   );
@@ -66,7 +66,7 @@ export const WindowsLayerProvider = (props: {
     const windowIndex = windows.findIndex(
       (window) => window.name === windowName
     );
-    if (windowIndex < 2) return;
+    //if (windowIndex < 1) return;
     setWindows((prev) => {
       const newPrev = [...prev];
       newPrev.splice(windowIndex, 1);
@@ -135,13 +135,13 @@ export const WindowsLayerProvider = (props: {
     return (
       <>
         <Windows />
-        <FlexCol className="fixed bottom-[10vh] -right-12 bg-transparent">
+        <FlexCol className="fixed bottom-[10vh] right-[17px] bg-transparent w-8">
           {windows &&
             Array.isArray(windows) &&
             windows.map((window, index) => {
               return (
                 <FlexRow
-                  className={`rounded-full h-10 w-20 m-0.5 cursor-pointer items-center pl-2 border-2 border-black`}
+                  className={`fancy-container rounded-l-full h-[35px] m-0.5 cursor-pointer items-center pl-2 border-r-0`}
                   onClick={() => {
                     console.log("click");
                     setIsOpen((prev) => {

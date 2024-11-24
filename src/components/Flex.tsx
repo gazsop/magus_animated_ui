@@ -5,15 +5,20 @@ export function FlexRow(
   props: {
     children?: ComponentChildren;
     className?: string;
-    preventShrink?: boolean;
+    allowShrink?: boolean;
+    preventWrap?: boolean;
   } & InputHTMLAttributes<HTMLDivElement>
 ) {
+  const shrink =
+    typeof props.allowShrink === "undefined" ? true : props.allowShrink;
   return (
     <div
       {...props}
       className={`${props.className ? `${props.className} ` : ""}${
-        props.preventShrink ? "" : "shrink-0 "
-      }flex flex-row`}
+        shrink ? "" : "shrink-0 "
+      }${
+        props.preventWrap ? "" : "flex-wrap "
+      }flex flex-row flex-wrap min-w-0 min-h-0`}
     >
       {props.children}
     </div>
@@ -24,15 +29,18 @@ export function FlexCol(
   props: {
     children?: ComponentChildren;
     className?: string;
-    preventShrink?: boolean;
+    allowShrink?: boolean;
+    preventWrap?: boolean;
   } & InputHTMLAttributes<HTMLDivElement>
 ) {
+  const shrink =
+    typeof props.allowShrink === "undefined" ? true : props.allowShrink;
   return (
     <div
       {...props}
       className={`${props.className ? `${props.className} ` : ""}${
-        props.preventShrink ? "" : "shrink-0 "
-      }flex flex-col min-h-0`} // bg-[rgba(255,255,255,0.5)]
+        shrink ? "" : "shrink-0 "
+      }${props.preventWrap ? "" : "flex-wrap "}flex flex-col min-h-0`} // bg-[rgba(255,255,255,0.5)]
     >
       {props.children}
     </div>

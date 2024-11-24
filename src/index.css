@@ -6,11 +6,100 @@
 	box-sizing: border-box;
 	scroll-behavior: smooth;
 }
+
 html {
 	overflow: hidden;
 }
+
+svg{
+	/*display: flex;
+  justify-content: center;
+  align-items: center;*/
+}
+
+label {
+	user-select: none;
+}
+
+input {
+	background-color: #c9a05b;
+}
+
+button {
+	background-color: #c18735;
+}
+
+input, button {
+	border: 2px solid #b87a23;
+	box-shadow: 0px 0px 1px 1px #903700;
+	color: #ffffff;
+	border-radius: 0.25rem;
+	transition: all 0.2s;
+	font-weight: 700;
+}
+	
+input:hover, button:hover {
+	background-color: #bf9040;
+}
+
+input:focus, button:focus {
+	outline: none;
+	box-shadow: 0px 0px 1px 1px #ffffff;
+	background-color: #ae8031;
+ }
+
+/*
+ 	SCROLLBAR
+*/
+html {
+  scrollbar-width: thin;       /* Thin scrollbar */
+  scrollbar-color: rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.1); /* Thumb and track colors */
+	color: #ffffff;
+}
+
+/* For Webkit-based browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 6px;  /* Change width for vertical scrollbar */
+  height: 6px; /* Change height for horizontal scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5); /* Scrollbar thumb color */
+  border-radius: 10px; /* Rounded scrollbar edges */
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1); /* Scrollbar track color */
+}
+ /*
+	CONTAINER
+ */
+
+ .fancy-container {
+	border: 2px solid #b68035;
+	box-shadow: 0px 0px 1px 1px #8d4e02;
+	border-radius: 0.25rem;
+	background-color:  rgba(120, 64, 0, 0.5);
+ }
+
+/*
+	REACT-SELECT
+*/
+
 .css-1xc3v61-indicatorContainer{
 	padding: 0.25rem !important;
+}
+
+.css-13cymwt-control, .css-t3ipsp-control {
+	background-color: #c9a05b !important;
+}
+
+.css-d7l1ni-option{
+	background-color: #bf9040 !important;
+}
+
+.css-tr4s17-option {
+	background-color: #ae8031 !important;
 }
 
 .css-13cymwt-control, .css-t3ipsp-control, .css-16xfy0z-control, .css-1wy0on6 {
@@ -31,10 +120,21 @@ html {
 	margin: 0 !important;
 }
 
+.css-19bb58m input {
+	box-shadow: none;
+}
+
+.css-1nmdiq5-menu{
+	background-color: #c9a05b !important;
+}
+
+.css-tr4s17-option {
+	background-color: #ae8031 !important;
+}
+
 .mdxeditor {
 	min-height: 0;
 }
-
 
 .mdxeditor-popup-container {
 	z-index: 9999 !important;
@@ -47,32 +147,8 @@ html {
 	font-size: 2rem;
 	line-height: 2.5rem;
 }
-/* For Webkit-based browsers (Chrome, Safari, Edge) */
-::-webkit-scrollbar {
-  width: 6px;  /* Change width for vertical scrollbar */
-  height: 6px; /* Change height for horizontal scrollbar */
-}
 
-::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.5); /* Scrollbar thumb color */
-  border-radius: 10px; /* Rounded scrollbar edges */
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1); /* Scrollbar track color */
-}
-
-/* For Firefox */
-html *, html {
-  scrollbar-width: thin;       /* Thin scrollbar */
-  scrollbar-color: rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.1); /* Thumb and track colors */
-}
-
-label {
-	user-select: none;
-}
-
-input, .css-b62m3t-container {
+.css-b62m3t-container {
 	border: 1px solid #c5c2ff;
 	border-radius: 0.25rem;
 }

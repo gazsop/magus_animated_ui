@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
 import Cropper, { Area, Point } from "react-easy-crop";
-import { FlexRow } from "./Flex";
+import { FlexCol, FlexRow } from "./Flex";
 import { Rnd } from "react-rnd";
 
 const EasyCut = ({}: {}) => {
@@ -15,6 +15,8 @@ const EasyCut = ({}: {}) => {
   };
 
   const showCroppedImage = async () => {
+    console.log("imageSrc", imageSrc);
+    console.log("croppedAreaPixels", croppedAreaPixels);
     try {
       if (!imageSrc || !croppedAreaPixels) return;
       const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
@@ -43,48 +45,66 @@ const EasyCut = ({}: {}) => {
   };
 
   return (
-    <Rnd>
-      <>
-        {imageSrc && (
-          <>
-            <div className={``}>
-              <Cropper
-                image={imageSrc}
-                crop={crop}
-                zoom={zoom}
-                aspect={4 / 3}
-                onCropChange={setCrop}
-                onCropComplete={onCropComplete}
-                onZoomChange={setZoom}
-                classes={{
-                  containerClassName: "h-[512px] w-[512px]",
-                }}
-              />
-            </div>
-            <div className={``}>
-              <div className={``}>
-                Zoom
+    <>
+      {imageSrc && (
+        <Rnd
+          id={"EasyCut"}
+          disableDragging={true}
+          enableResizing={false}
+          default={{
+            x: window.innerWidth / 2 - 256,
+            y: window.innerHeight * 0.1,
+            width: 512,
+            height: window.innerHeight * 0.8,
+          }}
+        >
+          <FlexCol className={`overflow-scroll h-full`}>
+            <div className="h-auto">
+              <div className="relative h-[512px]">
+                <Cropper
+                  image={imageSrc}
+                  crop={crop}
+                  zoom={zoom}
+                  aspect={1}
+                  onCropChange={setCrop}
+                  onCropComplete={onCropComplete}
+                  onZoomChange={setZoom}
+                  classes={{
+                    containerClassName: "h-[512px] w-[512px]",
+                  }}
+                  objectFit="cover"
+                />
+              </div>
+              <FlexRow>
+                <label htmlFor="">Zoom</label>
+
                 <input
                   type="range"
                   value={zoom}
                   min={1}
                   max={3}
                   step={0.1}
-                  onChange={(e) => setZoom(zoom)}
+                  onChange={(e) => {
+                    const target = e.target as HTMLInputElement;
+                    setZoom(target.valueAsNumber);
+                  }}
                 />
-              </div>
+              </FlexRow>
               <button onClick={showCroppedImage}>Show Result</button>
+              {croppedImage && (
+                <img
+                  src={croppedImage ? croppedImage : ""}
+                  onClose={onClose}
+                  className="h-[512px]"
+                />
+              )}
             </div>
-            <img
-              src={croppedImage ? croppedImage : ""}
-              onClose={onClose}
-              className="h-[512px]"
-            />
-          </>
-        )}
-        <input type="file" onChange={onFileChange} accept="image/*" />
-      </>
-    </Rnd>
+          </FlexCol>
+        </Rnd>
+      )}
+
+      <input type="file" onChange={onFileChange} accept="image/*" />
+    </>
   );
 };
 
@@ -93,7 +113,9 @@ const createImage = (url: string) =>
     const image = new Image();
     image.addEventListener("load", () => resolve(image));
     image.addEventListener("error", (error) => reject(error));
-    image.setAttribute("crossOrigin", "anonymous"); // needed to avoid cross-origin issues on CodeSandbox
+    if (!url.startsWith("data:")) {
+      image.setAttribute("crossOrigin", "anonymous");
+    }
     image.src = url;
   });
 
@@ -113,25 +135,25 @@ async function getCroppedImg(
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
+  console.log("getCroppedImg", { image, pixelCrop, canvas, ctx });
+  console.log(ctx);
   if (!ctx) {
     return null;
   }
 
-  // calculate bounding box of the rotated image
-  const bBoxWidth = image.width;
-  const bBoxHeight = image.height;
-
   // set canvas size to match the bounding box
-  canvas.width = bBoxWidth;
-  canvas.height = bBoxHeight;
+  canvas.width = image.width;
+  canvas.height = image.height;
 
   // translate canvas context to a central location to allow rotating and flipping around the center
-  ctx.translate(bBoxWidth / 2, bBoxHeight / 2);
-  ctx.translate(-image.width / 2, -image.height / 2);
+  //ctx.translate(bBoxWidth / 2, bBoxHeight / 2);
+  //ctx.translate(-image.width / 2, -image.height / 2);
 
-  // draw rotated image
+  //console.log("drawImage", image);
+  //// draw rotated image
   ctx.drawImage(image, 0, 0);
 
+  console.log("drawImage", image);
   const croppedCanvas = document.createElement("canvas");
 
   const croppedCtx = croppedCanvas.getContext("2d");
@@ -143,7 +165,9 @@ async function getCroppedImg(
   // Set the size of the cropped canvas
   croppedCanvas.width = pixelCrop.width;
   croppedCanvas.height = pixelCrop.height;
-
+  console.log("croppedCanvas", croppedCanvas);
+  console.log("croppedCtx", croppedCtx);
+  console.log(canvas);
   // Draw the cropped image onto the new canvas
   croppedCtx.drawImage(
     canvas,
@@ -156,7 +180,7 @@ async function getCroppedImg(
     pixelCrop.width,
     pixelCrop.height
   );
-
+  console.log("croppedCtx", croppedCtx);
   // As Base64 string
   // return croppedCanvas.toDataURL('image/jpeg');
 

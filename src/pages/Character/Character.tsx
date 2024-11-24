@@ -25,6 +25,9 @@ import CharHMAIMIcon from "../../components/icons/magus/CharHMAIMIcon";
 import CharHMINIIcon from "../../components/icons/magus/CharHMINIICon";
 import Notes from "../Notes";
 import { useWindowsLayer } from "../WindowsLayer";
+import CharCoindBronze from "../../components/icons/magus/CharCoinBronze.svg";
+import CharCoinSilver from "../../components/icons/magus/CharCoinSilver.svg";
+import CharCoinGold from "../../components/icons/magus/CharCoinGold.svg";
 
 const inventoryDummy: () => Character.Item.TInventory = () => {
   const money: Character.Item.TMoney = [
@@ -161,375 +164,17 @@ export default function CharacterPage({ advId = "" }: { advId: string }) {
   //);
 
   return (
-    <FlexRow className="flex-wrap justify-center items-start w-full">
+    <FlexCol className="justify-center items-start grow">
       <Header
         name={selectedCharacter.rp ? selectedCharacter.rp.name : "János"}
         descent={selectedCharacter.descent || Character.DESCENTS.HUMAN}
         class={selectedCharacter.class || Character.CLASSES.WARRIOR}
         lvl={selectedCharacter.level ? selectedCharacter.level.current : 1}
       />
-      <FlexCol>
-        {/*<PrimaryAttributes
-          name={selectedCharacter.rp ? selectedCharacter.rp.name : ""}
-          descent={selectedCharacter.descent || ""}
-          classProp=""
-          bioType={selectedCharacter.rp ? selectedCharacter.rp.bioType : ""}
-          className="max-h-40 m-2 space-between"
-        />*/}
-        {/*<RPData className="max-h-40 m-2" />*/}
-      </FlexCol>
-      <FlexCol className={`flex-wrap`} preventShrink={true}>
-        {/*<PrimaryStats className="m-2" />*/}
-
-        {/*<LevelData className="max-h-40 m-2" />*/}
-      </FlexCol>
-      <FlexCol>
-        {/*<HMData className="max-h-40 m-2" />*/}
-        {/*<HealthAndResourceData className="max-h-40 m-2" />*/}
-      </FlexCol>
-      <SecondaryStats className="max-h-80 m-2" />
       <Bag inventory={inventoryDummy()} className="max-h-40 m-2" />
-    </FlexRow>
+    </FlexCol>
   );
-
-  function PrimaryAttributes({
-    name,
-    descent,
-    bioType,
-    classProp,
-    className,
-  }: {
-    name: string;
-    descent: string;
-    bioType: string;
-    classProp: string;
-    className?: string;
-  }) {
-    const [primaryAttributes, setPrimaryAttributes] = useState({
-      name: name,
-      descent: descent,
-      bioType: bioType,
-    });
-
-    const classListRef = useRef<Array<HTMLOptionData<Character.CLASSES>>>(
-      Object.keys(Character.CLASSES).map((key) => {
-        const value = Character.CLASSES[key as keyof typeof Character.CLASSES];
-        return {
-          value: value,
-          label: value,
-        };
-      })
-    );
-
-    const descentListRef = useRef<Array<HTMLOptionData<Character.DESCENTS>>>(
-      Object.keys(Character.DESCENTS).map((key) => {
-        const value =
-          Character.DESCENTS[key as keyof typeof Character.DESCENTS];
-        return {
-          label: value,
-          value: value,
-        };
-      })
-    );
-
-    const bioTypeListRef = useRef<Array<HTMLOptionData<Character.BTYPE>>>(
-      Object.keys(Character.BTYPE).map((key) => ({
-        label: Character.BTYPE[key as keyof typeof Character.BTYPE],
-        value: Character.BTYPE[key as keyof typeof Character.BTYPE],
-      }))
-    );
-
-    return (
-      <FlexCol className={`${className ? className + " " : ""}overflow-auto`}>
-        <InputUnq
-          id="char-name"
-          label={Character.RP_STATS.NAME}
-          value={primaryAttributes.name}
-          onBlur={(e) => {
-            const target = e.target as HTMLInputElement;
-            const value = target.value;
-            console.log("asd");
-            setPrimaryAttributes({ ...primaryAttributes, name: value });
-          }}
-          placeholder="Name"
-          disabled={!isNewCharacter}
-        />
-        <SelectUnq
-          id="char-descent"
-          optionData={descentListRef.current}
-          label={Character.RP_STATS.DESCENTS}
-          value={{
-            label: primaryAttributes.descent,
-            value: primaryAttributes.descent,
-          }}
-          onChange={(e) => {
-            const target = e as HTMLOptionElement;
-            const value = target.value as Character.DESCENTS;
-            setPrimaryAttributes({ ...primaryAttributes, descent: value });
-          }}
-          disabled={false}
-        />
-        <SelectUnq
-          id="char-bioType"
-          optionData={bioTypeListRef.current}
-          label={Character.RP_STATS.BTYPE}
-          value={{
-            label: primaryAttributes.bioType,
-            value: primaryAttributes.bioType,
-          }}
-          onChange={(e) => {
-            const target = e as HTMLOptionElement;
-            const value = target.value as Character.BTYPE;
-            setPrimaryAttributes({ ...primaryAttributes, bioType: value });
-          }}
-          disabled={false}
-        />
-        {
-          <SelectUnq
-            id="char-class"
-            optionData={classListRef.current}
-            label={Character.RP_STATS.CLASSES}
-            value={{
-              label: classProp || "",
-              value: classProp,
-            }}
-            onChange={() => {}}
-            disabled={false}
-          />
-        }
-      </FlexCol>
-    );
-  }
-
-  function RPData({ className }: { className?: string }) {
-    const textAreaKeys: Character.RP_STATS[keyof Character.RP_STATS][] = [
-      Character.RP_STATS.HAIR_DESCRIPTION,
-      Character.RP_STATS.EYE_DESCRIPTION,
-      Character.RP_STATS.DESCRIPTION,
-      Character.RP_STATS.SCHOOLS,
-    ];
-
-    const rpData: Record<string, string> = {
-      [Character.RP_STATS.PERSONALITY]: "",
-      [Character.RP_STATS.RELIGION]: "",
-      [Character.RP_STATS.BORN_PLACE]: "",
-      [Character.RP_STATS.AGE]: "",
-      [Character.RP_STATS.SKIN_COLOR]: "",
-      [Character.RP_STATS.HAIR_DESCRIPTION]: "",
-      [Character.RP_STATS.HAIR_COLOR]: "",
-      [Character.RP_STATS.EYE_COLOR]: "",
-      [Character.RP_STATS.EYE_DESCRIPTION]: "",
-      [Character.RP_STATS.HEIGHT]: "",
-      [Character.RP_STATS.WEIGHT]: "",
-      [Character.RP_STATS.DESCRIPTION]: "",
-      [Character.RP_STATS.SCHOOLS]: "",
-      [Character.RP_STATS.KNOWN_LANGUAGES]: "",
-      [Character.RP_STATS.PROFESSIONS]: "",
-    };
-
-    return (
-      <FlexCol className={`${className ? className + " " : ""}overflow-auto`}>
-        {Object.keys(rpData).map((key) =>
-          textAreaKeys.includes(key) ? (
-            <TextAreaUnq
-              id={key}
-              label={key}
-              value={rpData[key]}
-              onChange={() => {}}
-              onSave={() => {}}
-              disabled={false}
-            />
-          ) : (
-            <InputUnq
-              id={key}
-              label={key}
-              value={rpData[key]}
-              onChange={() => {}}
-              disabled={false}
-            />
-          )
-        )}
-      </FlexCol>
-    );
-  }
-
-  function LevelData({ className }: { className?: string }) {
-    const levelValues = {
-      current: selectedCharacter.level
-        ? selectedCharacter.level.current || 1
-        : 1,
-      currentXp: selectedCharacter.level
-        ? selectedCharacter.level.currentXp || 0
-        : 0,
-      nextXp: selectedCharacter.level
-        ? selectedCharacter.level.nextXp || Character.LEVEL_CAPS[0]
-        : Character.LEVEL_CAPS[0],
-    };
-    return (
-      <FlexCol className={className}>
-        <InputUnq
-          id="chardatasheet-level"
-          label={Character.LEVELS.LEVEL}
-          value={levelValues.current}
-          onChange={() => {}}
-          disabled={true}
-          widthOverride="w-24"
-        />
-        <InputUnq
-          id="chardatasheet-current-xp"
-          label={Character.LEVELS.CURRENT_XP}
-          value={levelValues.currentXp}
-          onChange={() => {}}
-          disabled={true}
-          widthOverride="w-24"
-        />
-        <InputUnq
-          id="chardatasheet-next-level"
-          label={Character.LEVELS.NEXT_LEVEL}
-          value={levelValues.nextXp}
-          onChange={() => {}}
-          disabled={true}
-          widthOverride="w-24"
-        />
-      </FlexCol>
-    );
-  }
-
-  function HealthAndResourceData({ className }: { className?: string }) {
-    const hpAndResDataValues = {
-      maxHp: selectedCharacter.resource
-        ? selectedCharacter.resource.health.maxHp
-        : 0,
-      currentHp: selectedCharacter.resource
-        ? selectedCharacter.resource.health.currentHp
-        : 0,
-      maxEp: selectedCharacter.resource
-        ? selectedCharacter.resource.health.maxEp
-        : 0,
-      currentEp: selectedCharacter.resource
-        ? selectedCharacter.resource.health.currentEp
-        : 0,
-      resourceType: selectedCharacter.resource
-        ? selectedCharacter.resource.abilities.name
-        : "",
-      maxResource: selectedCharacter.resource
-        ? selectedCharacter.resource.abilities.max
-        : 0,
-      currentResource: selectedCharacter.resource
-        ? selectedCharacter.resource.abilities.name
-        : 0,
-      regen: "1/kör",
-    };
-    return (
-      <FlexCol>
-        <FlexCol className={className}>
-          <InputUnq
-            id="char-max-hp"
-            label={Character.STATS.MAX_HP}
-            value={hpAndResDataValues.maxHp}
-            onChange={() => {}}
-            disabled={true}
-            widthOverride="w-24"
-          />
-          <InputUnq
-            id="char-current-hp"
-            label={Character.STATS.CURRENT_HP}
-            value={hpAndResDataValues.currentHp}
-            onChange={() => {}}
-            disabled={true}
-            widthOverride="w-24"
-          />
-          <InputUnq
-            id="char-max-ep"
-            label={Character.STATS.MAX_EP}
-            value={hpAndResDataValues.maxEp}
-            onChange={() => {}}
-            disabled={true}
-            widthOverride="w-24"
-          />
-          <InputUnq
-            id="char-current-ep"
-            label={Character.STATS.CURRENT_EP}
-            value={hpAndResDataValues.currentEp}
-            onChange={() => {}}
-            disabled={true}
-            widthOverride="w-24"
-          />
-        </FlexCol>
-        <FlexCol>
-          <InputUnq
-            id="char-resource-type"
-            label={
-              selectedCharacter.resource
-                ? selectedCharacter.resource.abilities.name
-                : "valami"
-            }
-            value={hpAndResDataValues.resourceType}
-            onChange={() => {}}
-            disabled={true}
-            widthOverride="w-24"
-          />
-          <InputUnq
-            id="char-current-resource"
-            label={`max ${hpAndResDataValues.resourceType}`}
-            value={hpAndResDataValues.maxResource}
-            onChange={() => {}}
-            disabled={true}
-            widthOverride="w-24"
-          />
-          <InputUnq
-            id="char-regen"
-            label={Character.RP_STATS.RESOURCE_REGEN}
-            value={hpAndResDataValues.regen}
-            onChange={() => {}}
-            disabled={true}
-            widthOverride="w-24"
-          />
-        </FlexCol>
-      </FlexCol>
-    );
-  }
-
-  function SecondaryStats({ className }: { className?: string }) {
-    const secondaryStatValues: Character.TSecondaryStat[] = Object.keys(
-      Character.SECONDARY_STATS
-    ).map((key) => {
-      const secondaryStat = selectedCharacter.secondaryStats
-        ? selectedCharacter.secondaryStats.find((stat) => stat.name === key)
-        : null;
-      if (secondaryStat) return secondaryStat;
-      return {
-        id: "",
-        name: Character.SECONDARY_STATS[
-          key as keyof typeof Character.SECONDARY_STATS
-        ],
-        skill: 0,
-        skillLevel: Character.SECONDARY_STAT_LEVEL.BASIC,
-        lvlReq: 0,
-      };
-    });
-
-    return (
-      <FlexCol className={`${className ? className + " " : ""}overflow-auto`}>
-        {secondaryStatValues.map((val) => (
-          <FlexRow>
-            <label for={""} className={`grow`}>
-              {val.name}
-            </label>
-            <p>{val.skillLevel}</p>
-            <InputUnq
-              id={`charactersheet-secondarystats-${val.id}-lvl`}
-              label={""}
-              value={val.skill}
-              onChange={() => {}}
-              disabled={true}
-              widthOverride="w-16"
-            />
-          </FlexRow>
-        ))}
-      </FlexCol>
-    );
-  }
+  //<SecondaryStats className="max-h-80 m-2" />;
 }
 
 function StatIconValueElement({
@@ -555,7 +200,7 @@ function StatIconValueElement({
       onPointerLeave={() => {
         setPopupPos({ x: 0, y: 0 });
       }}
-      preventShrink={true}
+      allowShrink={true}
     >
       <div className={`pointer-events-none`}>{icon}</div>
       <p className="text-center">{value}</p>
@@ -612,7 +257,7 @@ function Header(data: {
     }, []);
 
     return (
-      <div className="flex items center justify-between w-full bg-gray-300 relative">
+      <div className="flex items center justify-between bg-gray-300 relative grow mb-1">
         <div
           className="w-full bg-gray-500"
           ref={xpBar}
@@ -620,7 +265,7 @@ function Header(data: {
           onTouchStart={(e) => setShowText((prev) => !prev)}
           onClick={(e) => console.log(e)}
         >
-          <div className="h-4 bg-green-500" ref={xpBarFill}></div>
+          <div className="h-4 bg-blue-500" ref={xpBarFill}></div>
         </div>
         {showText && (
           <div
@@ -644,84 +289,41 @@ function Header(data: {
 
     return (
       <FlexRow>
-        <ResourceBarElement
-          backgroundImg="resource_health_bg.png"
-          fillImg="resource_bubble_health.png"
-          fillHeight={(healthData.currentHp / healthData.maxHp) * 70}
-          fillText={`${healthData.currentHp}/\n${healthData.maxHp}`}
+        <VerticalBar
+          val={healthData.currentHp}
+          max={healthData.maxHp}
+          color="rgb(186, 96, 0)"
         />
-        <ResourceBarElement
-          backgroundImg="resource_health_bg.png"
-          fillImg="resource_bubble_ep.png"
-          fillHeight={(healthData.currentEp / healthData.maxEp) * 70}
-          fillText={`${healthData.currentEp}/\n${healthData.maxEp}`}
+        <VerticalBar
+          val={healthData.currentEp}
+          max={healthData.maxEp}
+          color="rgb(133, 18, 0)"
         />
-        <ResourceBarElement
-          backgroundImg="resource_health_bg.png"
-          fillImg="resource_bubble_mana.png"
-          fillHeight={(healthData.currentMana / healthData.mana) * 70}
-          fillText={`${healthData.currentMana}/\n${healthData.mana}`}
+        <VerticalBar
+          val={healthData.currentMana}
+          max={healthData.mana}
+          color="rgb(9, 0, 133)"
         />
       </FlexRow>
     );
 
-    function ResourceBarElement({
-      backgroundImg,
-      fillImg,
-      fillHeight,
-      fillText,
-      className,
-      height,
+    function VerticalBar({
+      val,
+      max,
+      color,
     }: {
-      backgroundImg: string;
-      fillImg: string;
-      fillHeight: number;
-      fillText: string;
-      className?: string;
-      height?: number;
+      val: number;
+      max: number;
+      color: string;
     }) {
-      const bar = useRef<HTMLDivElement>(null);
-      const fill = useRef<HTMLImageElement>(null);
-      const text = useRef<HTMLDivElement>(null);
-      const [showText, setShowText] = useState(false);
-
-      const barHeight = height || 50;
-
-      useEffect(() => {
-        fill.current!.style.height = `${fillHeight}px`;
-        if (text.current) text.current!.innerText = fillText;
-      }, [fillHeight, showText]);
-
-      const backgroundImgPath = "/imgs/" + backgroundImg;
-      const fillImgPath = "/imgs/" + fillImg;
-      const transparentBubblePath = "/imgs/transparent_bubble.png";
+      const percentage = Math.min((val / max) * 100, 100); // Ensure it doesn't exceed 100%
 
       return (
-        <div
-          className={`${
-            className ? className + " " : ""
-          }relative m-1 w-[50px] h-[50px]`}
-          ref={bar}
-          onClick={(e) => setShowText((prev) => !prev)}
-        >
-          <img
-            className={`absolute bottom-0 left-0 bg-cover w-[50px] h-[50px] object-cover object-bottom`}
-            src={backgroundImgPath}
-            alt=""
-          />
-
-          <img
-            className={`absolute bottom-0 left-0 bg-cover w-[50px] h-[50px] object-cover object-bottom`}
-            src={fillImgPath}
-            alt=""
-            ref={fill}
-          />
-          {showText && (
-            <div
-              className={`absolute bottom-0 left-0 bg-cover w-[50px] h-[50px] object-cover object-bottom z-10 text-white text-center align-middle`}
-              ref={text}
-            ></div>
-          )}
+        <div className="relative h-10 w-3 rounded overflow-hidden fancy-container m-1">
+          <div
+            className="absolute bottom-0 left-0 w-full"
+            style={{ height: `${percentage}%`, backgroundColor: color }}
+          ></div>
         </div>
       );
     }
@@ -754,7 +356,7 @@ function Header(data: {
     };
 
     return (
-      <FlexCol className={`overflow-auto max-h-80 bg-blue-400`}>
+      <FlexCol className={`overflow-auto max-h-80`}>
         <FlexCol className="mt-10">
           {Object.keys(rpData).map((key) =>
             textAreaKeys.includes(key) ? (
@@ -782,28 +384,10 @@ function Header(data: {
   };
 
   const PrimaryStats = ({ className }: { className?: string }) => {
-    //const statValues = Object.keys(Character.PRIMARY_STATS).map((key) => {
-    //  if (selectedCharacter.primaryStats === undefined)
-    //    return {
-    //      name: Character.PRIMARY_STATS[
-    //        key as keyof typeof Character.PRIMARY_STATS
-    //      ],
-    //      value: 0,
-    //    };
-    //  const value = selectedCharacter.primaryStats.find(
-    //    (stat) => stat.name === key
-    //  );
-    //  return {
-    //    name: Character.PRIMARY_STATS[
-    //      key as keyof typeof Character.PRIMARY_STATS
-    //    ],
-    //    value: value ? value.val || 0 : 0,
-    //  };
-    //});
     return (
       <FlexRow
-        className={`${className ? className + " " : ""}overflow-auto flex-wrap`}
-        preventShrink={true}
+        className={`${className ? className + " " : ""}`}
+        allowShrink={true}
       >
         <StatIconValueElement
           icon={<CharAstralIcon className="w-10 h-10" />}
@@ -896,30 +480,36 @@ function Header(data: {
   }
 
   return (
-    <FlexCol className="w-full bg-pink-500 sticky top-0 relative select-none">
+    <FlexCol
+      className="relative select-none fancy-container m-1"
+      style={{
+        width: "calc(100% - .5rem)",
+      }}
+    >
       <XpBar />
-      <FlexRow>
+      <FlexRow allowShrink={false}>
         <div
           className="absolute top-4 left-0 rounded-full bg-yellow-400 h-[100px] w-[100px]"
           onPointerDown={(e) => setShowRP((prev) => !prev)}
         ></div>
         <FlexCol
-          className="grow ml-[105px] items-start justify-center"
-          preventShrink={true}
+          className="ml-[105px] items-start justify-center fancy-container"
+          allowShrink={true}
         >
           <FlexRow>
             <p>{data.name}</p>
           </FlexRow>
-          <FlexRow className="flex-wrap text-ellipsis" preventShrink={true}>
+          <FlexRow className="text-ellipsis">
             <p className={`whitespace-normal`}>{data.lvl}-es szintű&nbsp;</p>
             <p className={`whitespace-normal`}>
               {data.descent} {data.class}
             </p>
           </FlexRow>
         </FlexCol>
+        <FlexCol className={`grow`} />
         <ResourceBar />
       </FlexRow>
-      <FlexRow preventShrink={true} className={`flex-wrap justify-between`}>
+      <FlexRow className={`justify-between`}>
         <PrimaryStats className="z-10 grow" />
         <HMData className="z-10 grow justify-center" />
       </FlexRow>
@@ -937,7 +527,12 @@ function Bag({
 }) {
   //v0.1: just make it work. Multiple selection like divs, displaying the name, amount and an x button to remove the item. At the bottom, there is a row an item name, a count and a "add new item" button
   return (
-    <FlexCol className={className}>
+    <FlexCol
+      className={`${className ? className + " " : ""}`}
+      style={{
+        width: "calc(100% - .5rem)",
+      }}
+    >
       {Object.keys(inventory).map((key) => (
         <FlexRow>
           <div>{[key]}</div>
@@ -951,34 +546,19 @@ function Bag({
         <button>Add</button>
       </FlexRow>
 
-      <FlexRow>
-        <FlexCol>
-          <InputUnq
-            id="char-gold"
-            label={Character.Item.MONEY.GOLD}
-            value={0}
-            onChange={() => {}}
-            disabled={true}
-          />
-        </FlexCol>
-        <FlexCol>
-          <InputUnq
-            id="char-silver"
-            label={Character.Item.MONEY.SILVER}
-            value={0}
-            onChange={() => {}}
-            disabled={true}
-          />
-        </FlexCol>
-        <FlexCol>
-          <InputUnq
-            id="char-copper"
-            label={Character.Item.MONEY.COPPER}
-            value={0}
-            onChange={() => {}}
-            disabled={true}
-          />
-        </FlexCol>
+      <FlexRow className={`fancy-container`}>
+        <FlexRow className={`items-center justify-center`}>
+          <img src={CharCoinGold} alt="" className="w-6 h-6" />
+          {0}
+        </FlexRow>
+        <FlexRow className={`items-center justify-center`}>
+          <img src={CharCoinSilver} alt="" className="w-6 h-6" />
+          {0}
+        </FlexRow>
+        <FlexRow className={`items-center justify-center`}>
+          <img src={CharCoindBronze} alt="" className="w-6 h-6" />
+          <p className={`p-1`}>{0}</p>
+        </FlexRow>
       </FlexRow>
     </FlexCol>
   );

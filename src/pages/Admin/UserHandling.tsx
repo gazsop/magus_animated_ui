@@ -96,6 +96,7 @@ function UserHandling() {
                   }
             }
             onChange={(e: SingleValue<HTMLOptionData<string>>) => {
+              debugger;
               if (!e) return;
               const userIndex = users.findIndex((user) => user.uid === e.value);
               setSelectedUser(userIndex === -1 ? 0 : userIndex);

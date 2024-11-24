@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Character } from "@appTypes/shared_types";
 import { FlexCol, FlexRow } from "../components/Flex";
 import useRequest from "../hooks/request";
+import ImageIcon from "../components/icons/general/image.svg";
 import EasyCut from "../components/EasyCut";
+import FancyWindow from "../components/FancyWindow";
 
 function AdventureCharacterSelection({
   selectCharacter,
@@ -51,9 +53,10 @@ function AdventureCharacterSelection({
     return <>{Elements}</>;
   };
   return (
-    <FlexCol className="grow">
+    <FlexCol className="grow h-full w-full p-1 fancy-container overflow-auto">
       <CharactersElements />
       <EasyCut />
+      {/*<FancyWindow height={650} width={1950} />*/}
     </FlexCol>
   );
 }
@@ -69,7 +72,7 @@ export function PlayerCard({
   selectCharacter,
 }: {
   id: string;
-  imgSrc: string;
+  imgSrc?: string;
   name: string;
   level: number;
   className: string;
@@ -79,14 +82,14 @@ export function PlayerCard({
 }) {
   return (
     <div
-      className="player-card border-2 border-black rounded-lg p-4 select-none cursor-pointer my-1"
+      className="player-card p-4 select-none cursor-pointer my-1 fancy-container"
       onClick={() => selectCharacter(id)}
     >
       <FlexRow className="items-center">
         {/* Circular Image Container */}
         <div className="flex-shrink-0 w-16 h-16 border-2 border-black rounded-full overflow-hidden mr-4">
           <img
-            src={imgSrc}
+            src={imgSrc || ImageIcon}
             alt={`${name} portrait`}
             className="w-full h-full object-cover"
           />

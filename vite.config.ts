@@ -36,6 +36,11 @@ export default defineConfig({
   build: {
     cssMinify: true,
     outDir: "../dist/client",
+    emptyOutDir: true,
+    sourcemap: true,
+  },
+  css: {
+    devSourcemap: true,
   },
 });
 //server: {
