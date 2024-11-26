@@ -5,20 +5,21 @@ export function FlexRow(
   props: {
     children?: ComponentChildren;
     className?: string;
-    allowShrink?: boolean;
+    preventShrink?: boolean;
     preventWrap?: boolean;
   } & InputHTMLAttributes<HTMLDivElement>
 ) {
   const shrink =
-    typeof props.allowShrink === "undefined" ? true : props.allowShrink;
+    typeof props.preventShrink === "undefined" ? false : props.preventShrink;
+  const wrap =
+    typeof props.preventWrap === "undefined" ? false : props.preventWrap;
+  console.log(props);
   return (
     <div
       {...props}
       className={`${props.className ? `${props.className} ` : ""}${
         shrink ? "" : "shrink-0 "
-      }${
-        props.preventWrap ? "" : "flex-wrap "
-      }flex flex-row flex-wrap min-w-0 min-h-0`}
+      }${wrap ? "" : "flex-wrap "}flex flex-row min-w-0 min-h-0`}
     >
       {props.children}
     </div>
@@ -29,18 +30,20 @@ export function FlexCol(
   props: {
     children?: ComponentChildren;
     className?: string;
-    allowShrink?: boolean;
+    preventShrink?: boolean;
     preventWrap?: boolean;
   } & InputHTMLAttributes<HTMLDivElement>
 ) {
   const shrink =
-    typeof props.allowShrink === "undefined" ? true : props.allowShrink;
+    typeof props.preventShrink === "undefined" ? true : props.preventShrink;
+  const wrap =
+    typeof props.preventWrap === "undefined" ? true : !props.preventWrap;
   return (
     <div
       {...props}
       className={`${props.className ? `${props.className} ` : ""}${
         shrink ? "" : "shrink-0 "
-      }${props.preventWrap ? "" : "flex-wrap "}flex flex-col min-h-0`} // bg-[rgba(255,255,255,0.5)]
+      }${wrap ? "" : "flex-wrap "}flex flex-col min-h-0`} // bg-[rgba(255,255,255,0.5)]
     >
       {props.children}
     </div>

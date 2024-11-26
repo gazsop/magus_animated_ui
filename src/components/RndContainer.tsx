@@ -6,6 +6,7 @@ import RefreshCwIcon from "./icons/general/RefreshCwIcon";
 import MoveIcon from "./icons/general/MoveIcon";
 import MaximizeIcon from "./icons/general/MaximizeIcon";
 import XIcon from "./icons/general/XIcon";
+import FancyWindow from "./FancyWindow";
 
 const yOff = 5;
 const xOff = 24;
@@ -103,52 +104,54 @@ function RndContainer({
         }}
         className={`${
           className ? className + " " : ""
-        }bg-white flex flex-col border border-black pointer-events-auto`}
+        }flex flex-col border border-black pointer-events-auto`}
         disableDragging={!onDragState}
         enableResizing={resizeable}
         resizeGrid={[20, 20]}
         dragGrid={[20, 20]}
       >
-        <FlexRow className="fixed bg-black h-6 w-full bg-opacity-50 justify-between items-center cursor-default select-none">
-          <p>{label}</p>
-          <FlexRow>
-            {aditionalIcons}
-            <RefreshCwIcon
-              className="h-4 m-1 w-6 cursor-pointer"
-              onClick={() => {
-                setOnDragState(true);
-                setResizeable(false);
-                setWindowPosition({ x: 0, y: yOff });
-                setWindowSize({ width: 200, height: 200 });
-              }}
-            />
-            <MoveIcon
-              className={`relative h-4 m-1 w-6 cursor-pointer ${
-                onDragState ? "text-white" : "text-black"
-              }`}
-              onClick={() => {
-                console.log("asd");
-                setOnDragState((prev) => !prev);
-              }}
-            />
-            <MaximizeIcon
-              className={`h-4 m-1 w-6 cursor-pointer ${
-                resizeable ? "text-white" : "text-drag"
-              }`}
-              onClick={() => setResizeable((prev) => !prev)}
-            />
-            <XIcon className="h-4 m-1 w-6 cursor-pointer" onClick={close} />
+        <FancyWindow height={windowSize.height} width={windowSize.width}>
+          <FlexRow className="fixed h-6 w-max justify-between items-center cursor-default select-none">
+            <p>{label}</p>
+            <FlexRow>
+              {aditionalIcons}
+              <RefreshCwIcon
+                className="h-4 m-1 w-6 cursor-pointer"
+                onClick={() => {
+                  setOnDragState(true);
+                  setResizeable(false);
+                  setWindowPosition({ x: 0, y: yOff });
+                  setWindowSize({ width: 200, height: 200 });
+                }}
+              />
+              <MoveIcon
+                className={`relative h-4 m-1 w-6 cursor-pointer ${
+                  onDragState ? "text-white" : "text-black"
+                }`}
+                onClick={() => {
+                  console.log("asd");
+                  setOnDragState((prev) => !prev);
+                }}
+              />
+              <MaximizeIcon
+                className={`h-4 m-1 w-6 cursor-pointer ${
+                  resizeable ? "text-white" : "text-drag"
+                }`}
+                onClick={() => setResizeable((prev) => !prev)}
+              />
+              <XIcon className="h-4 m-1 w-6 cursor-pointer" onClick={close} />
+            </FlexRow>
           </FlexRow>
-        </FlexRow>
-        <FlexRow className="h-[calc(100%-1.5rem)] overflow-auto mt-6 grow">
-          {children}
-          {onDragState && (
-            <div
-              id="invisible-layer"
-              className={`absolute top-[1.5rem] left-0 w-full h-[calc(100%-1.5rem)] bg-transparent grow`}
-            ></div>
-          )}
-        </FlexRow>
+          <FlexRow className="h-[calc(100%-1.5rem)] overflow-auto mt-6 grow">
+            {children}
+            {onDragState && (
+              <div
+                id="invisible-layer"
+                className={`absolute top-[1.5rem] left-0 w-full h-[calc(100%-1.5rem)] bg-transparent grow`}
+              ></div>
+            )}
+          </FlexRow>
+        </FancyWindow>
       </Rnd>
     </div>
   );

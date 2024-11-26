@@ -82,6 +82,18 @@ html {
 	background-color:  rgba(120, 64, 0, 0.5);
  }
 
+ hr.fancy{
+	border: 1px solid #b68035;
+	box-shadow: 0px 0px 1px 1px #8d4e02;
+ }
+
+ .bag-item {
+	border: 2px solid #b68035;
+	box-shadow: 0px 0px 1px 1px #583101;
+	border-radius: 0.25rem;
+	background-color:  rgba(0, 0, 0, 0.5);
+ }
+
 /*
 	REACT-SELECT
 */

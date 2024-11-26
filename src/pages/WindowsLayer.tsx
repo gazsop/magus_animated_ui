@@ -27,8 +27,8 @@ const WindowsLayerContext = createContext<IWindowsLayer>({
 
 export const WindowsLayerProvider = (props: {
   children: JSX.Element | JSX.Element[];
+  view: "sm" | "md" | "lg";
   windows?: IWindowsLayerWindowProps[];
-  offsetX?: number;
 }) => {
   const [windows, setWindows] = useState<IWindowsLayerWindowProps[]>(
     props.windows || []
@@ -135,13 +135,21 @@ export const WindowsLayerProvider = (props: {
     return (
       <>
         <Windows />
-        <FlexCol className="fixed bottom-[10vh] right-[17px] bg-transparent w-8">
+        <FlexCol
+          className="fixed bottom-[10vh] bg-transparent w-8 z-10"
+          style={{
+            right: props.view === "sm" ? `0px` : "10px",
+          }}
+        >
           {windows &&
             Array.isArray(windows) &&
             windows.map((window, index) => {
               return (
                 <FlexRow
-                  className={`fancy-container rounded-l-full h-[35px] m-0.5 cursor-pointer items-center pl-2 border-r-0`}
+                  className={`fancy-container h-[35px] m-0.5 cursor-pointer items-center pl-2 z-10`}
+                  style={{
+                    borderRadius: "17px 0px 0px 17px",
+                  }}
                   onClick={() => {
                     console.log("click");
                     setIsOpen((prev) => {

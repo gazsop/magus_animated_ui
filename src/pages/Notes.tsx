@@ -47,20 +47,20 @@ function Notes({
   const NotesElement = () => {
     return (
       <FlexCol
-        className={`bg-white p-1 grow relative nowrap overflow-x-hidden overflow-y-auto`}
+        className={`p-1 grow relative nowrap overflow-x-hidden overflow-y-auto`}
         //onClick={selectWindow}
       >
         {notes.map((note) => {
           return (
             <FlexRow
               key={note.id}
-              className="bg-white bg-opacity-100 p-1 justify-between items-center"
+              className="p-1 justify-between items-center fancy-container"
+              preventWrap={true}
             >
               <div className="grow overflow-ellipsis whitespace-nowrap overflow-hidden">
                 {note.text}
               </div>
-              <FlexRow />
-              <p class="whitespace-nowrap">{`${note.createDate.toLocaleDateString()}, ${
+              <p class="whitespace-nowrap mr-2">{`${note.createDate.toLocaleDateString()}, ${
                 note.createdBy
               }`}</p>
               <EditWritePenIcon

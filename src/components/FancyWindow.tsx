@@ -6,7 +6,15 @@ import borderInnerCor from "/imgs/border_inner_corner.png";
 import borderCor2 from "/imgs/border_corner.png";
 import borderHolder from "/imgs/border_deco.png";
 
-function FancyWindow({ height, width }: { height: number; width: number }) {
+function FancyWindow({
+  height,
+  width,
+  children,
+}: {
+  height: number;
+  width: number;
+  children?: JSX.Element | JSX.Element[];
+}) {
   const outerBorderWidth = 5;
   const innerBorderWidth = 3;
   const cornerOffset = 10;
@@ -38,11 +46,11 @@ function FancyWindow({ height, width }: { height: number; width: number }) {
       />
       <img
         src={borderCol}
-        className={`absolute origin-bottom-right rotate-90`}
+        className={`absolute bottom-0 origin-bottom-right rotate-90`}
         style={{
           width: `${outerBorderWidth}px`,
-          height: `${width - 2 * outerBorderWidth}px`,
-          bottom: `0px`,
+          height: `${width}px`,
+          left: `-${outerBorderWidth}px`,
         }}
       />
       <img
@@ -50,8 +58,9 @@ function FancyWindow({ height, width }: { height: number; width: number }) {
         className={`absolute origin-top-right -rotate-90 outerBorder4`}
         style={{
           top: `0px`,
+          left: `-${outerBorderWidth}px`,
           width: `${outerBorderWidth}px`,
-          height: `${width - 2 * outerBorderWidth}px`,
+          height: `${width}px`,
         }}
       />
       <img
@@ -292,24 +301,36 @@ function FancyWindow({ height, width }: { height: number; width: number }) {
       />
     </>
   );
+
+  const InnerOverlay = () => {
+    return (
+      <div
+        className={`absolute`}
+        style={{
+          backgroundColor: "rgba(112, 228, 255, 0.25)",
+          height: `${height - 2 * (outerBorderWidth + cornerOffset)}px`,
+          width: `${width - 2 * (outerBorderWidth + cornerOffset)}px`,
+          left: `${BetweenBordersDivWidth}px`,
+          top: `${BetweenBordersDivWidth}px`,
+        }}
+      />
+    );
+  };
   return (
     <div
-      className={`relative`}
+      className={`relative bg-left-top bg-no-repeat bg-cover h-full px-6 py-2`}
       style={{
         height: `${height}px`,
         width: `${width}px`,
+        backgroundImage: `url(${bgParchment})`,
       }}
     >
-      <div
-        className={`bg-left-top bg-no-repeat bg-cover h-full`}
-        style={{
-          backgroundImage: `url(${bgParchment})`,
-        }}
-      />
-      <BetweenBordersOverlay />
+      {/*<BetweenBordersOverlay />*/}
+      <InnerOverlay />
       <OuterBorder />
       <InnerBorder />
       <CornerDecos />
+      {children}
     </div>
   );
 }

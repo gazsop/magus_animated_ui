@@ -180,11 +180,12 @@ export default function App() {
             //{ jsx: Spells, name: "spells", icon: <>S</> },
           ]
         }
+        view={view}
       >
         <div
           className={`${
             pSt === PageState.LOGIN ? "opacity-70" : "opacity-100"
-          } transition duration-${transTime} self-center absolute left-1 top-1/2 z-10`}
+          } transition duration-${transTime} self-center absolute left-0 top-1/2 z-10`}
         >
           <div
             onClick={() => {
@@ -233,7 +234,7 @@ export default function App() {
         <div
           className={`${
             pSt === PageState.LOGIN ? "opacity-70" : "opacity-100"
-          } transition duration-${transTime} self-center absolute right-1 top-1/2 z-10`}
+          } transition duration-${transTime} self-center absolute right-0 top-1/2 z-10`}
         >
           <div
             onClick={() =>
@@ -287,7 +288,6 @@ function BackgroundDeco({
 
   useEffect(() => {
     const resizeListener = () => {
-      console.log("resize");
       if (window.innerWidth < 768) {
         setView("sm");
         setOffsetY(15);
@@ -296,10 +296,10 @@ function BackgroundDeco({
         setCornerDecoWidth(50);
       } else {
         setView("lg");
-        setOffsetY(17);
-        setOffsetX(17);
+        setOffsetY(10);
+        setOffsetX(10);
         setBorderWidth(5);
-        setCornerDecoWidth(100);
+        setCornerDecoWidth(60);
       }
       setWindowHeight(window.innerHeight);
       if (window.innerWidth !== windowWidth) {

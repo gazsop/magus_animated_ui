@@ -94,6 +94,7 @@ const inventoryDummy: () => Character.Item.TInventory = () => {
     return {
       size: bagpackSize,
       items: items,
+      type: "bag",
     };
   }
   return {
@@ -164,14 +165,15 @@ export default function CharacterPage({ advId = "" }: { advId: string }) {
   //);
 
   return (
-    <FlexCol className="justify-center items-start grow">
+    <FlexCol className="justify-stretch items-start grow fancy-container">
       <Header
         name={selectedCharacter.rp ? selectedCharacter.rp.name : "János"}
         descent={selectedCharacter.descent || Character.DESCENTS.HUMAN}
         class={selectedCharacter.class || Character.CLASSES.WARRIOR}
         lvl={selectedCharacter.level ? selectedCharacter.level.current : 1}
       />
-      <Bag inventory={inventoryDummy()} className="max-h-40 m-2" />
+      <Bag inventory={inventoryDummy()} className="m-1" />
+      <Chat />
     </FlexCol>
   );
   //<SecondaryStats className="max-h-80 m-2" />;
@@ -191,7 +193,9 @@ function StatIconValueElement({
   const [popupPos, setPopupPos] = useState({ x: 0, y: 0 });
   return (
     <FlexCol
-      className={`${className ? className + " " : ""}m-1 relative`}
+      className={`${
+        className ? className + " " : ""
+      }m-1 relative fancy-container`}
       //onPointerMove={(e) => {
       //  console.log(e);
       //  if (!e || e.clientX === 0 || e.clientY === 0) return;
@@ -200,13 +204,17 @@ function StatIconValueElement({
       onPointerLeave={() => {
         setPopupPos({ x: 0, y: 0 });
       }}
-      allowShrink={true}
+      preventShrink={true}
     >
       <div className={`pointer-events-none`}>{icon}</div>
+      <hr className={`fancy mx-1`} />
       <p className="text-center">{value}</p>
-      <p className={`text-center`}>
-        {label && label.length > 4 ? label.substring(0, 4) : label}
-      </p>
+      {label && (
+        <>
+          <hr />
+          <p className="text-center">{label.substring(0, 4)}</p>
+        </>
+      )}
     </FlexCol>
   );
 }
@@ -230,7 +238,7 @@ function Header(data: {
     const xpBarFill = useRef<HTMLDivElement>(null);
     const xpBarText = useRef<HTMLDivElement>(null);
 
-    const [showText, setShowText] = useState(false);
+    const [showText, setShowText] = useState(true);
 
     useEffect(() => {
       const xpBarWidth = xpBar.current?.clientWidth || 0;
@@ -257,13 +265,11 @@ function Header(data: {
     }, []);
 
     return (
-      <div className="flex items center justify-between bg-gray-300 relative grow mb-1">
+      <div className="flex items center justify-between relative mb-1 fancy-container">
         <div
           className="w-full bg-gray-500"
           ref={xpBar}
           onPointerDown={(e) => setShowText((prev) => !prev)}
-          onTouchStart={(e) => setShowText((prev) => !prev)}
-          onClick={(e) => console.log(e)}
         >
           <div className="h-4 bg-blue-500" ref={xpBarFill}></div>
         </div>
@@ -287,8 +293,10 @@ function Header(data: {
       currentMana: 30,
     });
 
+    const [showDetails, setShowDetails] = useState(true);
+
     return (
-      <FlexRow>
+      <FlexRow onPointerDown={(e) => setShowDetails((prev) => !prev)}>
         <VerticalBar
           val={healthData.currentHp}
           max={healthData.maxHp}
@@ -317,14 +325,22 @@ function Header(data: {
       color: string;
     }) {
       const percentage = Math.min((val / max) * 100, 100); // Ensure it doesn't exceed 100%
-
       return (
-        <div className="relative h-10 w-3 rounded overflow-hidden fancy-container m-1">
+        <FlexCol className={`items-center`}>
+          {showDetails && <p>{max}</p>}
           <div
-            className="absolute bottom-0 left-0 w-full"
-            style={{ height: `${percentage}%`, backgroundColor: color }}
-          ></div>
-        </div>
+            className="relative w-[20px] rounded overflow-hidden fancy-container mx-1"
+            style={{
+              height: showDetails ? "56px" : "88px",
+            }}
+          >
+            <div
+              className="absolute bottom-0 left-0 w-full"
+              style={{ height: `${percentage}%`, backgroundColor: color }}
+            ></div>
+          </div>
+          {showDetails && <p>{val}</p>}
+        </FlexCol>
       );
     }
   };
@@ -356,7 +372,7 @@ function Header(data: {
     };
 
     return (
-      <FlexCol className={`overflow-auto max-h-80`}>
+      <FlexCol className={`overflow-auto max-h-80 fancy-container mt-1`}>
         <FlexCol className="mt-10">
           {Object.keys(rpData).map((key) =>
             textAreaKeys.includes(key) ? (
@@ -384,51 +400,55 @@ function Header(data: {
   };
 
   const PrimaryStats = ({ className }: { className?: string }) => {
+    const [showText, setShowText] = useState(true);
+
     return (
       <FlexRow
-        className={`${className ? className + " " : ""}`}
-        allowShrink={true}
+        className={`${
+          className ? className + " " : ""
+        } justify-center items-center fancy-container`}
+        preventShrink={true}
+        onClick={() => setShowText((prev) => !prev)}
       >
         <StatIconValueElement
           icon={<CharAstralIcon className="w-10 h-10" />}
           value={0}
-          label={Character.PRIMARY_STATS.AST}
-          className="ml-[105px]"
+          label={showText ? Character.PRIMARY_STATS.AST : ""}
         />
         <StatIconValueElement
           icon={<CharIntIcon className="w-10 h-10" />}
           value={0}
-          label={Character.PRIMARY_STATS.INT}
+          label={showText ? Character.PRIMARY_STATS.INT : ""}
         />
         <StatIconValueElement
           icon={<CharStrIcon className="w-10 h-10" />}
           value={0}
-          label={Character.PRIMARY_STATS.STR}
+          label={showText ? Character.PRIMARY_STATS.STR : ""}
         />
         <StatIconValueElement
           icon={<CharDexIcon className="w-10 h-10" />}
           value={0}
-          label={Character.PRIMARY_STATS.DEX}
+          label={showText ? Character.PRIMARY_STATS.DEX : ""}
         />
         <StatIconValueElement
           icon={<CharSpeIcon className="w-10 h-10" />}
           value={0}
-          label={Character.PRIMARY_STATS.SPE}
+          label={showText ? Character.PRIMARY_STATS.SPE : ""}
         />
         <StatIconValueElement
           icon={<CharWipIcon className="w-10 h-10" />}
           value={0}
-          label={Character.PRIMARY_STATS.WIP}
+          label={showText ? Character.PRIMARY_STATS.WIP : ""}
         />
         <StatIconValueElement
           icon={<CharConIcon className="w-10 h-10" />}
           value={0}
-          label={Character.PRIMARY_STATS.CON}
+          label={showText ? Character.PRIMARY_STATS.CON : ""}
         />
         <StatIconValueElement
           icon={<CharHeaIcon className="w-10 h-10" />}
           value={0}
-          label={Character.PRIMARY_STATS.HEA}
+          label={showText ? Character.PRIMARY_STATS.HEA : ""}
         />
         <StatIconValueElement
           icon={<CharBeaIcon className="w-10 h-10" />}
@@ -454,7 +474,7 @@ function Header(data: {
     }));
 
     return (
-      <FlexRow className={className}>
+      <FlexRow className={className + " fancy-container"}>
         <StatIconValueElement
           icon={<CharHMATKIcon className="w-10 h-10" />}
           value={0}
@@ -481,20 +501,24 @@ function Header(data: {
 
   return (
     <FlexCol
-      className="relative select-none fancy-container m-1"
+      className="relative select-none fancy-container m-1 p-0.5"
       style={{
         width: "calc(100% - .5rem)",
       }}
     >
       <XpBar />
-      <FlexRow allowShrink={false}>
-        <div
-          className="absolute top-4 left-0 rounded-full bg-yellow-400 h-[100px] w-[100px]"
+      <FlexRow
+        className={`fancy-container p-1 mb-1`}
+        preventShrink={false}
+        preventWrap={true}
+      >
+        <FlexRow
+          className="rounded-full bg-yellow-400 h-[80px] w-[60px] m-1 cursor-pointer"
           onPointerDown={(e) => setShowRP((prev) => !prev)}
-        ></div>
+        ></FlexRow>
         <FlexCol
-          className="ml-[105px] items-start justify-center fancy-container"
-          allowShrink={true}
+          className="items-start justify-center px-2"
+          preventShrink={true}
         >
           <FlexRow>
             <p>{data.name}</p>
@@ -510,7 +534,7 @@ function Header(data: {
         <ResourceBar />
       </FlexRow>
       <FlexRow className={`justify-between`}>
-        <PrimaryStats className="z-10 grow" />
+        <PrimaryStats className="z-10 grow mr-0.5" />
         <HMData className="z-10 grow justify-center" />
       </FlexRow>
       {showRP && <RPElement />}
@@ -528,38 +552,60 @@ function Bag({
   //v0.1: just make it work. Multiple selection like divs, displaying the name, amount and an x button to remove the item. At the bottom, there is a row an item name, a count and a "add new item" button
   return (
     <FlexCol
-      className={`${className ? className + " " : ""}`}
+      className={`${className ? className + " " : ""} fancy-container grow`}
       style={{
         width: "calc(100% - .5rem)",
       }}
     >
-      {Object.keys(inventory).map((key) => (
-        <FlexRow>
-          <div>{[key]}</div>
-          {/*<div>{inventory[key as keyof typeof inventory]}</div>*/}
-          <button>X</button>
-        </FlexRow>
-      ))}
-      <FlexRow>
-        <input type="text" />
-        <input type="number" />
-        <button>Add</button>
-      </FlexRow>
+      <FlexCol className={`grow`}>
+        {Object.keys(inventory).map((key) => (
+          <FlexRow>
+            <div>{[key]}</div>
+            {/*<div>{inventory[key as keyof typeof inventory]}</div>*/}
+            <button>X</button>
+          </FlexRow>
+        ))}
+      </FlexCol>
+      <Coins />
+    </FlexCol>
+  );
 
-      <FlexRow className={`fancy-container`}>
-        <FlexRow className={`items-center justify-center`}>
+  function Coins() {
+    return (
+      <FlexRow className={`fancy-container mt-1`}>
+        <FlexRow className={`items-center justify-center my-1`}>
           <img src={CharCoinGold} alt="" className="w-6 h-6" />
-          {0}
+          <p className={`p-1 w-8`}>{999}</p>
         </FlexRow>
-        <FlexRow className={`items-center justify-center`}>
+        <FlexRow className={`items-center justify-center my-1`}>
           <img src={CharCoinSilver} alt="" className="w-6 h-6" />
-          {0}
+          <p className={`p-1 w-8`}>{0}</p>
         </FlexRow>
-        <FlexRow className={`items-center justify-center`}>
+        <FlexRow className={`items-center justify-center mx-1`}>
           <img src={CharCoindBronze} alt="" className="w-6 h-6" />
-          <p className={`p-1`}>{0}</p>
+          <p className={`p-1 w-8`}>{0}</p>
         </FlexRow>
       </FlexRow>
+    );
+  }
+}
+
+function Chat() {
+  return (
+    <FlexCol
+      className="fancy-container m-1"
+      style={{
+        width: "calc(100% - .5rem)",
+      }}
+    >
+      <FlexCol className="h-40">
+        <FlexRow className="fancy-container">
+          <p>Chat</p>
+        </FlexRow>
+      </FlexCol>
+      <FlexCol className={`m-1`}>
+        <input type="text" />
+      </FlexCol>
     </FlexCol>
   );
 }

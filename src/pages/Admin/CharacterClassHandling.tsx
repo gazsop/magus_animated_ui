@@ -1344,7 +1344,7 @@ function ClassHandling() {
   };
   return (
     <>
-      <FlexCol className="flex-wrap basis-1/2" allowShrink={true}>
+      <FlexCol className="flex-wrap basis-1/2" preventShrink={true}>
         <SelectUnq
           id="char-select-class"
           label="Classes"

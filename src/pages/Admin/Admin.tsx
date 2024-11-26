@@ -11,7 +11,7 @@ function Admin() {
         <UserHandling />
         <AdventureHandling />
       </FlexRow>
-      <FlexRow className={className} allowShrink={true}>
+      <FlexRow className={className} preventShrink={true}>
         <ClassHandling />
       </FlexRow>
     </FlexCol>
