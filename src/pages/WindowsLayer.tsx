@@ -136,9 +136,10 @@ export const WindowsLayerProvider = (props: {
       <>
         <Windows />
         <FlexCol
-          className="fixed bottom-[10vh] bg-transparent w-8 z-10"
+          className="fixed bottom-[10vh] bg-transparent w-8"
           style={{
             right: props.view === "sm" ? `0px` : "10px",
+            zIndex: "var(--layer-window-icons)",
           }}
         >
           {windows &&
@@ -146,7 +147,7 @@ export const WindowsLayerProvider = (props: {
             windows.map((window, index) => {
               return (
                 <FlexRow
-                  className={`fancy-container h-[35px] m-0.5 cursor-pointer items-center pl-2 z-10`}
+                  className={`fancy-container h-[35px] m-0.5 cursor-pointer items-center pl-2`}
                   style={{
                     borderRadius: "17px 0px 0px 17px",
                   }}

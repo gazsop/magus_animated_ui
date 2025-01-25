@@ -302,7 +302,7 @@ export function TextAreaUnq({
             }),
             headingsPlugin(),
           ]}
-          className={`p-1 grow shrink-0`}
+          className={`${className ? className + " " : ""}p-1 grow max-w-100`}
           placeholder={placeholder}
           onChange={(e) => onChange && onChange(e)}
           onBlur={(e) => onBlur && onBlur(e)}
@@ -313,7 +313,7 @@ export function TextAreaUnq({
       <textarea
         id={`${id}-textarea`}
         key={`${id}-textarea`}
-        className={`p-1 shrink-0 grow`}
+        className={`${className ? className + " " : ""}p-1 shrink-0 grow`}
         value={value}
         onChange={(e) => {
           const target = e.target as HTMLTextAreaElement;
@@ -367,7 +367,7 @@ export function ButtonUnq({
 }) {
   const ButtonElement = (
     <button
-      className={`p-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none ${className}`}
+      className={`p-1 ${className}`}
       onClick={onClick}
       disabled={disabled || false}
       id={id}

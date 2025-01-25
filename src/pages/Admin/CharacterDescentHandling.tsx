@@ -522,7 +522,7 @@ function DescentHandling() {
 
   return (
     <>
-      <FlexCol className={`basis-1/2`} preventShrink={true}>
+      <FlexCol className={``} preventShrink={true}>
         <SelectUnq
           id={"DescentHandling-list"}
           label="Descents"

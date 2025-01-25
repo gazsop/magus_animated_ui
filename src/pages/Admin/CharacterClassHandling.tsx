@@ -301,7 +301,7 @@ function ClassHandling() {
       return (
         <FlexCol>
           <label>Specs</label>
-          <FlexRow>
+          <FlexRow className={`w-max`}>
             <InputUnq
               id={`char-input-spec-name-${selectedSpec}`}
               label="Name"
@@ -319,7 +319,7 @@ function ClassHandling() {
               layout="flex-col"
             />
             <TextAreaUnq
-              id={`char-input-spec-descr-${selectedSpec}`}
+              id={`char-input-spec-descr-${selectedSpec}]`}
               label="description"
               value={selectedSpec?.description || ""}
               onSave={(e) => {
@@ -351,75 +351,82 @@ function ClassHandling() {
               Add
             </ButtonUnq>
           </FlexRow>
-          <FlexCol className="grow">
+          <hr className={`fancy my-2`} />
+          <FlexCol>
             {selectedClass.specs.map((spec) => (
-              <FlexRow>
-                <InputUnq
-                  id={`char-input-spec-${spec}`}
-                  label="Name"
-                  value={spec.name}
-                  disabled={false}
-                  onBlur={(e) => {
-                    const target = e.target as HTMLInputElement;
-                    const value = target.value;
-                    setSelectedClass((prev) => {
-                      return {
-                        ...prev,
-                        specs: prev.specs.map((s) => {
-                          if (s === spec) {
-                            return {
-                              ...s,
-                              name: value,
-                            };
-                          }
-                          return s;
-                        }),
-                      };
-                    });
-                  }}
-                  layout="flex-col"
-                />
-                <TextAreaUnq
-                  id={`char-input-spec-descr-${spec}`}
-                  label="Description"
-                  value={spec.description || ""}
-                  disabled={false}
-                  onSave={(e) => {
-                    const msg = e;
-                    if (msg === spec.description) return;
-                    setSelectedClass((prev) => {
-                      return {
-                        ...prev,
-                        specs: prev.specs.map((s) => {
-                          if (s === spec) {
-                            return {
-                              ...s,
-                              description: msg,
-                            };
-                          }
-                          return s;
-                        }),
-                      };
-                    });
-                  }}
-                  layout="flex-col"
-                  element="editor"
-                  className="grow"
-                />
-                <ButtonUnq
-                  id={`char-remove-spec-${spec}`}
-                  onClick={(e) => {
-                    setSelectedClass((prev) => {
-                      return {
-                        ...prev,
-                        specs: prev.specs.filter((s) => s !== spec),
-                      };
-                    });
-                  }}
+              <>
+                <FlexRow
+                  className="w-full"
+                  key={`char-spec-${spec.name}-${spec.description}`}
                 >
-                  Remove
-                </ButtonUnq>
-              </FlexRow>
+                  <InputUnq
+                    id={`char-input-spec-${spec}`}
+                    label="Name"
+                    value={spec.name}
+                    disabled={false}
+                    onBlur={(e) => {
+                      const target = e.target as HTMLInputElement;
+                      const value = target.value;
+                      setSelectedClass((prev) => {
+                        return {
+                          ...prev,
+                          specs: prev.specs.map((s) => {
+                            if (s === spec) {
+                              return {
+                                ...s,
+                                name: value,
+                              };
+                            }
+                            return s;
+                          }),
+                        };
+                      });
+                    }}
+                    layout="flex-col"
+                  />
+                  <TextAreaUnq
+                    id={`char-input-spec-descr-${spec}`}
+                    label="Description"
+                    value={spec.description || ""}
+                    disabled={false}
+                    onSave={(e) => {
+                      const msg = e;
+                      if (msg === spec.description) return;
+                      setSelectedClass((prev) => {
+                        return {
+                          ...prev,
+                          specs: prev.specs.map((s) => {
+                            if (s === spec) {
+                              return {
+                                ...s,
+                                description: msg,
+                              };
+                            }
+                            return s;
+                          }),
+                        };
+                      });
+                    }}
+                    layout="flex-col"
+                    element="editor"
+                    className="grow"
+                  />
+                  <ButtonUnq
+                    id={`char-remove-spec-${spec}`}
+                    onClick={(e) => {
+                      setSelectedClass((prev) => {
+                        return {
+                          ...prev,
+                          specs: prev.specs.filter((s) => s !== spec),
+                        };
+                      });
+                    }}
+                  >
+                    Remove
+                  </ButtonUnq>
+                </FlexRow>
+                <hr className={`fancy my-2`} />
+              </>
             ))}
           </FlexCol>
         </FlexCol>
@@ -987,7 +994,7 @@ function ClassHandling() {
                           />
                         ))}
                     </SpellsElement>
-                    <hr />
+                    <hr className="fancy" />
                   </>
                 );
               })}
@@ -1045,7 +1052,7 @@ function ClassHandling() {
               value: selectedClass.mainClass || ("0" as Character.MAIN_CLASSES),
             }}
           ></SelectUnq>
-          <hr />
+          <hr className="fancy" />
           <InputUnq
             id={`char-input-hp-${selectedClass.id}`}
             label="hp"
@@ -1119,7 +1126,7 @@ function ClassHandling() {
               });
             }}
           />
-          <hr />
+          <hr className="fancy" />
           <FlexCol className="grow">
             <label>HM</label>
             <InputUnq
@@ -1252,7 +1259,7 @@ function ClassHandling() {
               }}
             />
           </FlexCol>
-          <hr />
+          <hr className="fancy" />
           {Object.values(Character.PRIMARY_STATS).map((stat) => {
             return (
               <FlexRow>
@@ -1298,10 +1305,10 @@ function ClassHandling() {
               </FlexRow>
             );
           })}
-          <hr />
+          <hr className="fancy" />
           <SecondaryStatScalings />
 
-          <hr />
+          <hr className="fancy" />
           <FlexCol className="grow">
             <label onClick={() => setshowSecondaryStats((prev) => !prev)}>
               Secondary Stats
@@ -1334,9 +1341,9 @@ function ClassHandling() {
               />
             )}
           </FlexCol>
-          <hr />
+          <hr className="fancy" />
           <Specs />
-          <hr />
+          <hr className="fancy" />
           <Spells />
         </FlexCol>
       </RndContainer>
@@ -1344,7 +1351,7 @@ function ClassHandling() {
   };
   return (
     <>
-      <FlexCol className="flex-wrap basis-1/2" preventShrink={true}>
+      <FlexCol className="flex-wrap" preventShrink={true}>
         <SelectUnq
           id="char-select-class"
           label="Classes"
@@ -1472,7 +1479,7 @@ const SpellsElement = memo(function ({
   }, [spellState]);
 
   return (
-    <FlexCol>
+    <FlexCol className={`fancy-container my-2`}>
       <FlexRow
         className={`${
           "levels" in spellState && spellState.levels ? "bg-gray-300" : ""

@@ -185,7 +185,10 @@ export default function App() {
         <div
           className={`${
             pSt === PageState.LOGIN ? "opacity-70" : "opacity-100"
-          } transition duration-${transTime} self-center absolute left-0 top-1/2 z-10`}
+          } transition duration-${transTime} self-center absolute left-0 top-1/2`}
+          style={{
+            zIndex: "var(--layer-arrows)",
+          }}
         >
           <div
             onClick={() => {
@@ -226,7 +229,7 @@ export default function App() {
           <div
             id="page-container"
             className="flex justify-center items-stretch grow relative overflow-hidden"
-            style={{ zIndex: 1 }}
+            style={{ zIndex: "var(--layer-bg)" }}
           >
             {pageSelector()}
           </div>
@@ -234,7 +237,10 @@ export default function App() {
         <div
           className={`${
             pSt === PageState.LOGIN ? "opacity-70" : "opacity-100"
-          } transition duration-${transTime} self-center absolute right-0 top-1/2 z-10`}
+          } transition duration-${transTime} self-center absolute right-0 top-1/2`}
+          style={{
+            zIndex: "var(--layer-arrows)",
+          }}
         >
           <div
             onClick={() =>
@@ -307,6 +313,13 @@ function BackgroundDeco({
       }
     };
     resizeListener();
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", resizeListener);
+      return () => {
+        window.visualViewport &&
+          window.visualViewport.removeEventListener("resize", resizeListener);
+      };
+    }
     window.addEventListener("resize", resizeListener);
     return () => window.removeEventListener("resize", resizeListener);
   }, []);

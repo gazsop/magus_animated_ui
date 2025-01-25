@@ -1,7 +1,7 @@
 import { useState } from "preact/hooks";
 import useLocalStorage from "../hooks/localStorageHandler";
 import { DraggableData, Rnd, RndDragEvent } from "react-rnd";
-import { FlexRow } from "./Flex";
+import { FlexRow, FlexCol } from "./Flex";
 import RefreshCwIcon from "./icons/general/RefreshCwIcon";
 import MoveIcon from "./icons/general/MoveIcon";
 import MaximizeIcon from "./icons/general/MaximizeIcon";
@@ -109,11 +109,18 @@ function RndContainer({
         enableResizing={resizeable}
         resizeGrid={[20, 20]}
         dragGrid={[20, 20]}
+        style={{
+          zIndex: "var(--layer-window)",
+        }}
       >
         <FancyWindow height={windowSize.height} width={windowSize.width}>
-          <FlexRow className="fixed h-6 w-max justify-between items-center cursor-default select-none">
-            <p>{label}</p>
-            <FlexRow>
+          <FlexRow
+            className="fixed right-3 h-3 w-max justify-between items-center cursor-default select-none"
+            style={{
+              zIndex: "var(--layer-window-header)",
+            }}
+          >
+            <FlexRow className={`fancy-container`}>
               {aditionalIcons}
               <RefreshCwIcon
                 className="h-4 m-1 w-6 cursor-pointer"
@@ -142,8 +149,16 @@ function RndContainer({
               <XIcon className="h-4 m-1 w-6 cursor-pointer" onClick={close} />
             </FlexRow>
           </FlexRow>
-          <FlexRow className="h-[calc(100%-1.5rem)] overflow-auto mt-6 grow">
-            {children}
+          <FlexRow
+            className="h-[calc(100%-1.5rem)] overflow-auto grow"
+            style={{
+              zIndex: "var(--layer-window-content)",
+            }}
+          >
+            <FlexCol className={`fancy-container w-full p-2`}>
+              <p>{label}</p>
+              {children}
+            </FlexCol>
             {onDragState && (
               <div
                 id="invisible-layer"

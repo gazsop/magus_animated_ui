@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+	--layer-bg: 0;
+	--layer-bg-decor: 4;
+	--layer-bg-decor2: 8;
+	--layer-window: 12;
+	--layer-window-bg: 14;
+	--layer-window-content: 16;
+	--layer-window-decor: 20;
+	--layer-window-decor2: 21;
+	--layer-window-header: 24;
+	--layer-window-icons: 28;
+	--layer-arrows: 28;
+}
 * {
 	box-sizing: border-box;
 	scroll-behavior: smooth;
@@ -161,6 +174,6 @@ html {
 }
 
 .css-b62m3t-container {
-	border: 1px solid #c5c2ff;
-	border-radius: 0.25rem;
+	/*border: 1px solid #c5c2ff;
+	border-radius: 0.25rem;*/
 }

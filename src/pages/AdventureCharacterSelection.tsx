@@ -56,7 +56,6 @@ function AdventureCharacterSelection({
     <FlexCol className="grow h-full w-full p-1 fancy-container overflow-auto">
       <CharactersElements />
       <EasyCut />
-      {/*<FancyWindow height={650} width={1000} />*/}
     </FlexCol>
   );
 }

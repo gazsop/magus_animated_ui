@@ -28,6 +28,7 @@ import { useWindowsLayer } from "../WindowsLayer";
 import CharCoindBronze from "../../components/icons/magus/CharCoinBronze.svg";
 import CharCoinSilver from "../../components/icons/magus/CharCoinSilver.svg";
 import CharCoinGold from "../../components/icons/magus/CharCoinGold.svg";
+import NewCharacter from "./NewCharacter";
 
 const inventoryDummy: () => Character.Item.TInventory = () => {
   const money: Character.Item.TMoney = [
@@ -172,8 +173,9 @@ export default function CharacterPage({ advId = "" }: { advId: string }) {
         class={selectedCharacter.class || Character.CLASSES.WARRIOR}
         lvl={selectedCharacter.level ? selectedCharacter.level.current : 1}
       />
-      <Bag inventory={inventoryDummy()} className="m-1" />
-      <Chat />
+      <NewCharacter />
+      {/*<Bag inventory={inventoryDummy()} className="m-1" />
+      <Chat />*/}
     </FlexCol>
   );
   //<SecondaryStats className="max-h-80 m-2" />;
@@ -267,11 +269,20 @@ function Header(data: {
     return (
       <div className="flex items center justify-between relative mb-1 fancy-container">
         <div
-          className="w-full bg-gray-500"
+          className="w-full"
+          style={{
+            backgroundColor: "rgba(106, 0, 60,.2)",
+          }}
           ref={xpBar}
           onPointerDown={(e) => setShowText((prev) => !prev)}
         >
-          <div className="h-4 bg-blue-500" ref={xpBarFill}></div>
+          <div
+            className="h-4 bg-blue-500"
+            ref={xpBarFill}
+            style={{
+              backgroundColor: "rgb(1, 79, 9)",
+            }}
+          ></div>
         </div>
         {showText && (
           <div
@@ -534,8 +545,8 @@ function Header(data: {
         <ResourceBar />
       </FlexRow>
       <FlexRow className={`justify-between`}>
-        <PrimaryStats className="z-10 grow mr-0.5" />
-        <HMData className="z-10 grow justify-center" />
+        <PrimaryStats className="grow mr-0.5" />
+        <HMData className="grow justify-center" />
       </FlexRow>
       {showRP && <RPElement />}
     </FlexCol>

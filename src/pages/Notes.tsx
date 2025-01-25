@@ -47,7 +47,7 @@ function Notes({
   const NotesElement = () => {
     return (
       <FlexCol
-        className={`p-1 grow relative nowrap overflow-x-hidden overflow-y-auto`}
+        className={`p-1 grow relative nowrap overflow-x-hidden overflow-y-auto cursor-pointer user-select-none`}
         //onClick={selectWindow}
       >
         {notes.map((note) => {
@@ -64,7 +64,7 @@ function Notes({
                 note.createdBy
               }`}</p>
               <EditWritePenIcon
-                className="h-4 mx-1 w-4 cursor-pointer shrink-0"
+                className="h-4 mx-1 w-4 shrink-0"
                 onClick={() => {
                   setDisplay((prev) => "editor");
                   currentNoteMsgRef.current = note.text;

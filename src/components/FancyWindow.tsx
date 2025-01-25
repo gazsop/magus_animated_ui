@@ -5,6 +5,7 @@ import borderInnerCol from "/imgs/border_inner_column.png";
 import borderInnerCor from "/imgs/border_inner_corner.png";
 import borderCor2 from "/imgs/border_corner.png";
 import borderHolder from "/imgs/border_deco.png";
+import { FlexCol } from "./Flex";
 
 function FancyWindow({
   height,
@@ -32,6 +33,7 @@ function FancyWindow({
           right: `0px`,
           width: `${outerBorderWidth}px`,
           height: `${height - 2 * outerBorderWidth}px`,
+          zIndex: "var(--layer-window-decor)",
         }}
       />
       <img
@@ -42,15 +44,18 @@ function FancyWindow({
           left: `0px`,
           width: `${outerBorderWidth}px`,
           height: `${height - 2 * outerBorderWidth}px`,
+          zIndex: "var(--layer-window-decor)",
         }}
       />
       <img
         src={borderCol}
-        className={`absolute bottom-0 origin-bottom-right rotate-90`}
+        className={`absolute origin-bottom-right rotate-90`}
         style={{
           width: `${outerBorderWidth}px`,
           height: `${width}px`,
           left: `-${outerBorderWidth}px`,
+          bottom: `-${height}px`,
+          zIndex: "var(--layer-window-decor)",
         }}
       />
       <img
@@ -61,6 +66,7 @@ function FancyWindow({
           left: `-${outerBorderWidth}px`,
           width: `${outerBorderWidth}px`,
           height: `${width}px`,
+          zIndex: "var(--layer-window-decor)",
         }}
       />
       <img
@@ -71,6 +77,7 @@ function FancyWindow({
           left: `0px`,
           width: `${outerBorderWidth}px`,
           height: `${outerBorderWidth}px`,
+          zIndex: "var(--layer-window-decor)",
         }}
       />
       <img
@@ -81,26 +88,29 @@ function FancyWindow({
           right: `0px`,
           width: `${outerBorderWidth}px`,
           height: `${outerBorderWidth}px`,
+          zIndex: "var(--layer-window-decor2)",
         }}
       />
       <img
         src={borderCor2}
         className={`absolute rotate-90`}
         style={{
-          bottom: `0px`,
+          bottom: `-${height}px`,
           left: `0px`,
           width: `${outerBorderWidth}px`,
           height: `${outerBorderWidth}px`,
+          zIndex: "var(--layer-window-decor2)",
         }}
       />
       <img
         src={borderCor2}
         className={`absolute -rotate-90`}
         style={{
-          top: `0px`,
+          bottom: `-${height}px`,
           right: `0px`,
           width: `${outerBorderWidth}px`,
           height: `${outerBorderWidth}px`,
+          zIndex: "var(--layer-window-decor2)",
         }}
       />
     </>
@@ -116,6 +126,7 @@ function FancyWindow({
           left: `${outerBorderWidth + cornerOffset - innerBorderWidth}px`,
           width: `${innerBorderWidth}px`,
           height: `${height - 2 * (outerBorderWidth + cornerOffset)}px`,
+          zIndex: "var(--layer-window-decor)",
         }}
       />
       <img
@@ -126,6 +137,7 @@ function FancyWindow({
           right: `${outerBorderWidth + cornerOffset - innerBorderWidth}px`,
           width: `${innerBorderWidth}px`,
           height: `${height - 2 * (outerBorderWidth + cornerOffset)}px`,
+          zIndex: "var(--layer-window-decor)",
         }}
       />
       <img
@@ -136,6 +148,7 @@ function FancyWindow({
           right: `${outerBorderWidth + cornerOffset}px`,
           width: `${innerBorderWidth}px`,
           height: `${width - 2 * (outerBorderWidth + cornerOffset)}px`,
+          zIndex: "var(--layer-window-decor)",
         }}
       />
       <img
@@ -146,6 +159,7 @@ function FancyWindow({
           left: `${outerBorderWidth + cornerOffset - innerBorderWidth}px`,
           width: `${innerBorderWidth}px`,
           height: `${width - 2 * (outerBorderWidth + cornerOffset)}px`,
+          zIndex: "var(--layer-window-decor)",
         }}
       />
       <img
@@ -155,6 +169,7 @@ function FancyWindow({
           top: `${outerBorderWidth + cornerOffset - innerBorderWidth}px`,
           left: `${outerBorderWidth + cornerOffset - innerBorderWidth}px`,
           width: `${innerBorderWidth}px`,
+          zIndex: "var(--layer-window-decor2)",
         }}
       />
       <img
@@ -164,6 +179,7 @@ function FancyWindow({
           top: `${outerBorderWidth + cornerOffset - 2 * innerBorderWidth}px`,
           right: `${outerBorderWidth + cornerOffset - innerBorderWidth}px`,
           width: `${innerBorderWidth}px`,
+          zIndex: "var(--layer-window-decor2)",
         }}
       />
       <img
@@ -173,6 +189,7 @@ function FancyWindow({
           bottom: `${outerBorderWidth + cornerOffset - 2 * innerBorderWidth}px`,
           right: `${outerBorderWidth + cornerOffset}px`,
           width: `${innerBorderWidth}px`,
+          zIndex: "var(--layer-window-decor2)",
         }}
       />
       <img
@@ -182,6 +199,7 @@ function FancyWindow({
           bottom: `${outerBorderWidth + cornerOffset - 2 * innerBorderWidth}px`,
           left: `${outerBorderWidth + cornerOffset - innerBorderWidth}px`,
           width: `${innerBorderWidth}px`,
+          zIndex: "var(--layer-window-decor2)",
         }}
       />
     </>
@@ -196,14 +214,15 @@ function FancyWindow({
           top: `${cornerDecoWidth}px`,
           left: `${cornerDecoWidth}px`,
           width: `${cornerDecoWidth}px`,
+          zIndex: "var(--layer-window-decor2)",
         }}
       />
       <img
         src={borderHolder}
         className={`absolute origin-top-right -rotate-90 select-none`}
         style={{
-          top: `${0}px`,
-          right: `${cornerDecoWidth + cornerDecoHeight}px`,
+          top: `${10}px`,
+          right: `${cornerDecoHeight + 100}px`,
           width: `${cornerDecoWidth}px`,
         }}
       />
@@ -305,32 +324,46 @@ function FancyWindow({
   const InnerOverlay = () => {
     return (
       <div
-        className={`absolute`}
+        className={`absolute fancy-container`}
         style={{
-          backgroundColor: "rgba(112, 228, 255, 0.25)",
           height: `${height - 2 * (outerBorderWidth + cornerOffset)}px`,
           width: `${width - 2 * (outerBorderWidth + cornerOffset)}px`,
           left: `${BetweenBordersDivWidth}px`,
           top: `${BetweenBordersDivWidth}px`,
+          zIndex: "var(--layer-window-bg)",
         }}
       />
     );
   };
   return (
     <div
-      className={`relative bg-left-top bg-no-repeat bg-cover h-full px-6 py-2`}
+      className={`relative bg-left-top bg-no-repeat bg-cover h-full p-4`}
       style={{
         height: `${height}px`,
         width: `${width}px`,
         backgroundImage: `url(${bgParchment})`,
       }}
     >
-      {/*<BetweenBordersOverlay />*/}
-      <InnerOverlay />
-      <OuterBorder />
-      <InnerBorder />
-      <CornerDecos />
-      {children}
+      <div
+        className="absolute top-0 left-0 w-full h-max bg-[rgba(255,255,255,0.5)]"
+        style={{
+          zIndex: "var(--layer-window-decor-bg)",
+        }}
+      >
+        {/*<BetweenBordersOverlay />*/}
+        <InnerOverlay />
+        <OuterBorder />
+        <InnerBorder />
+        {/*<CornerDecos />*/}
+      </div>
+      <FlexCol
+        className="overflow-auto h-full w-full"
+        style={{
+          zIndex: "var(--layer-window-content)",
+        }}
+      >
+        {children}
+      </FlexCol>
     </div>
   );
 }

@@ -13,7 +13,6 @@ export function FlexRow(
     typeof props.preventShrink === "undefined" ? false : props.preventShrink;
   const wrap =
     typeof props.preventWrap === "undefined" ? false : props.preventWrap;
-  console.log(props);
   return (
     <div
       {...props}
