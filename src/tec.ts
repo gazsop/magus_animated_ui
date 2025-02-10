@@ -15,7 +15,7 @@ export type TTransitionTime =
 
 export const transTime: TTransitionTime = "1000";
 
-const devHost = "192.168.0.202";
+const devHost = "192.168.0.200";
 const host = "testelem.hu";
 const devPort = 4001;
 const port = 6868;

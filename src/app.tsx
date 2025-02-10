@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { transTime } from "./tec";
-import ArrowLeftIcon from "./components/icons/general/ArrowLeftIcon";
-import ArrowRightIcon from "./components/icons/general/ArrowRightIcon";
 import { LoginForm } from "./pages/Login";
 import Character from "./pages/Character/Character";
 import { FlexCol, FlexRow } from "./components/Flex";
@@ -11,9 +9,9 @@ import AdventureCharacterSelection from "./pages/AdventureCharacterSelection";
 import Admin from "./pages/Admin/Admin";
 import Spells from "./pages/Character/Spells";
 import borderInnerCol from "/imgs/border_inner_column.png";
-import borderInnerCor from "/imgs/border_inner_corner.png";
 import ArrowLeftSelectionIcon from "./components/icons/general/ArrowLeftSelectionIcon";
 import ArrowRightSelectionIcon from "./components/icons/general/ArrowRightSelectionIcon";
+import { useUtilContext, UtilContextProvider } from "./utils/utilContext";
 
 enum PageState {
   INIT,
@@ -54,11 +52,12 @@ export default function App() {
     rank: User.USER_RANK;
   }>({ uid: "", rank: User.USER_RANK.UNAUTH });
 
-  const [view, setView] = useState<"sm" | "md" | "lg">(
-    window.innerWidth < 768 ? "sm" : window.innerWidth < 1024 ? "md" : "lg"
-  );
-  const [offsetY, setOffsetY] = useState(0);
-  const [offsetX, setOffsetX] = useState(0);
+  //const [height, setHeight] = useState(window.innerHeight);
+  //const [view, setView] = useState<"sm" | "md" | "lg">(
+  //  window.innerWidth < 768 ? "sm" : window.innerWidth < 1024 ? "md" : "lg"
+  //);
+  //const [backgroundOffsetY, setOffsetY] = useState(0);
+  //const [backgroundOffsetX, setOffsetX] = useState(0);
 
   const selectedAdvIdRef = useRef("");
 
@@ -165,165 +164,124 @@ export default function App() {
 
   return (
     <div
-      className={`flex justify-center items-stretch h-screen w-screen`}
+      className={`flex justify-center items-stretch w-screen`}
       style={{
         backgroundImage: `url(/imgs/bg_parchment_4.png)`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        padding: `${offsetY + 10}px ${offsetX + 10}px`,
+        //padding: `${backgroundOffsetY + 10}px ${backgroundOffsetX + 10}px`,
+        height: `100vh`,
       }}
     >
-      <WindowsLayerProvider
-        windows={
-          [
-            //{ jsx: Notes, name: "notes", icon: <>N</> },
-            //{ jsx: Spells, name: "spells", icon: <>S</> },
-          ]
-        }
-        view={view}
-      >
-        <div
-          className={`${
-            pSt === PageState.LOGIN ? "opacity-70" : "opacity-100"
-          } transition duration-${transTime} self-center absolute left-0 top-1/2`}
-          style={{
-            zIndex: "var(--layer-arrows)",
-          }}
+      <UtilContextProvider>
+        <WindowsLayerProvider
+          windows={
+            [
+              //{ jsx: Notes, name: "notes", icon: <>N</> },
+              //{ jsx: Spells, name: "spells", icon: <>S</> },
+            ]
+          }
         >
           <div
-            onClick={() => {
-              pSt !== 2
-                ? setTransitioning({
-                    state: Visibility.HIDDEN,
-                    direction: Change.DEC,
-                  })
-                : confirm("Are you sure you logout?") &&
-                  setPst(PageState.LOGIN);
+            className={`${
+              pSt === PageState.LOGIN ? "opacity-70" : "opacity-100"
+            } transition duration-${transTime} self-center absolute left-0 top-1/2`}
+            style={{
+              zIndex: "var(--layer-arrows)",
             }}
-            className={`text-gray-400 hover:text-black flex justify-center items-center focus:outline-none cursor-pointer transition duration-${transTime}`}
-            disabled={pSt === (PageState.LOGIN || PageState.INIT)}
           >
-            <ArrowLeftSelectionIcon className="w-[12px]" />
+            <div
+              onClick={() => {
+                pSt !== 2
+                  ? setTransitioning({
+                      state: Visibility.HIDDEN,
+                      direction: Change.DEC,
+                    })
+                  : confirm("Are you sure you logout?") &&
+                    setPst(PageState.LOGIN);
+              }}
+              className={`text-gray-400 hover:text-black flex justify-center items-center focus:outline-none cursor-pointer transition duration-${transTime}
+						${
+              (pSt === PageState.LOGIN ||
+                pSt === PageState.TEST ||
+                pSt === PageState.INIT) &&
+              "user-select-none pointer-events-none"
+            }`}
+            >
+              <ArrowLeftSelectionIcon className="w-[12px]" />
+            </div>
           </div>
-        </div>
-        <FlexCol
-          className={`relative grow transition-opacity duration-${transTime} ${
-            Visibility[transitioning.state] === "HIDDEN"
-              ? "opacity-0"
-              : "opacity-100"
-          }`}
-          onTransitionEnd={() => {
-            if (transitioning.state === Visibility.HIDDEN) {
-              setPst((prev) =>
-                transitioning.direction === Change.INC
-                  ? prev + ((pSt === PageState.INIT ? 2 : 1) % PST_LENGTH)
-                  : (prev - 1) % PST_LENGTH
-              );
-              setTransitioning({
-                state: Visibility.DISPLAY,
-                direction: Change.STILL,
-              });
-            }
-          }}
-        >
+          <FlexCol
+            className={`relative grow transition-opacity duration-${transTime} ${
+              Visibility[transitioning.state] === "HIDDEN"
+                ? "opacity-0"
+                : "opacity-100"
+            }`}
+            onTransitionEnd={() => {
+              if (transitioning.state === Visibility.HIDDEN) {
+                setPst((prev) =>
+                  transitioning.direction === Change.INC
+                    ? prev + ((pSt === PageState.INIT ? 2 : 1) % PST_LENGTH)
+                    : (prev - 1) % PST_LENGTH
+                );
+                setTransitioning({
+                  state: Visibility.DISPLAY,
+                  direction: Change.STILL,
+                });
+              }
+            }}
+          >
+            <div
+              id="page-container"
+              className="flex justify-center items-stretch grow relative overflow-hidden"
+              style={{ zIndex: "var(--layer-bg)" }}
+            >
+              {pageSelector()}
+            </div>
+          </FlexCol>
           <div
-            id="page-container"
-            className="flex justify-center items-stretch grow relative overflow-hidden"
-            style={{ zIndex: "var(--layer-bg)" }}
+            className={`${
+              pSt === PageState.LOGIN ? "opacity-70" : "opacity-100"
+            } transition duration-${transTime} self-center absolute right-0 top-1/2`}
+            style={{
+              zIndex: "var(--layer-arrows)",
+            }}
           >
-            {pageSelector()}
+            <div
+              onClick={() =>
+                setTransitioning({
+                  state: Visibility.HIDDEN,
+                  direction: Change.INC,
+                })
+              }
+              className={`text-gray-400 hover:text-black flex justify-center items-center focus:outline-none cursor-pointer transition duration-${transTime}${
+                (pSt === PageState.LOGIN ||
+                  pSt === PageState.TEST ||
+                  pSt === PageState.INIT) &&
+                "user-select-none pointer-events-none"
+              }`}
+            >
+              <ArrowRightSelectionIcon className="w-[12px]" />
+            </div>
           </div>
-        </FlexCol>
-        <div
-          className={`${
-            pSt === PageState.LOGIN ? "opacity-70" : "opacity-100"
-          } transition duration-${transTime} self-center absolute right-0 top-1/2`}
-          style={{
-            zIndex: "var(--layer-arrows)",
-          }}
-        >
-          <div
-            onClick={() =>
-              setTransitioning({
-                state: Visibility.HIDDEN,
-                direction: Change.INC,
-              })
-            }
-            className={`text-gray-400 hover:text-black flex justify-center items-center focus:outline-none cursor-pointer transition duration-${transTime}`}
-            disabled={
-              pSt === PageState.LOGIN ||
-              pSt === PageState.TEST ||
-              pSt === PageState.INIT
-            }
-          >
-            <ArrowRightSelectionIcon className="w-[12px]" />
-          </div>
-        </div>
-      </WindowsLayerProvider>
-      <BackgroundDeco
-        setView={setView}
-        view={view}
-        setOffsetY={setOffsetY}
-        offsetY={offsetY}
-        setOffsetX={setOffsetX}
-        offsetX={offsetX}
-      />
+        </WindowsLayerProvider>
+        <BackgroundDeco />
+      </UtilContextProvider>
     </div>
   );
 }
 
-function BackgroundDeco({
-  setView,
-  view,
-  setOffsetY,
-  offsetY,
-  setOffsetX,
-  offsetX,
-}: {
-  setView: (view: "sm" | "md" | "lg") => void;
-  view: "sm" | "md" | "lg";
-  setOffsetY: (offset: number) => void;
-  offsetY: number;
-  setOffsetX: (offset: number) => void;
-  offsetX: number;
-}) {
+function BackgroundDeco() {
   const [borderWidth, setBorderWidth] = useState(0);
   const [cornerDecoWidth, setCornerDecoWidth] = useState(0);
-  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  useEffect(() => {
-    const resizeListener = () => {
-      if (window.innerWidth < 768) {
-        setView("sm");
-        setOffsetY(15);
-        setOffsetX(0);
-        setBorderWidth(4);
-        setCornerDecoWidth(50);
-      } else {
-        setView("lg");
-        setOffsetY(10);
-        setOffsetX(10);
-        setBorderWidth(5);
-        setCornerDecoWidth(60);
-      }
-      setWindowHeight(window.innerHeight);
-      if (window.innerWidth !== windowWidth) {
-        setWindowWidth(window.innerWidth);
-      }
-    };
-    resizeListener();
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener("resize", resizeListener);
-      return () => {
-        window.visualViewport &&
-          window.visualViewport.removeEventListener("resize", resizeListener);
-      };
-    }
-    window.addEventListener("resize", resizeListener);
-    return () => window.removeEventListener("resize", resizeListener);
-  }, []);
-
+  const {
+    view,
+    windowHeight,
+    windowWidth,
+    backgroundOffsetX,
+    backgroundOffsetY,
+  } = useUtilContext();
   return (
     <div
       className={`user-select-none pointer-events-none absolute top-0 left-0 w-screen`}
@@ -332,7 +290,7 @@ function BackgroundDeco({
         className="absolute top-0 left-0"
         style={{
           height: windowHeight,
-          width: offsetX,
+          width: backgroundOffsetX,
           backgroundColor: "rgba(123, 69, 0, 0.24)",
         }}
       />
@@ -340,26 +298,26 @@ function BackgroundDeco({
         className="absolute top-0 right-0"
         style={{
           height: windowHeight,
-          width: offsetX,
+          width: backgroundOffsetX,
           backgroundColor: "rgba(123, 69, 0, 0.24)",
         }}
       />
       <div
         className="absolute top-0"
         style={{
-          height: offsetY,
-          width: windowWidth - 2 * offsetX,
-          left: offsetX,
+          height: backgroundOffsetY,
+          width: windowWidth - 2 * backgroundOffsetX,
+          left: backgroundOffsetX,
           backgroundColor: "rgba(123, 69, 0, 0.24)",
         }}
       />
       <div
         className="absolute"
         style={{
-          height: offsetY,
-          width: windowWidth - 2 * offsetX,
-          top: windowHeight - offsetY,
-          left: offsetX,
+          height: backgroundOffsetY,
+          width: windowWidth - 2 * backgroundOffsetX,
+          top: windowHeight - backgroundOffsetY,
+          left: backgroundOffsetX,
           backgroundColor: "rgba(123, 69, 0, 0.24)",
         }}
       />
@@ -395,7 +353,7 @@ function BackgroundDeco({
           width: cornerDecoWidth,
           top:
             view === "sm"
-              ? windowHeight - cornerDecoWidth / 2
+              ? windowHeight - cornerDecoWidth / 2 - 2
               : windowHeight - cornerDecoWidth,
         }}
       />
@@ -413,7 +371,7 @@ function BackgroundDeco({
           width: cornerDecoWidth,
           top:
             view === "sm"
-              ? windowHeight - cornerDecoWidth / 2
+              ? windowHeight - cornerDecoWidth / 2 - 2
               : windowHeight - cornerDecoWidth,
         }}
       />
@@ -422,9 +380,9 @@ function BackgroundDeco({
         className="absolute pointer-events-none"
         style={{
           zIndex: 9,
-          height: `calc(100vh - ${2 * offsetY}px)`,
-          top: offsetY,
-          right: offsetX,
+          height: `${windowHeight - 2 * backgroundOffsetY}px`,
+          top: backgroundOffsetY,
+          right: backgroundOffsetX,
           width: borderWidth,
         }}
       />
@@ -433,10 +391,10 @@ function BackgroundDeco({
         className="absolute pointer-events-none"
         style={{
           zIndex: 9,
-          height: `calc(100vh - ${2 * offsetY}px)`,
+          height: `${windowHeight - 2 * backgroundOffsetY}px`,
           width: borderWidth,
-          left: offsetX,
-          top: offsetY,
+          left: backgroundOffsetX,
+          top: backgroundOffsetY,
         }}
       />
       <img
@@ -445,10 +403,12 @@ function BackgroundDeco({
         style={{
           zIndex: 9,
           height: `calc(100vw - ${
-            view === "sm" ? 2 * (offsetY + borderWidth) : 2 * offsetY
+            view === "sm"
+              ? 2 * (backgroundOffsetY + borderWidth)
+              : 2 * backgroundOffsetY
           }px)`,
-          top: offsetY,
-          left: offsetY,
+          top: backgroundOffsetY,
+          left: backgroundOffsetY,
           width: borderWidth,
         }}
       />
@@ -458,11 +418,13 @@ function BackgroundDeco({
         style={{
           zIndex: 9,
           height: `calc(100vw - ${
-            view === "sm" ? 2 * (offsetY + borderWidth) : 2 * offsetY
+            view === "sm"
+              ? 2 * (backgroundOffsetY + borderWidth)
+              : 2 * backgroundOffsetY
           }px)`,
           width: borderWidth,
-          bottom: -1 * (windowHeight - offsetY),
-          left: offsetY,
+          bottom: -1 * (windowHeight - backgroundOffsetY),
+          left: backgroundOffsetY,
         }}
       />
     </div>

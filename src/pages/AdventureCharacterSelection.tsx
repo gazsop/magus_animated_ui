@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import { Character } from "@appTypes/shared_types";
 import { FlexCol, FlexRow } from "../components/Flex";
 import useRequest from "../hooks/request";

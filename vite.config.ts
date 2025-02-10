@@ -17,7 +17,8 @@ export default defineConfig({
     fs: {
       allow: ["../shared", "./src", "./node_modules", "./dist", "./public"],
     },
-    host: "192.168.0.202",
+    //host: "192.168.0.52",
+    host: "192.168.0.200",
     port: 5173,
     open: true,
   },
@@ -26,6 +27,7 @@ export default defineConfig({
       react: "preact/compat",
       "react-dom": "preact/compat",
       "@appTypes": path.resolve(__dirname, "../shared"),
+      //	e:/synced/own/web/magus/client/src/components/icons/magus/CharSpeIcon
       //  "@css": path.resolve(__dirname, "./src/assets/css"),
       //  "@components": path.resolve(__dirname, "./src/components"),
       //  "@images": path.resolve(__dirname, "./src/assets/imgs"),

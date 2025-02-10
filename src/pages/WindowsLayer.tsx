@@ -1,6 +1,13 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  JSX,
+} from "preact/compat";
 import { FlexCol, FlexRow } from "../components/Flex";
 import { JSXInternal } from "preact/src/jsx";
+import { useUtilContext } from "../utils/utilContext";
 
 export interface IWindowsLayerWindowProps {
   jsx: (props: {
@@ -27,7 +34,6 @@ const WindowsLayerContext = createContext<IWindowsLayer>({
 
 export const WindowsLayerProvider = (props: {
   children: JSX.Element | JSX.Element[];
-  view: "sm" | "md" | "lg";
   windows?: IWindowsLayerWindowProps[];
 }) => {
   const [windows, setWindows] = useState<IWindowsLayerWindowProps[]>(
@@ -37,6 +43,8 @@ export const WindowsLayerProvider = (props: {
   const [isOpen, setIsOpen] = useState<boolean[]>(
     windows && Array.isArray(windows) ? windows.map(() => false) : []
   );
+
+  const { view } = useUtilContext();
 
   const addWindow = (window: {
     jsx: ({
@@ -138,7 +146,7 @@ export const WindowsLayerProvider = (props: {
         <FlexCol
           className="fixed bottom-[10vh] bg-transparent w-8"
           style={{
-            right: props.view === "sm" ? `0px` : "10px",
+            right: view === "sm" ? `0px` : "10px",
             zIndex: "var(--layer-window-icons)",
           }}
         >

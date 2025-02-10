@@ -2,6 +2,7 @@
 import { Character } from "@appTypes/shared_types";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { FlexCol, FlexRow } from "../../components/Flex";
+import { JSX } from "preact";
 import {
   HTMLOptionData,
   InputUnq,
@@ -166,7 +167,7 @@ export default function CharacterPage({ advId = "" }: { advId: string }) {
   //);
 
   return (
-    <FlexCol className="justify-stretch items-start grow fancy-container">
+    <FlexCol className="justify-stretch items-start grow fancy-container overflow-y-auto 123a">
       <Header
         name={selectedCharacter.rp ? selectedCharacter.rp.name : "János"}
         descent={selectedCharacter.descent || Character.DESCENTS.HUMAN}
@@ -464,12 +465,12 @@ function Header(data: {
         <StatIconValueElement
           icon={<CharBeaIcon className="w-10 h-10" />}
           value={0}
-          label={Character.PRIMARY_STATS.BEA}
+          label={showText ? Character.PRIMARY_STATS.BEA : ""}
         />
         <StatIconValueElement
           icon={<CharPerIcon className="w-10 h-10" />}
           value={0}
-          label={Character.PRIMARY_STATS.PER}
+          label={showText ? Character.PRIMARY_STATS.PER : ""}
         />
       </FlexRow>
     );
@@ -484,27 +485,32 @@ function Header(data: {
       value: 0,
     }));
 
+    const [showText, setShowText] = useState(true);
+
     return (
-      <FlexRow className={className + " fancy-container"}>
+      <FlexRow
+        className={className + " justify-center items-center fancy-container"}
+        onClick={() => setShowText((prev) => !prev)}
+      >
         <StatIconValueElement
           icon={<CharHMATKIcon className="w-10 h-10" />}
           value={0}
-          label={Character.HM.ATK}
+          label={showText ? Character.HM.ATK : ""}
         />
         <StatIconValueElement
           icon={<CharHMDEFIcon className="w-10 h-10" />}
           value={0}
-          label={Character.HM.DEF}
+          label={showText ? Character.HM.DEF : ""}
         />
         <StatIconValueElement
           icon={<CharHMAIMIcon className="w-10 h-10" />}
           value={0}
-          label={Character.HM.AIM}
+          label={showText ? Character.HM.AIM : ""}
         />
         <StatIconValueElement
           icon={<CharHMINIIcon className="w-10 h-10" />}
           value={0}
-          label={Character.HM.INI}
+          label={showText ? Character.HM.INI : ""}
         />
       </FlexRow>
     );
@@ -516,6 +522,7 @@ function Header(data: {
       style={{
         width: "calc(100% - .5rem)",
       }}
+      preventShrink={false}
     >
       <XpBar />
       <FlexRow
